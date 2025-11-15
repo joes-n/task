@@ -1,0 +1,15 @@
+<%- include('partials/header') %>
+
+<div class="error-container">
+    <h2>Error</h2>
+    <% if (error && error.message) { %>
+        <p><%= error.message %></p>
+    <% } else { %>
+        <p>An error occurred. Please try again later.</p>
+    <% } %>
+    <div style="margin-top: 30px;">
+        <a href="/tasks" class="btn btn-primary">Back to Dashboard</a>
+    </div>
+</div>
+
+<%- include('partials/footer') %>
