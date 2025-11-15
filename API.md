@@ -1,6 +1,6 @@
 # RESTful API Documentation
 
-The Task Management System provides RESTful API endpoints for programmatic access to task data.
+Details of API endpoints.
 
 ## Base URL
 
