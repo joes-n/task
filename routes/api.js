@@ -224,6 +224,61 @@ router.get('/accounts', async (req, res) => {
   }
 });
 
+// POST /api/accounts - Create new account
+router.post('/accounts', async (req, res) => {
+  try {
+    const { username, email, password, confirmPassword } = req.body;
+
+    // Validation
+    if (password !== confirmPassword) {
+      return res.status(400).json({
+        success: false,
+        error: 'Passwords do not match'
+      });
+    }
+
+    if (password.length < 6) {
+      return res.status(400).json({
+        success: false,
+        error: 'Password must be at least 6 characters'
+      });
+    }
+
+    // Check if user exists
+    const existingUser = await User.findOne({ $or: [{ email }, { username }] });
+    if (existingUser) {
+      return res.status(409).json({
+        success: false,
+        error: 'User with this email or username already exists'
+      });
+    }
+
+    // Create new user
+    const user = new User({ username, email, password });
+    await user.save();
+
+    // Return user data without password
+    const userData = {
+      _id: user._id,
+      username: user.username,
+      email: user.email,
+      createdAt: user.createdAt
+    };
+
+    res.status(201).json({
+      success: true,
+      data: userData,
+      message: 'Account created successfully'
+    });
+  } catch (error) {
+    console.error('API Error creating account:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to create account'
+    });
+  }
+});
+
 // GET /api/accounts/:id - Read single account
 router.get('/accounts/:id', async (req, res) => {
   try {
