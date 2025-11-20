@@ -1,0 +1,36 @@
+<%- include('partials/header') %>
+
+<div class="auth-container">
+    <div class="auth-box">
+        <h2>Logged Out</h2>
+
+        <div class="logout-message">
+            <p class="logout-text">You are logged out. Redirecting to login in <span id="countdown" class="countdown-number">5</span>...</p>
+        </div>
+
+        <div class="redirect-info">
+            <p>If you are not redirected automatically,</p>
+            <a href="/login" class="btn btn-primary">click here to login</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Countdown timer
+    let seconds = <%= countdown || 5 %>;
+    const countdownElement = document.getElementById('countdown');
+
+    const timer = setInterval(() => {
+        seconds--;
+        if (countdownElement) {
+            countdownElement.textContent = seconds;
+        }
+
+        if (seconds <= 0) {
+            clearInterval(timer);
+            window.location.href = '/login';
+        }
+    }, 1000);
+</script>
+
+<%- include('partials/footer') %>

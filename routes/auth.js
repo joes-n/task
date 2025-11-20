@@ -101,7 +101,18 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// Logout handler
+// Logout page (with countdown)
+router.get('/logout', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error('Logout error:', err);
+      return res.redirect('/tasks');
+    }
+    res.render('logout', { title: 'Logged Out', countdown: 5 });
+  });
+});
+
+// Logout handler (POST - for form submissions)
 router.post('/logout', (req, res) => {
   req.session.destroy((err) => {
     if (err) {
