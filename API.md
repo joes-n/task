@@ -328,7 +328,82 @@ GET /api/accounts/60d5ec31f8b2b12a8c8e4560
 
 ---
 
-### 8. Delete Account
+### 8. Create Account
+
+Create a new user account.
+
+**Endpoint:** `POST /api/accounts`
+
+**Request Headers:**
+```
+Content-Type: application/json
+```
+
+**Request Body:**
+
+| Field | Type | Required | Description | Example |
+|-------|------|----------|-------------|---------|
+| `username` | string | Yes | Unique username | `"johndoe"` |
+| `email` | string | Yes | Unique email address | `"john@example.com"` |
+| `password` | string | Yes | Password (min 6 chars) | `"password123"` |
+| `confirmPassword` | string | Yes | Password confirmation | `"password123"` |
+
+**Example Request:**
+```bash
+POST /api/accounts
+Content-Type: application/json
+
+{
+  "username": "johndoe",
+  "email": "john@example.com",
+  "password": "password123",
+  "confirmPassword": "password123"
+}
+```
+
+**Success Response (201):**
+```json
+{
+  "success": true,
+  "data": {
+    "_id": "60d5ec31f8b2b12a8c8e4560",
+    "username": "johndoe",
+    "email": "john@example.com",
+    "createdAt": "2024-01-01T12:00:00.000Z"
+  },
+  "message": "Account created successfully"
+}
+```
+
+**Error Response (400 - Password mismatch):**
+```json
+{
+  "success": false,
+  "error": "Passwords do not match"
+}
+```
+
+**Error Response (400 - Password too short):**
+```json
+{
+  "success": false,
+  "error": "Password must be at least 6 characters"
+}
+```
+
+**Error Response (409 - User exists):**
+```json
+{
+  "success": false,
+  "error": "User with this email or username already exists"
+}
+```
+
+**Note:** The `password` field is never returned in the response for security reasons.
+
+---
+
+### 9. Delete Account
 
 Delete an account and all associated tasks.
 
@@ -384,6 +459,7 @@ Example: `2024-12-31T23:59:59.000Z`
 ## Error Codes
 
 - `400` - Bad Request: Invalid input or missing required fields
+- `409` - Conflict: Resource already exists (e.g., duplicate email or username)
 - `404` - Not Found: Task with specified ID does not exist
 - `500` - Internal Server Error: Server-side error
 
@@ -427,6 +503,18 @@ curl -X GET "http://localhost:3000/api/tasks?search=meeting&status=pending"
 ### Delete Account
 ```bash
 curl -X DELETE http://localhost:3000/api/accounts/60d5ec31f8b2b12a8c8e4560
+```
+
+### Create Account
+```bash
+curl -X POST http://localhost:3000/api/accounts \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "newuser",
+    "email": "newuser@example.com",
+    "password": "password123",
+    "confirmPassword": "password123"
+  }'
 ```
 
 ## Testing with Postman
