@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Task = require('../models/Task');
+const User = require('../models/User');
 
 // GET /api/tasks - Read all tasks (with optional filters)
 router.get('/tasks', async (req, res) => {
@@ -174,6 +175,76 @@ router.delete('/tasks/:id', async (req, res) => {
     res.status(500).json({
       success: false,
       error: 'Failed to delete task'
+    });
+  }
+});
+
+// GET /api/accounts - Read all accounts (with optional filters)
+router.get('/accounts', async (req, res) => {
+  try {
+    const { search, email, username, sort } = req.query;
+
+    // Build query
+    const query = {};
+
+    if (search) {
+      query.$or = [
+        { username: { $regex: search, $options: 'i' } },
+        { email: { $regex: search, $options: 'i' } }
+      ];
+    }
+
+    if (email) {
+      query.email = email;
+    }
+
+    if (username) {
+      query.username = username;
+    }
+
+    // Build sort
+    let sortObj = { createdAt: -1 };
+    if (sort === 'oldest') sortObj = { createdAt: 1 };
+    if (sort === 'username') sortObj = { username: 1 };
+    if (sort === 'email') sortObj = { email: 1 };
+
+    const accounts = await User.find(query).sort(sortObj).select('-password').lean();
+
+    res.json({
+      success: true,
+      count: accounts.length,
+      data: accounts
+    });
+  } catch (error) {
+    console.error('API Error fetching accounts:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch accounts'
+    });
+  }
+});
+
+// GET /api/accounts/:id - Read single account
+router.get('/accounts/:id', async (req, res) => {
+  try {
+    const account = await User.findById(req.params.id).select('-password').lean();
+
+    if (!account) {
+      return res.status(404).json({
+        success: false,
+        error: 'Account not found'
+      });
+    }
+
+    res.json({
+      success: true,
+      data: account
+    });
+  } catch (error) {
+    console.error('API Error fetching account:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch account'
     });
   }
 });
