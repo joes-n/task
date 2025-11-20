@@ -249,4 +249,54 @@ router.get('/accounts/:id', async (req, res) => {
   }
 });
 
+// DELETE /api/accounts/:id - Delete account
+router.delete('/accounts/:id', async (req, res) => {
+  try {
+    const { userId } = req.body || {};
+
+    // Validate userId provided
+    if (!userId) {
+      return res.status(400).json({
+        success: false,
+        error: 'userId is required'
+      });
+    }
+
+    // Verify ownership
+    if (userId !== req.params.id) {
+      return res.status(400).json({
+        success: false,
+        error: 'Cannot delete account: userId mismatch'
+      });
+    }
+
+    // Check if account exists
+    const account = await User.findById(req.params.id);
+    if (!account) {
+      return res.status(404).json({
+        success: false,
+        error: 'Account not found'
+      });
+    }
+
+    // Delete all associated tasks (cascade delete)
+    const deletedTasks = await Task.deleteMany({ user: userId });
+
+    // Delete account
+    await User.findByIdAndDelete(req.params.id);
+
+    res.json({
+      success: true,
+      message: 'Account deleted successfully',
+      deletedTasks: deletedTasks.deletedCount
+    });
+  } catch (error) {
+    console.error('API Error deleting account:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to delete account'
+    });
+  }
+});
+
 module.exports = router;
