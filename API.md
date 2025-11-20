@@ -252,6 +252,82 @@ DELETE /api/tasks/60d5ec49f8b2b12a8c8e4567
 
 ---
 
+### 6. Get All Accounts
+
+Retrieve all user accounts with optional filtering and sorting.
+
+**Endpoint:** `GET /api/accounts`
+
+**Query Parameters:**
+
+| Parameter | Type | Description | Example |
+|-----------|------|-------------|---------|
+| `search` | string | Search in username or email | `?search=john` |
+| `email` | string | Filter by exact email | `?email=john@example.com` |
+| `username` | string | Filter by exact username | `?username=johndoe` |
+| `sort` | string | Sort order | `?sort=newest` or `?sort=oldest` or `?sort=username` or `?sort=email` |
+
+**Example Request:**
+```bash
+GET /api/accounts?search=john&sort=newest
+```
+
+**Success Response:**
+```json
+{
+  "success": true,
+  "count": 2,
+  "data": [
+    {
+      "_id": "60d5ec31f8b2b12a8c8e4560",
+      "username": "johndoe",
+      "email": "john@example.com",
+      "createdAt": "2024-01-01T12:00:00.000Z",
+      "__v": 0
+    }
+  ]
+}
+```
+
+**Note:** The `password` field is never returned in responses for security reasons.
+
+---
+
+### 7. Get Single Account
+
+Retrieve a specific account by ID.
+
+**Endpoint:** `GET /api/accounts/:id`
+
+**Example Request:**
+```bash
+GET /api/accounts/60d5ec31f8b2b12a8c8e4560
+```
+
+**Success Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "_id": "60d5ec31f8b2b12a8c8e4560",
+    "username": "johndoe",
+    "email": "john@example.com",
+    "createdAt": "2024-01-01T12:00:00.000Z",
+    "__v": 0
+  }
+}
+```
+
+**Error Response (404):**
+```json
+{
+  "success": false,
+  "error": "Account not found"
+}
+```
+
+---
+
 ## Status Values
 
 - `pending` - Task has not been started
