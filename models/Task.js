@@ -29,21 +29,7 @@ const taskSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now
   }
-});
-
-// Update updatedAt before saving
-taskSchema.pre('save', function(next) {
-  this.updatedAt = Date.now();
-  next();
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model('Task', taskSchema);
