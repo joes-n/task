@@ -328,6 +328,70 @@ GET /api/accounts/60d5ec31f8b2b12a8c8e4560
 
 ---
 
+### 8. Delete Account
+
+Delete an account and all associated tasks.
+
+**Endpoint:** `DELETE /api/accounts/:id`
+
+**Request Headers:**
+```
+Content-Type: application/json
+```
+
+**Request Body:**
+
+| Field | Type | Required | Description | Example |
+|-------|------|----------|-------------|---------|
+| `userId` | string | Yes | ID of the account to delete | `"60d5ec31f8b2b12a8c8e4560"` |
+
+**Example Request:**
+```bash
+DELETE /api/accounts/60d5ec31f8b2b12a8c8e4560
+Content-Type: application/json
+
+{
+  "userId": "60d5ec31f8b2b12a8c8e4560"
+}
+```
+
+**Success Response (200):**
+```json
+{
+  "success": true,
+  "message": "Account deleted successfully",
+  "deletedTasks": 5
+}
+```
+
+**Error Response (400):**
+```json
+{
+  "success": false,
+  "error": "userId is required"
+}
+```
+
+**Error Response (400):**
+```json
+{
+  "success": false,
+  "error": "Cannot delete account: userId mismatch"
+}
+```
+
+**Error Response (404):**
+```json
+{
+  "success": false,
+  "error": "Account not found"
+}
+```
+
+**Note:** This operation will permanently delete the account and all associated tasks. This action cannot be undone.
+
+---
+
 ## Status Values
 
 - `pending` - Task has not been started
@@ -390,6 +454,13 @@ curl -X DELETE http://localhost:3000/api/tasks/60d5ec49f8b2b12a8c8e4567
 ### Search Tasks
 ```bash
 curl -X GET "http://localhost:3000/api/tasks?search=meeting&status=pending"
+```
+
+### Delete Account
+```bash
+curl -X DELETE http://localhost:3000/api/accounts/60d5ec31f8b2b12a8c8e4560 \
+  -H "Content-Type: application/json" \
+  -d '{"userId": "60d5ec31f8b2b12a8c8e4560"}'
 ```
 
 ## Testing with Postman
