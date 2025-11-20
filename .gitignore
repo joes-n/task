@@ -37,3 +37,5 @@ jspm_packages/
 tmp/
 temp/
 project.txt
+
+package-lock.json
