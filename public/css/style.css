@@ -30,7 +30,7 @@ body {
 }
 
 .container {
-    max-width: 1400px;
+    width: 85%;
     margin: 0 auto;
     background: transparent;
     border-radius: 0;
@@ -131,14 +131,11 @@ body.light-mode {
 .form-group input:focus {
     outline: none;
     border-color: var(--primary-red);
-    box-shadow: 0 0 10px rgba(255, 51, 51, 0.5);
+    box-shadow: 0 0 10px rgba(255, 51, 51, 0.3);
 }
-
 .btn {
     font-size: 1.4rem;
-    border-width: 3px;
     padding: 10px 30px;
-    font-weight: bold;
     font-family: var(--terminal-font);
 }
 
@@ -158,9 +155,7 @@ body.light-mode {
     color: #000;
     border-color: var(--primary-red);
     width: 100%;
-    font-weight: bold;
-    padding: 10px 10px !important;       /* Increased vertical padding so it feels massive */
-    line-height: 1 !important;           /* Kills any inherited line-height weirdness */
+    padding: 10px 10px !important;
     min-height: 40px;
     text-decoration: none;
 }
@@ -173,7 +168,7 @@ body.light-mode {
 
 .btn-primary:hover {
     background: #ff0000;
-    box-shadow: 0 0 20px rgba(255, 51, 51, 0.6);
+    box-shadow: 0 0 40px rgba(255, 51, 51, 0.3);
 }
 
 .btn-secondary {
@@ -181,12 +176,12 @@ body.light-mode {
     white-space: nowrap;
     color: var(--primary-red);
     border: 2px solid var(--primary-red);
-    margin-right: 10px;
+    text-align: center;
 }
 
 .btn-secondary:hover {
     background: rgba(255, 51, 51, 0.2);
-    box-shadow: 0 0 15px rgba(255, 51, 51, 0.4);
+    box-shadow: 0 0 40px rgba(255, 51, 51, 0.3);
 }
 
 .btn-danger {
@@ -250,7 +245,6 @@ body.light-mode {
 }
 
 .dashboard-header {
-    border-left: 5px solid var(--primary-red);
     padding-left: 20px;
     margin-bottom: 30px;
     display: flex;
@@ -262,6 +256,42 @@ body.light-mode {
     color: var(--primary-red);
     text-transform: uppercase;
     letter-spacing: 3px;
+}
+
+.dashboard-header--actions {
+    display: flex;
+    justify-content: space-between; /* Pushes items to far left and far right */
+    align-items: center;
+    width: 100%;
+    padding: 0;
+    margin-bottom: 30px;
+}
+
+/* Override the global 100% width */
+.dashboard-header--actions .header-btn {
+    width: auto !important; /* CRITICAL: Stops the button from filling the row */
+    min-width: 48%;       /* Keeps them chunky */
+    flex: 0 0 auto;         /* Prevents shrinking/growing */
+    margin: 0;              /* Removes auto margins */
+}
+
+.dashboard-header--actions .header-btn--add {
+    margin-right: auto;
+}
+
+.dashboard-header--actions .header-btn--logout {
+    margin-left: auto;
+}
+
+@media (max-width: 640px) {
+    .dashboard-header--actions {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .dashboard-header--actions .header-btn {
+        width: 100% !important; /* Go back to full width on phone */
+    }
 }
 
 .user-info {
@@ -333,7 +363,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .task-card-link:hover .task-card {
-    box-shadow: 0 0 40px rgba(255, 51, 51, 0.6);
+    box-shadow: 0 0 40px rgba(255, 51, 51, 0.3);
     border-color: #ff0000;
 }
 
@@ -343,11 +373,10 @@ input:focus, select:focus, textarea:focus {
     padding: 0;
     transition: all 0.3s;
     position: relative;
-    box-shadow: 0 0 20px rgba(255, 51, 51, 0.2);
 }
 
 .task-card:hover {
-    box-shadow: 0 0 30px rgba(255, 51, 51, 0.5);
+    box-shadow: 0 0 40px rgba(255, 51, 51, 0.3);
     border-color: #ff0000;
 }
 
@@ -594,22 +623,6 @@ input:focus, select:focus, textarea:focus {
     overflow: hidden;
 }
 
-/* LAYER 1: STATIC SCANLINES */
-.scanlines {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    background: linear-gradient(
-        to bottom,
-        rgba(255,255,255,0),
-        rgba(255,255,255,0) 50%,
-        rgba(0,0,0,0.3) 50%,
-        rgba(0,0,0,0.3)
-    );
-    background-size: 100% 3px;
-    opacity: 0.1;
-}
-
 /* LAYER 2: VIGNETTE (Dark Corners) */
 .vignette {
     width: 100%;
@@ -641,7 +654,7 @@ input:focus, select:focus, textarea:focus {
     text-align: center;
     padding: 30px 15px;
     font-size: 1.2rem;
-    letter-spacing: 3px;
+    letter-spacing: 2px;
     text-transform: uppercase;
 }
 
@@ -652,27 +665,20 @@ input:focus, select:focus, textarea:focus {
     border-bottom: 2px solid #331111;
 }
 
-/* PROCRASTINATE Button - Fixed at bottom */
+/* PROCRASTINATE Button - At bottom of tasks */
 .procrastinate-container {
-    position: fixed;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10000;
-    width: 90%;
-    max-width: 800px;
+    margin: 30px auto 0;
+    width: 100%;
 }
 
 .btn-procrastinate {
-    background: #ff3333;
-    color: #000;
+    background: #000000;
+    color: #808080;
     border: 3px solid #ff3333;
-    padding: 25px 40px;
+    padding: 5px 20px;
     font-size: 1.8rem;
-    font-weight: bold;
     text-transform: uppercase;
-    letter-spacing: 3px;
-    box-shadow: 0 0 20px rgba(255, 51, 51, 0.5);
+    letter-spacing: 2px;
     transition: all 0.3s;
     width: 100%;
     display: block;
@@ -682,8 +688,8 @@ input:focus, select:focus, textarea:focus {
 .btn-procrastinate:hover {
     background: #ff0000;
     border-color: #ff0000;
-    box-shadow: 0 0 40px rgba(255, 51, 51, 0.8);
-    transform: scale(1.05);
+    box-shadow: 0 0 40px rgba(255, 51, 51, 0.5);
+    color: #000000;
 }
 
 #regret-overlay {
@@ -704,9 +710,7 @@ input:focus, select:focus, textarea:focus {
     }
 
     .fatal-error-box {
-        width: 80%;
-        max-width: 1000px;
-        padding: 50px;
+        width: 60%;
         text-align: center;
         position: relative;
         background: transparent;
@@ -714,8 +718,8 @@ input:focus, select:focus, textarea:focus {
     }
 
     .fatal-error-box h1 {
-        font-size: 6rem;
-        margin: 40px 0;
+        font-size: 3rem;
+        margin: 20px 0;
         line-height: 1;
     }
 
@@ -791,7 +795,6 @@ input:focus, select:focus, textarea:focus {
 .custom-select-trigger:after {
     content: "V"; /* Retro ASCII arrow */
     font-family: monospace;
-    font-weight: bold;
     margin-left: 10px;
     color: var(--primary-red);
     transition: transform 0.3s;
