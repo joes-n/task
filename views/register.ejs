@@ -2,11 +2,10 @@
 
 <div class="auth-container">
     <div class="auth-box">
-        <h2>Register</h2>
 
         <% if (typeof error !== 'undefined') { %>
             <div class="alert alert-error">
-                <%= error %>
+                <span class="btn-label--baseline-fix"><%= error %></span>
             </div>
         <% } %>
 
@@ -58,7 +57,7 @@
             </div>
 
             <button type="submit" class="btn btn-primary">
-                <span class="btn-label--baseline-fix">Register</span>
+                <span class="btn-label--baseline-fix">REGISTER</span>
             </button>
         </form>
 

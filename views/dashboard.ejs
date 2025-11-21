@@ -14,41 +14,69 @@
     </div>
 
     <div class="task-controls">
-        <form action="/tasks" method="GET" class="search-box">
-            <input
-                type="text"
-                name="search"
-                placeholder="SEARCH TASKS"
-                value="<%= filters.search || '' %>"
-            >
+        <form action="/tasks" method="GET" class="search-box" id="task-filter-form">
+    <input
+        type="text"
+        name="search"
+        placeholder="SEARCH TASKS"
+        value="<%= filters.search || '' %>"
+    >
 
-            <select name="status">
-                <option value="">ALL STATUS</option>
-                <option value="pending" <%= filters.status === 'pending' ? 'selected' : '' %>>PENDING</option>
-                <option value="in-progress" <%= filters.status === 'in-progress' ? 'selected' : '' %>>IN PROGRESS</option>
-                <option value="completed" <%= filters.status === 'completed' ? 'selected' : '' %>>COMPLETED</option>
-            </select>
+    <div class="custom-select-wrapper">
+        <div class="custom-select">
+            <div class="custom-select-trigger">
+                <span><%= !filters.status ? 'ALL STATUS' : filters.status.toUpperCase().replace('-', ' ') %></span>
+            </div>
+            <div class="custom-options">
+                <span class="custom-option <%= !filters.status ? 'selected' : '' %>" data-value="">ALL STATUS</span>
+                <span class="custom-option <%= filters.status === 'pending' ? 'selected' : '' %>" data-value="pending">PENDING</span>
+                <span class="custom-option <%= filters.status === 'in-progress' ? 'selected' : '' %>" data-value="in-progress">IN PROGRESS</span>
+                <span class="custom-option <%= filters.status === 'completed' ? 'selected' : '' %>" data-value="completed">COMPLETED</span>
+            </div>
+        </div>
+        <input type="hidden" name="status" value="<%= filters.status || '' %>">
+    </div>
 
-            <select name="priority">
-                <option value="">ALL PRIORITY</option>
-                <option value="low" <%= filters.priority === 'low' ? 'selected' : '' %>>LOW</option>
-                <option value="medium" <%= filters.priority === 'medium' ? 'selected' : '' %>>MEDIUM</option>
-                <option value="high" <%= filters.priority === 'high' ? 'selected' : '' %>>HIGH</option>
-            </select>
+    <div class="custom-select-wrapper">
+        <div class="custom-select">
+            <div class="custom-select-trigger">
+                <span><%= !filters.priority ? 'ALL PRIORITY' : filters.priority.toUpperCase() %></span>
+            </div>
+            <div class="custom-options">
+                <span class="custom-option <%= !filters.priority ? 'selected' : '' %>" data-value="">ALL PRIORITY</span>
+                <span class="custom-option <%= filters.priority === 'low' ? 'selected' : '' %>" data-value="low">LOW</span>
+                <span class="custom-option <%= filters.priority === 'medium' ? 'selected' : '' %>" data-value="medium">MEDIUM</span>
+                <span class="custom-option <%= filters.priority === 'high' ? 'selected' : '' %>" data-value="high">HIGH</span>
+            </div>
+        </div>
+        <input type="hidden" name="priority" value="<%= filters.priority || '' %>">
+    </div>
 
-            <select name="sort">
-                <option value="newest">NEWEST FIRST</option>
-                <option value="oldest" <%= filters.sort === 'oldest' ? 'selected' : '' %>>OLDEST FIRST</option>
-                <option value="dueDate" <%= filters.sort === 'dueDate' ? 'selected' : '' %>>BY DUE DATE</option>
-            </select>
+    <div class="custom-select-wrapper">
+        <div class="custom-select">
+            <div class="custom-select-trigger">
+                 <span>
+                    <% if(filters.sort === 'oldest') { %> OLDEST FIRST
+                    <% } else if(filters.sort === 'dueDate') { %> BY DUE DATE
+                    <% } else { %> NEWEST FIRST <% } %>
+                 </span>
+            </div>
+            <div class="custom-options">
+                <span class="custom-option <%= filters.sort === 'newest' || !filters.sort ? 'selected' : '' %>" data-value="newest">NEWEST FIRST</span>
+                <span class="custom-option <%= filters.sort === 'oldest' ? 'selected' : '' %>" data-value="oldest">OLDEST FIRST</span>
+                <span class="custom-option <%= filters.sort === 'dueDate' ? 'selected' : '' %>" data-value="dueDate">BY DUE DATE</span>
+            </div>
+        </div>
+        <input type="hidden" name="sort" value="<%= filters.sort || 'newest' %>">
+    </div>
 
-            <button type="submit" class="btn btn-primary btn-small">
-                <span class="btn-label--baseline-fix">SEARCH</span>
-            </button>
-            <a href="/tasks" class="btn btn-secondary btn-small">
-                <span class="btn-label--baseline-fix">CLEAR</span>
-            </a>
-        </form>
+    <button type="submit" class="btn btn-primary btn-small">
+        <span class="btn-label--baseline-fix">SEARCH</span>
+    </button>
+    <a href="/tasks" class="btn btn-secondary btn-small">
+        <span class="btn-label--baseline-fix">CLEAR</span>
+    </a>
+</form>
     </div>
 
     <% if (typeof tasks !== 'undefined' && tasks.length > 0) { %>
@@ -56,7 +84,7 @@
             <% tasks.forEach((task, index) => { %>
                 <a href="/tasks/<%= task._id %>/edit" class="task-card-link">
                     <div class="task-card" data-file-number="<%= String(index + 1).padStart(2, '0') %>">
-                        <h3><%= task.title.toUpperCase() %></h3>
+                        <h3><span class="btn-label--baseline-fix"><%= task.title %></span></h3>
 
                         <div class="task-timestamp">
                             <%= new Date(task.createdAt || Date.now()).toLocaleDateString('en-GB').replace(/\//g, '/') %>
@@ -164,6 +192,61 @@
             }
         });
     });
+    // ... existing procrastinate code ...
+
+    // Custom Terminal Select Logic
+    document.addEventListener('DOMContentLoaded', function() {
+        const selectWrappers = document.querySelectorAll('.custom-select-wrapper');
+
+        selectWrappers.forEach(wrapper => {
+            const select = wrapper.querySelector('.custom-select');
+            const trigger = wrapper.querySelector('.custom-select-trigger');
+            const triggerSpan = trigger.querySelector('span');
+            const options = wrapper.querySelectorAll('.custom-option');
+            const hiddenInput = wrapper.querySelector('input[type="hidden"]');
+
+            // Toggle open/close
+            trigger.addEventListener('click', function(e) {
+                e.stopPropagation(); // Prevent immediate closing
+                // Close all other selects first
+                document.querySelectorAll('.custom-select').forEach(s => {
+                    if(s !== select) s.classList.remove('open');
+                });
+                select.classList.toggle('open');
+            });
+
+            // Option selection
+            options.forEach(option => {
+                option.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    
+                    // Update Visuals
+                    triggerSpan.textContent = this.textContent;
+                    
+                    // Remove selected class from siblings
+                    options.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+
+                    // Update Hidden Input Value
+                    hiddenInput.value = this.getAttribute('data-value');
+
+                    // Close dropdown
+                    select.classList.remove('open');
+
+                    // Submit the form to filter tasks
+                    document.getElementById('task-filter-form').submit();
+                });
+            });
+        });
+
+        // Close dropdowns when clicking anywhere else
+        document.addEventListener('click', function() {
+            document.querySelectorAll('.custom-select').forEach(select => {
+                select.classList.remove('open');
+            });
+        });
+    });
+
 </script>
 
 <!-- Add CRT overlay -->
