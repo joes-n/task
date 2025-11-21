@@ -2,7 +2,7 @@
 
 <div class="dashboard">
     <div class="dashboard-header">
-        <h2>█ LOAD PROGRESS █</h2>
+        <h2>TASKS</h2>
         <div class="user-info">
             <a href="/tasks/new" class="btn btn-primary">+ ADD TASK</a>
             <a href="/logout" class="btn btn-secondary">LOG OUT</a>
@@ -46,49 +46,49 @@
     <% if (typeof tasks !== 'undefined' && tasks.length > 0) { %>
         <div class="tasks-grid">
             <% tasks.forEach((task, index) => { %>
-                <div class="task-card" data-file-number="<%= String(index + 1).padStart(2, '0') %>">
-                    <h3><%= task.title.toUpperCase() %></h3>
-                    
-                    <div class="task-timestamp">
-                        <%= new Date(task.createdAt || Date.now()).toLocaleDateString('en-GB').replace(/\//g, '/') %> 
-                        <%= new Date(task.createdAt || Date.now()).toLocaleTimeString('en-GB', { hour12: false }) %>
-                    </div>
+                <a href="/tasks/<%= task._id %>/edit" class="task-card-link">
+                    <div class="task-card" data-file-number="<%= String(index + 1).padStart(2, '0') %>">
+                        <h3><%= task.title.toUpperCase() %></h3>
 
-                    <% if (task.description) { %>
-                        <p><%= task.description %></p>
-                    <% } else { %>
-                        <div class="no-data">NO DATA</div>
-                    <% } %>
+                        <div class="task-timestamp">
+                            <%= new Date(task.createdAt || Date.now()).toLocaleDateString('en-GB').replace(/\//g, '/') %>
+                            <%= new Date(task.createdAt || Date.now()).toLocaleTimeString('en-GB', { hour12: false }) %>
+                        </div>
 
-                    <div class="task-meta">
-                        <span class="task-status status-<%= task.status %>">
-                            <%= task.status.toUpperCase() %>
-                        </span>
-                        <span class="task-priority priority-<%= task.priority %>">
-                            <%= task.priority.toUpperCase() %>
-                        </span>
-                        <% if (task.dueDate) { %>
-                            <span>
-                                DUE: <%= new Date(task.dueDate).toLocaleString('en-GB', { 
-                                    day: '2-digit',
-                                    month: '2-digit', 
-                                    year: 'numeric',
-                                    hour: '2-digit',
-                                    minute: '2-digit',
-                                    hour12: false
-                                }).replace(',', '') %>
-                            </span>
+                        <% if (task.description) { %>
+                            <p><%= task.description %></p>
+                        <% } else { %>
+                            <div class="no-data">NO DESCRIPTION</div>
                         <% } %>
-                    </div>
 
-                    <div class="task-actions">
-                        <a href="/tasks/<%= task._id %>" class="btn btn-secondary btn-small">VIEW</a>
-                        <a href="/tasks/<%= task._id %>/edit" class="btn btn-secondary btn-small">EDIT</a>
-                        <form action="/tasks/<%= task._id %>?_method=DELETE" method="POST" style="display: inline;">
-                            <button type="submit" class="btn btn-danger btn-small" onclick="return confirm('DELETE FILE <%= String(index + 1).padStart(2, '0') %>?')">DELETE</button>
-                        </form>
+                        <div class="task-meta">
+                            <span class="task-status status-<%= task.status %>">
+                                <%= task.status.toUpperCase() %>
+                            </span>
+                            <span class="task-priority priority-<%= task.priority %>">
+                                <%= task.priority.toUpperCase() %>
+                            </span>
+                            <% if (task.dueDate) { %>
+                                <span>
+                                    DUE: <%= new Date(task.dueDate).toLocaleString('en-GB', {
+                                        day: '2-digit',
+                                        month: '2-digit',
+                                        year: 'numeric',
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                        hour12: false
+                                    }).replace(',', '') %>
+                                </span>
+                            <% } %>
+                        </div>
+
+                        <div class="task-actions">
+                            <form action="/tasks/<%= task._id %>?_method=DELETE" method="POST" style="display: inline;" onclick="event.stopPropagation();">
+                                <button type="submit" class="btn btn-danger btn-small" onclick="return confirm('DELETE FILE 00?')">DELETE</button>
+                            </form>
+                        </div>
                     </div>
-                </div>
+                </a>
             <% }) %>
         </div>
     <% } else { %>
@@ -101,8 +101,58 @@
 
 <!-- PROCRASTINATE Button -->
 <div class="procrastinate-container">
-    <a href="/procrastinate" class="btn btn-procrastinate">PROCRASTINATE</a>
+    <button id="procrastinate-btn" class="btn btn-procrastinate">
+        PROCRASTINATE
+    </button>
 </div>
+
+<div id="regret-overlay">
+    <div class="fatal-error-box">
+        <h1>YOU WILL REGRET THIS LATER.</h1>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const btn = document.getElementById('procrastinate-btn');
+        const overlay = document.getElementById('regret-overlay');
+        let timeoutId = null;
+
+        // Function to fade out
+        const fadeOut = () => {
+            // 1. Remove the class to trigger CSS transition (opacity goes to 0)
+            overlay.classList.remove('active');
+
+            // 2. Clear the timer so we don't trigger this twice
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+                timeoutId = null;
+            }
+        };
+
+        // Trigger the Red Screen
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if(confirm("ARE YOU SURE?")) {
+                // Make it visible INSTANTLY (no fade in)
+                // Temporarily disable transition for instant show
+                overlay.style.transition = 'none';
+                overlay.classList.add('active');
+
+                // Force a reflow to apply the class without transition
+                void overlay.offsetWidth;
+
+                // Restore transition for the fade out
+                overlay.style.transition = 'opacity 2s ease-in-out, visibility 2s';
+
+                // Set timer: After 3 seconds, start fading out
+                timeoutId = setTimeout(() => {
+                    fadeOut();
+                }, 1000);
+            }
+        });
+    });
+</script>
 
 <!-- Add CRT overlay -->
 <div class="crt-container">

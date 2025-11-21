@@ -108,7 +108,7 @@ router.get('/logout', (req, res) => {
       console.error('Logout error:', err);
       return res.redirect('/tasks');
     }
-    res.render('logout', { title: 'Logged Out', countdown: 5 });
+    res.render('logout', { title: 'Logged Out', countdown: 3 });
   });
 });
 

@@ -22,7 +22,7 @@
 body {
     font-family: var(--terminal-font);
     /* Bump from 18px to 28px - Pixel fonts need to be huge */
-    font-size: 28px; [cite: 46]
+    font-size: 28px;
     letter-spacing: 1px;
     background-color: var(--bg-color);
     color: var(--text-main);
@@ -37,6 +37,14 @@ body {
     min-height: calc(100vh - 40px);
     display: flex;
     flex-direction: column;
+}
+
+/* Add this to CSS */
+body.light-mode {
+    --bg-color: #e0e0e0;
+    --text-main: #111111;
+    --dim-grid: #cccccc;
+    /* Red usually stays red in these UIs as an accent */
 }
 
 /* Header - Terminal Style */
@@ -122,6 +130,7 @@ body {
     border-width: 3px;
     padding: 10px 30px;
     font-weight: bold;
+    font-family: var(--terminal-font);
 }
 
 .btn-primary {
@@ -288,6 +297,17 @@ input:focus, select:focus, textarea:focus {
     gap: 25px;
 }
 
+.task-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.task-card-link:hover .task-card {
+    box-shadow: 0 0 40px rgba(255, 51, 51, 0.6);
+    border-color: #ff0000;
+}
+
 .task-card {
     background: rgba(0, 0, 0, 0.9);
     border: 3px solid var(--primary-red);
@@ -304,10 +324,14 @@ input:focus, select:focus, textarea:focus {
 
 /* File header styling */
 .task-card h3 {
-    font-size: 1.8rem; /* Bigger headers */
-    padding: 15px;
     background: var(--primary-red);
-    color: black; /* High contrast black on red */
+    color: #000;
+    margin: 0;
+    padding: 15px;
+    font-size: 1.8rem; /* Large size */
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    border-bottom: 3px solid var(--border-red);
 }
 
 /* Content area */
@@ -583,21 +607,6 @@ input:focus, select:focus, textarea:focus {
     padding: 5px 10px;
 }
 
-/* File number badge */
-.task-card::before {
-    content: 'FILE ' attr(data-file-number);
-    position: absolute;
-    top: -12px;
-    left: 15px;
-    background: #000;
-    color: var(--primary-red);
-    padding: 2px 10px;
-    font-size: 0.7rem;
-    letter-spacing: 2px;
-    border: 2px solid var(--primary-red);
-    z-index: 1;
-}
-
 /* NO DATA state for empty descriptions */
 .task-card .no-data {
     color: var(--primary-red);
@@ -647,4 +656,78 @@ input:focus, select:focus, textarea:focus {
     border-color: #ff0000;
     box-shadow: 0 0 40px rgba(255, 51, 51, 0.8);
     transform: scale(1.05);
+}
+
+#regret-overlay {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100vw; height: 100vh;
+        background-color: #ff0000; /* Pure Signal Red */
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Silver', monospace;
+        cursor: none; /* Hide mouse for immersion */
+        opacity: 0;
+    visibility: hidden; /* Prevents clicking while hidden */
+    transition: opacity 2s ease-in-out, visibility 2s; /* 2 second fade */
+    display: flex; /* Always keep it flex, we toggle visibility instead */
+    }
+
+    .fatal-error-box {
+        width: 80%;
+        max-width: 1000px;
+        padding: 50px;
+        text-align: center;
+        position: relative;
+        background: transparent;
+        color: white;
+    }
+
+    .fatal-error-box h1 {
+        font-size: 6rem;
+        margin: 40px 0;
+        line-height: 1;
+    }
+
+    .error-header {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 2px solid white;
+        padding-bottom: 10px;
+        font-size: 2rem;
+        margin-bottom: 30px;
+    }
+
+    .error-console {
+        text-align: left;
+        font-size: 2rem;
+        background: rgba(0,0,0,0.3);
+        padding: 20px;
+    }
+
+    /* Corner Markers */
+    .corner {
+        position: absolute;
+        font-size: 3rem;
+        line-height: 1;
+    }
+    .c-tl { top: -15px; left: -12px; }
+    .c-tr { top: -15px; right: -12px; }
+    .c-bl { bottom: -20px; left: -12px; }
+    .c-br { bottom: -20px; right: -12px; }
+
+    /* Animation */
+    .blink-text {
+        animation: blinker 1s linear infinite;
+    }
+
+    @keyframes blinker {
+        50% { opacity: 0; }
+    }
+
+#regret-overlay.active {
+    opacity: 1;
+    visibility: visible;
 }
