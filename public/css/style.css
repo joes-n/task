@@ -89,8 +89,15 @@ body.light-mode {
     margin-bottom: 30px;
     color: var(--primary-red);
     text-align: center;
-    text-transform: uppercase;
     letter-spacing: 3px;
+}
+
+.auth-box .form-group label {
+    font-size: 1.5rem !important;        /* Makes EMAIL: and PASSWORD: properly big and consistent */
+    text-transform: uppercase;           /* Forces "Email:" → "EMAIL:" so both labels match */
+    letter-spacing: 4px;                 /* Gives it that proper terminal brutality */
+    margin-bottom: 12px;
+    line-height: 1;
 }
 
 .auth-form {
@@ -106,17 +113,19 @@ body.light-mode {
     margin-bottom: 8px;
     font-weight: normal;
     color: var(--primary-red);
-    text-transform: uppercase;
     font-size: 0.9rem;
     letter-spacing: 2px;
 }
 
 .form-group input {
     width: 100%;
-    padding: 12px;
-    border: 2px solid #333;
-    font-size: 1.2rem;
+    padding: 15px !important;
+    border: 3px solid #333;
+    font-size: 1.5rem !important;
     transition: all 0.3s;
+    font-family: var(--terminal-font) !important;
+    background: #000 !important;
+    color: #fff !important;
 }
 
 .form-group input:focus {
@@ -133,12 +142,32 @@ body.light-mode {
     font-family: var(--terminal-font);
 }
 
+/* Pixel fonts sit a little high; use a helper to nudge button labels back to center */
+.btn-label--baseline-fix {
+    display: inline-block;
+    position: relative;
+    top: 2px;
+    letter-spacing: 1px;
+}
+
 .btn-primary {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
     background: var(--primary-red);
     color: #000;
     border-color: var(--primary-red);
     width: 100%;
     font-weight: bold;
+    padding: 10px 10px !important;       /* Increased vertical padding so it feels massive */
+    line-height: 1 !important;           /* Kills any inherited line-height weirdness */
+    min-height: 40px; 
+}
+
+.auth-box .form-group input {
+    font-size: 1.8rem !important;        /* Absolutely massive, matches the "terminal" feel */
+    padding: 20px 15px !important;
+    letter-spacing: 2px;
 }
 
 .btn-primary:hover {
@@ -272,7 +301,6 @@ input, select, textarea, .form-group input {
     background: #000 !important;
     font-family: 'Silver', monospace !important;
     color: #fff !important;
-    text-transform: uppercase;
 }
 
 input:focus, select:focus, textarea:focus {
@@ -588,9 +616,9 @@ input:focus, select:focus, textarea:focus {
     height: 100%;
     position: absolute;
     background: radial-gradient(
-        circle,
-        rgba(0,0,0,0) 60%,
-        rgba(0,0,0,0.7) 100%
+        ellipse,
+        rgba(0,0,0,0) 70%,
+        rgba(0,0,0,0.3) 100%
     );
 }
 

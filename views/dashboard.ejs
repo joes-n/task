@@ -4,8 +4,12 @@
     <div class="dashboard-header">
         <h2>TASKS</h2>
         <div class="user-info">
-            <a href="/tasks/new" class="btn btn-primary">+ ADD TASK</a>
-            <a href="/logout" class="btn btn-secondary">LOG OUT</a>
+            <a href="/tasks/new" class="btn btn-primary">
+                <span class="btn-label--baseline-fix">+ ADD TASK</span>
+            </a>
+            <a href="/logout" class="btn btn-secondary">
+                <span class="btn-label--baseline-fix">LOG OUT</span>
+            </a>
         </div>
     </div>
 
@@ -38,8 +42,12 @@
                 <option value="dueDate" <%= filters.sort === 'dueDate' ? 'selected' : '' %>>BY DUE DATE</option>
             </select>
 
-            <button type="submit" class="btn btn-primary btn-small">SEARCH</button>
-            <a href="/tasks" class="btn btn-secondary btn-small">CLEAR</a>
+            <button type="submit" class="btn btn-primary btn-small">
+                <span class="btn-label--baseline-fix">SEARCH</span>
+            </button>
+            <a href="/tasks" class="btn btn-secondary btn-small">
+                <span class="btn-label--baseline-fix">CLEAR</span>
+            </a>
         </form>
     </div>
 
@@ -84,7 +92,9 @@
 
                         <div class="task-actions">
                             <form action="/tasks/<%= task._id %>?_method=DELETE" method="POST" style="display: inline;" onclick="event.stopPropagation();">
-                                <button type="submit" class="btn btn-danger btn-small" onclick="return confirm('DELETE FILE 00?')">DELETE</button>
+                                <button type="submit" class="btn btn-danger btn-small" onclick="return confirm('DELETE FILE 00?')">
+                                    <span class="btn-label--baseline-fix">DELETE</span>
+                                </button>
                             </form>
                         </div>
                     </div>
@@ -94,7 +104,9 @@
     <% } else { %>
         <div class="empty-state">
             <h3>NO TASK</h3>
-            <a href="/tasks/new" class="btn btn-primary">ADD NEW TASK</a>
+            <a href="/tasks/new" class="btn btn-primary">
+                <span class="btn-label--baseline-fix">ADD NEW TASK</span>
+            </a>
         </div>
     <% } %>
 </div>
@@ -102,7 +114,7 @@
 <!-- PROCRASTINATE Button -->
 <div class="procrastinate-container">
     <button id="procrastinate-btn" class="btn btn-procrastinate">
-        PROCRASTINATE
+        <span class="btn-label--baseline-fix">PROCRASTINATE</span>
     </button>
 </div>
 
