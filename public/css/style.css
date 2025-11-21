@@ -21,12 +21,8 @@
 
 body {
     font-family: var(--terminal-font);
-    /* Bump from 18px to 28px - Pixel fonts need to be huge */
-    font-size: 28px;
-    letter-spacing: 1px;
     background-color: var(--bg-color);
     color: var(--text-main);
-    line-height: 1.2; /* tighter line height for retro feel */
 }
 
 .container {
@@ -39,34 +35,19 @@ body {
     flex-direction: column;
 }
 
-/* Add this to CSS */
 body.light-mode {
     --bg-color: #e0e0e0;
     --text-main: #111111;
     --dim-grid: #cccccc;
-    /* Red usually stays red in these UIs as an accent */
 }
 
-/* Header - Terminal Style */
 .header {
-    /* Make the top bar massive */
     padding: 25px 30px;
     border-bottom: 4px solid var(--border-red);
 }
 
 .header h1 {
-    font-size: 3rem; /* Huge title */
-}
-
-/* Footer */
-.footer {
-    margin-top: auto;
-    padding: 15px;
-    text-align: center;
-    background: rgba(255, 51, 51, 0.1);
-    border-top: 2px solid var(--border-red);
-    color: var(--primary-red);
-    font-size: 0.8rem;
+    font-size: 3rem;
 }
 
 /* Auth pages */
@@ -93,11 +74,9 @@ body.light-mode {
 }
 
 .auth-box .form-group label {
-    font-size: 1.5rem !important;        /* Makes EMAIL: and PASSWORD: properly big and consistent */
-    text-transform: uppercase;           /* Forces "Email:" → "EMAIL:" so both labels match */
-    letter-spacing: 4px;                 /* Gives it that proper terminal brutality */
+    font-size: 1.5rem !important;
+    text-transform: uppercase;
     margin-bottom: 12px;
-    line-height: 1;
 }
 
 .auth-form {
@@ -113,8 +92,7 @@ body.light-mode {
     margin-bottom: 8px;
     font-weight: normal;
     color: var(--primary-red);
-    font-size: 0.9rem;
-    letter-spacing: 2px;
+    font-size: 1.4rem;
 }
 
 .form-group input {
@@ -135,7 +113,7 @@ body.light-mode {
 }
 .btn {
     font-size: 1.4rem;
-    padding: 10px 30px;
+    padding: 5px 10px;
     font-family: var(--terminal-font);
 }
 
@@ -144,7 +122,6 @@ body.light-mode {
     display: inline-block;
     position: relative;
     top: 2px;
-    letter-spacing: 1px;
 }
 
 .btn-primary {
@@ -155,7 +132,6 @@ body.light-mode {
     color: #000;
     border-color: var(--primary-red);
     width: 100%;
-    padding: 10px 10px !important;
     min-height: 40px;
     text-decoration: none;
 }
@@ -176,6 +152,7 @@ body.light-mode {
     white-space: nowrap;
     color: var(--primary-red);
     border: 2px solid var(--primary-red);
+    font-family: var(--terminal-font);
     text-align: center;
 }
 
@@ -190,7 +167,7 @@ body.light-mode {
     color: var(--primary-red);
     border: 2px solid var(--primary-red);
     padding: 8px 16px;
-    font-size: 0.85rem;
+    font-size: 1.2rem;
 }
 
 .btn-danger:hover {
@@ -199,8 +176,10 @@ body.light-mode {
 }
 
 .btn-small {
-    padding: 8px 16px;
-    font-size: 0.85rem;
+    padding: 8px 28px;
+    font-size: 1.2rem;
+    min-width: 150px;
+    text-align: center;
 }
 
 /* Alerts */
@@ -324,10 +303,13 @@ body.light-mode {
     font-size: 0.9rem;
 }
 
+.search-box input {
+    padding-bottom: 5px;
+}
+
 /* Make inputs huge and blocky */
 input, select, textarea, .form-group input {
     font-size: 1.5rem !important; /* ~42px */
-    padding: 15px !important;
     border-width: 3px !important;
     background: #000 !important;
     font-family: 'Silver', monospace !important;
@@ -363,21 +345,21 @@ input:focus, select:focus, textarea:focus {
 }
 
 .task-card-link:hover .task-card {
-    box-shadow: 0 0 40px rgba(255, 51, 51, 0.3);
-    border-color: #ff0000;
+    color: #ffffff;
+    border-color: #ffffff;
 }
 
 .task-card {
     background: rgba(0, 0, 0, 0.9);
     border: 3px solid var(--primary-red);
-    padding: 0;
+    padding: 0px;
     transition: all 0.3s;
     position: relative;
 }
 
 .task-card:hover {
-    box-shadow: 0 0 40px rgba(255, 51, 51, 0.3);
-    border-color: #ff0000;
+    color: #ffffff;
+    border-color: #ffffff;
 }
 
 /* File header styling */
@@ -389,12 +371,57 @@ input:focus, select:focus, textarea:focus {
     font-size: 1.8rem; /* Large size */
     letter-spacing: 3px;
     border-bottom: 3px solid var(--border-red);
+    display: flex;             /* Align title and timer */
+    justify-content: space-between;
+    align-items: center;
 }
 
-/* Content area */
-.task-card > p,
-.task-card > div {
-    padding: 15px;
+.task-countdown {
+    font-family: monospace;    /* Keeps numbers from jumping */
+    color: #000000;
+    opacity: 0.8;
+    font-family: var(--terminal-font);
+}
+
+.task-countdown.overdue {
+    font-family: var(--terminal-font);
+}
+
+/* Container for the whole timer block */
+.timer-container {
+    display: inline-flex;
+    align-items: baseline;
+    font-variant-numeric: tabular-nums;
+}
+
+/* The Main Time (Days/Hours/Mins/Secs) */
+/* We give it a min-width so it doesn't shift when seconds change from 1 to 0 */
+.timer-main {
+    display: inline-block;
+    min-width: 140px;      /* Fixed width large enough for "00D 00:00:00" */
+    text-align: right;     /* Anchors text to the right side of this box */
+}
+
+/* The Millisecond Container */
+.timer-ms-container {
+    display: inline-flex;  /* Flex keeps the digits in a row */
+    width: 30px;           /* STRICT WIDTH: Prevents the whole timer from moving */
+    justify-content: flex-start;
+}
+
+/* The Individual Digit Box */
+.ms-digit {
+    display: inline-block;
+    width: 14px;           /* Forces every number to take up exact same space */
+    text-align: center;    /* Centers the thin '1' inside the 14px box */
+    color: #000000;
+}
+
+.task-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
 }
 
 .task-card p {
@@ -660,9 +687,8 @@ input:focus, select:focus, textarea:focus {
 
 /* Timestamp styling */
 .task-timestamp {
-    font-size: 1rem; /* Readable timestamp */
+    font-size: 1.2rem; /* Readable timestamp */
     color: var(--primary-red);
-    border-bottom: 2px solid #331111;
 }
 
 /* PROCRASTINATE Button - At bottom of tasks */
@@ -783,7 +809,7 @@ input:focus, select:focus, textarea:focus {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 15px !important;
+    padding: 5px !important;
     font-size: 1.5rem;
     background: #000;
     color: #fff;
@@ -865,4 +891,148 @@ input:focus, select:focus, textarea:focus {
 .custom-options::-webkit-scrollbar-thumb {
     background: var(--primary-red); 
     border: 1px solid #000;
+}
+
+.task-card {
+    background: transparent;
+    border: none; /* Remove old border */
+    padding: 0px;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s;
+    margin-bottom: 20px;
+    font-family: var(--terminal-font);
+    transition: all 0.3s;
+}
+
+.task-card:hover {
+    color: #ffffff;
+}
+
+/* The Top Bar: "FILE 02" */
+.signalis-header {
+    background-color: var(--primary-red);
+    color: #000000;
+    text-align: center;
+    font-size: 1.4rem;
+    margin-bottom: 4px; /* Spacing between header and body */
+}
+
+/* The Main Box: Black bg, Red Border */
+.signalis-body {
+    border: 2px solid var(--primary-red);
+    background-color: #000000;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;     /* Center content like "NO DATA" */
+    justify-content: space-between;
+    min-height: 250px;       /* Force a vertical rectangle shape */
+    position: relative;
+    font-family: var(--terminal-font);
+}
+
+/* The Task Title (Replaces "NO DATA") */
+.signalis-title {
+    color: var(--primary-red);
+    font-size: 2rem;
+    text-transform: uppercase;
+    text-align: center;
+    letter-spacing: 4px;
+    margin: auto 0; /* Vertically center in the available space */
+    text-shadow: 0 0 5px rgba(255, 51, 51, 0.5);
+    font-family: var(--terminal-font);
+}
+
+/* The Timer/Countdown styling */
+.signalis-timer {
+    font-size: 1rem;
+    color: #fff;
+    margin-top: 10px;
+    border-bottom: 1px solid #333;
+    font-family: var(--terminal-font);
+}
+
+/* Empty-state cross fills the body */
+.signalis-body--empty {
+    background-color: rgba(20, 0, 0, 0.85);
+    background-image:
+        linear-gradient(to top right, transparent calc(50% - 1px), var(--primary-red) 50%, transparent calc(50% + 1px)),
+        linear-gradient(to bottom right, transparent calc(50% - 1px), var(--primary-red) 50%, transparent calc(50% + 1px));
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    box-shadow: inset 0 0 20px rgba(255, 51, 51, 0.15);
+}
+
+.task-card:hover .signalis-body--empty {
+    background-color: rgba(50, 0, 0, 0.9);
+    box-shadow: inset 0 0 25px rgba(255, 51, 51, 0.3);
+}
+
+.signalis-no-description {
+    z-index: 3;
+    padding: 6px 18px;
+    letter-spacing: 3px;
+    color: var(--primary-red);
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    border: 1px solid var(--primary-red);
+    background: rgba(0, 0, 0, 0.85);
+    text-align: center;
+}
+
+.signalis-body--empty .signalis-no-description {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* 1. The Wrapper: Remove borders/bg from here */
+.signalis-actions {
+    z-index: 2;
+    background: transparent; /* Changed from #000 */
+    border: none;           /* Changed from 1px solid */
+    padding: 0;             /* Changed from padding: 2px 10px */
+    font-family: var(--terminal-font);
+    display: flex;          /* Ensures button centers correctly */
+}
+
+/* 2. The Button: Give IT the border and background */
+.signalis-actions button {
+    background: #000;
+    border: 1px solid var(--primary-red) !important; /* !important overrides inline styles */
+    color: inherit;
+    padding: 2px 10px;      /* Padding moves here */
+    cursor: pointer;        /* Shows hand cursor */
+    font-family: inherit;
+    font-size: inherit;
+    transition: all 0.2s;
+    width: 100%;            /* Ensures it fills the wrapper if needed */
+}
+
+/* 3. Hover Effect: Invert colors when hovering the button */
+.signalis-actions button:hover {
+    background: var(--primary-red);
+    color: #000;
+    box-shadow: 0 0 10px rgba(255, 51, 51, 0.5);
+}
+
+.signalis-actions--inline {
+    margin-top: 20px;
+    align-self: stretch;
+    display: flex;
+    justify-content: center;
+}
+
+.signalis-actions--overlay {
+    margin-top: auto;
+    align-self: stretch;
+    display: flex;
+    justify-content: center;
+}
+
+/* Hide elements we don't want cluttering the Signalis look */
+.task-timestamp {
+    display: none; /* Hide creation date to keep it clean */
 }

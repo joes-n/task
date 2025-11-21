@@ -1,294 +1,361 @@
 <%- include('partials/header') %>
 
-<div class="dashboard">
-    <div class="dashboard-header dashboard-header--actions">
-        <a href="/tasks/new" class="btn btn-primary header-btn header-btn--add">
-            <span class="btn-label--baseline-fix">ADD TASK</span>
-        </a>
-        <a href="/logout" class="btn btn-secondary header-btn header-btn--logout">
-            <span class="btn-label--baseline-fix">LOG OUT</span>
-        </a>
-    </div>
-
-    <div class="task-controls">
-        <form action="/tasks" method="GET" class="search-box" id="task-filter-form">
-    <input
-        type="text"
-        name="search"
-        placeholder="SEARCH TASKS"
-        value="<%= filters.search || '' %>"
-        class="btn-label--baseline-fix"
-    >
-
-    <div class="custom-select-wrapper">
-        <div class="custom-select">
-            <div class="custom-select-trigger">
-                <span class="btn-label--baseline-fix"><%= !filters.status ? 'ALL STATUS' : filters.status.toUpperCase().replace('-', ' ') %></span>
-            </div>
-            <div class="custom-options">
-                <span class="custom-option <%= !filters.status ? 'selected' : '' %>" data-value=""><span class="btn-label--baseline-fix">ALL STATUS</span></span>
-                <span class="custom-option <%= filters.status === 'pending' ? 'selected' : '' %>" data-value="pending"><span class="btn-label--baseline-fix">PENDING</span></span>
-                <span class="custom-option <%= filters.status === 'in-progress' ? 'selected' : '' %>" data-value="in-progress"><span class="btn-label--baseline-fix">IN PROGRESS</span></span>
-                <span class="custom-option <%= filters.status === 'completed' ? 'selected' : '' %>" data-value="completed"><span class="btn-label--baseline-fix">COMPLETED</span></span>
-            </div>
-        </div>
-        <input type="hidden" name="status" value="<%= filters.status || '' %>">
-    </div>
-
-    <div class="custom-select-wrapper">
-        <div class="custom-select">
-            <div class="custom-select-trigger">
-                <span class="btn-label--baseline-fix"><%= !filters.priority ? 'ALL PRIORITY' : filters.priority.toUpperCase() %></span>
-            </div>
-            <div class="custom-options">
-                <span class="custom-option <%= !filters.priority ? 'selected' : '' %>" data-value=""><span class="btn-label--baseline-fix">ALL PRIORITY</span></span>
-                <span class="custom-option <%= filters.priority === 'low' ? 'selected' : '' %>" data-value="low"><span class="btn-label--baseline-fix">LOW</span></span>
-                <span class="custom-option <%= filters.priority === 'medium' ? 'selected' : '' %>" data-value="medium"><span class="btn-label--baseline-fix">MEDIUM</span></span>
-                <span class="custom-option <%= filters.priority === 'high' ? 'selected' : '' %>" data-value="high"><span class="btn-label--baseline-fix">HIGH</span></span>
-            </div>
-        </div>
-        <input type="hidden" name="priority" value="<%= filters.priority || '' %>">
-    </div>
-
-    <div class="custom-select-wrapper">
-        <div class="custom-select">
-            <div class="custom-select-trigger">
-                 <span class="btn-label--baseline-fix">
-                    <% if(filters.sort === 'oldest') { %> OLDEST FIRST
-                    <% } else if(filters.sort === 'dueDate') { %> BY DUE DATE
-                    <% } else { %> NEWEST FIRST <% } %>
-                 </span>
-            </div>
-            <div class="custom-options">
-                <span class="custom-option <%= filters.sort === 'newest' || !filters.sort ? 'selected' : '' %>" data-value="newest"><span class="btn-label--baseline-fix">NEWEST FIRST</span></span>
-                <span class="custom-option <%= filters.sort === 'oldest' ? 'selected' : '' %>" data-value="oldest"><span class="btn-label--baseline-fix">OLDEST FIRST</span></span>
-                <span class="custom-option <%= filters.sort === 'dueDate' ? 'selected' : '' %>" data-value="dueDate"><span class="btn-label--baseline-fix">BY DUE DATE</span></span>
-            </div>
-        </div>
-        <input type="hidden" name="sort" value="<%= filters.sort || 'newest' %>">
-    </div>
-
-    <button type="submit" class="btn btn-primary">
-        <span class="btn-label--baseline-fix">SEARCH</span>
-    </button>
-</form>
-    </div>
-
-    <% if (typeof tasks !== 'undefined' && tasks.length > 0) { %>
-        <div class="tasks-grid">
-            <% tasks.forEach((task, index) => { %>
-                <a href="/tasks/<%= task._id %>/edit" class="task-card-link">
-                    <div class="task-card" data-file-number="<%= String(index + 1).padStart(2, '0') %>">
-                        <h3><span class="btn-label--baseline-fix"><%= task.title %></span></h3>
-
-                        <div class="task-timestamp">
-                            <%= new Date(task.createdAt || Date.now()).toLocaleDateString('en-GB').replace(/\//g, '/') %>
-                            <%= new Date(task.createdAt || Date.now()).toLocaleTimeString('en-GB', { hour12: false }) %>
-                        </div>
-
-                        <% if (task.description) { %>
-                            <p><%= task.description %></p>
-                        <% } else { %>
-                            <div class="no-data">NO DESCRIPTION</div>
-                        <% } %>
-
-                        <div class="task-meta">
-                            <span class="task-status status-<%= task.status %>">
-                                <%= task.status.toUpperCase() %>
-                            </span>
-                            <span class="task-priority priority-<%= task.priority %>">
-                                <%= task.priority.toUpperCase() %>
-                            </span>
-                            <% if (task.dueDate) { %>
-                                <span>
-                                    DUE: <%= new Date(task.dueDate).toLocaleString('en-GB', {
-                                        day: '2-digit',
-                                        month: '2-digit',
-                                        year: 'numeric',
-                                        hour: '2-digit',
-                                        minute: '2-digit',
-                                        hour12: false
-                                    }).replace(',', '') %>
-                                </span>
-                            <% } %>
-                        </div>
-
-                        <div class="task-actions">
-                            <form action="/tasks/<%= task._id %>?_method=DELETE" method="POST" style="display: inline;" onclick="event.stopPropagation();">
-                                <button type="submit" class="btn btn-danger btn-small" onclick="return confirm('DELETE TASK')">
-                                    <span class="btn-label--baseline-fix">DELETE</span>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </a>
-            <% }) %>
-        </div>
-
-        <!-- PROCRASTINATE Button -->
-        <div class="procrastinate-container">
-            <button id="procrastinate-btn" class="btn btn-procrastinate">
-                <span class="btn-label--baseline-fix">PROCRASTINATE</span>
-            </button>
-        </div>
-    <% } else { %>
-        <div class="empty-state">
-            <h3>NO TASK</h3>
-            <a href="/tasks/new" class="btn btn-primary">
-                <span class="btn-label--baseline-fix">ADD NEW TASK</span>
+    <div class="dashboard">
+        <div class="dashboard-header dashboard-header--actions">
+            <a href="/tasks/new" class="btn btn-primary header-btn header-btn--add">
+                <span class="btn-label--baseline-fix">ADD TASK</span>
+            </a>
+            <a href="/logout" class="btn btn-secondary header-btn header-btn--logout">
+                <span class="btn-label--baseline-fix">LOG OUT</span>
             </a>
         </div>
-    <% } %>
-</div>
 
-<div id="regret-overlay">
-    <div class="fatal-error-box">
-        <h1>YOU WILL REGRET THIS LATER.</h1>
+        <div class="task-controls">
+            <form action="/tasks" method="GET" class="search-box" id="task-filter-form">
+                <input type="text" name="search" placeholder="SEARCH TASKS" value="<%= filters.search || '' %>">
+
+                <div class="custom-select-wrapper">
+                    <div class="custom-select">
+                        <div class="custom-select-trigger">
+                            <span class="btn-label--baseline-fix">
+                                <%= !filters.status ? 'ALL STATUS' : filters.status.toUpperCase().replace('-', ' ' ) %>
+                            </span>
+                        </div>
+                        <div class="custom-options">
+                            <span class="custom-option <%= !filters.status ? 'selected' : '' %>" data-value=""><span
+                                    class="btn-label--baseline-fix">ALL STATUS</span></span>
+                            <span class="custom-option <%= filters.status === 'pending' ? 'selected' : '' %>"
+                                data-value="pending"><span class="btn-label--baseline-fix">PENDING</span></span>
+                            <span class="custom-option <%= filters.status === 'in-progress' ? 'selected' : '' %>"
+                                data-value="in-progress"><span class="btn-label--baseline-fix">IN PROGRESS</span></span>
+                            <span class="custom-option <%= filters.status === 'completed' ? 'selected' : '' %>"
+                                data-value="completed"><span class="btn-label--baseline-fix">COMPLETED</span></span>
+                        </div>
+                    </div>
+                    <input type="hidden" name="status" value="<%= filters.status || '' %>">
+                </div>
+
+                <div class="custom-select-wrapper">
+                    <div class="custom-select">
+                        <div class="custom-select-trigger">
+                            <span class="btn-label--baseline-fix">
+                                <%= !filters.priority ? 'ALL PRIORITY' : filters.priority.toUpperCase() %>
+                            </span>
+                        </div>
+                        <div class="custom-options">
+                            <span class="custom-option <%= !filters.priority ? 'selected' : '' %>" data-value=""><span
+                                    class="btn-label--baseline-fix">ALL PRIORITY</span></span>
+                            <span class="custom-option <%= filters.priority === 'low' ? 'selected' : '' %>"
+                                data-value="low"><span class="btn-label--baseline-fix">LOW</span></span>
+                            <span class="custom-option <%= filters.priority === 'medium' ? 'selected' : '' %>"
+                                data-value="medium"><span class="btn-label--baseline-fix">MEDIUM</span></span>
+                            <span class="custom-option <%= filters.priority === 'high' ? 'selected' : '' %>"
+                                data-value="high"><span class="btn-label--baseline-fix">HIGH</span></span>
+                        </div>
+                    </div>
+                    <input type="hidden" name="priority" value="<%= filters.priority || '' %>">
+                </div>
+
+                <div class="custom-select-wrapper">
+                    <div class="custom-select">
+                        <div class="custom-select-trigger">
+                            <span class="btn-label--baseline-fix">
+                                <% if(filters.sort==='oldest' ) { %> OLDEST FIRST
+                                    <% } else if(filters.sort==='dueDate' ) { %> BY DUE DATE
+                                        <% } else { %> NEWEST FIRST <% } %>
+                            </span>
+                        </div>
+                        <div class="custom-options">
+                            <span
+                                class="custom-option <%= filters.sort === 'newest' || !filters.sort ? 'selected' : '' %>"
+                                data-value="newest"><span class="btn-label--baseline-fix">NEWEST FIRST</span></span>
+                            <span class="custom-option <%= filters.sort === 'oldest' ? 'selected' : '' %>"
+                                data-value="oldest"><span class="btn-label--baseline-fix">OLDEST FIRST</span></span>
+                            <span class="custom-option <%= filters.sort === 'dueDate' ? 'selected' : '' %>"
+                                data-value="dueDate"><span class="btn-label--baseline-fix">BY DUE DATE</span></span>
+                        </div>
+                    </div>
+                    <input type="hidden" name="sort" value="<%= filters.sort || 'newest' %>">
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    <span class="btn-label--baseline-fix">SEARCH</span>
+                </button>
+            </form>
+        </div>
+
+        <% if (typeof tasks !=='undefined' && tasks.length> 0) { %>
+            <div class="tasks-grid">
+                <% tasks.forEach((task, index) => { %>
+                    <a href="/tasks/<%= task._id %>/edit" class="task-card-link">
+                        <div class="task-card">
+                            
+                            <div class="signalis-header">
+                                <span class="btn-label--baseline-fix"><%= task.title.toUpperCase() %></span>
+                            </div>
+
+                            <div class="signalis-body<%= task.description ? '' : ' signalis-body--empty' %>">
+                                
+                                <div style="align-self: flex-end; font-size: 0.8rem; color: #888;">
+                                    [<%= task.priority.toUpperCase().substring(0,3) %>]
+                                </div>
+
+                                <% if (task.description) { %>
+                                    <div class="signalis-title">
+                                        <%= task.description %>
+                                    </div>
+                                <% } else { %>
+                                    <div class="signalis-no-description">
+                                        NO DESCRIPTION
+                                    </div>
+                                <% } %>
+
+                                <% if (task.dueDate) { %>
+                                    <div class="signalis-timer">
+                                        <span class="task-countdown" data-due="<%= task.dueDate %>"></span>
+                                    </div>
+                                <% } %>
+
+                                <% if (task.description) { %>
+                                    <div class="signalis-actions signalis-actions--inline">
+                                        <form action="/tasks/<%= task._id %>?_method=DELETE" method="POST" style="display: inline;" onclick="event.stopPropagation();">
+                                            <button type="submit" class="btn-secondary btn-small" onclick="return confirm('DELETE FILE?')" style="color: inherit;">
+                                                DELETE
+                                            </button>
+                                        </form>
+                                    </div>
+                                <% } else { %>
+                                    <div class="signalis-actions signalis-actions--overlay">
+                                        <form action="/tasks/<%= task._id %>?_method=DELETE" method="POST" style="display: inline;" onclick="event.stopPropagation();">
+                                            <button type="submit" class="btn-secondary btn-small" onclick="return confirm('DELETE FILE?')" style="color: inherit;">
+                                                DELETE
+                                            </button>
+                                        </form>
+                                    </div>
+                                <% } %>
+
+                            </div>
+                        </div>
+                    </a>
+                <% }) %>
+            </div>
+
+            <!-- PROCRASTINATE Button -->
+            <div class="procrastinate-container">
+                <button id="procrastinate-btn" class="btn btn-procrastinate">
+                    <span class="btn-label--baseline-fix">PROCRASTINATE</span>
+                </button>
+            </div>
+            <% } else { %>
+                <div class="empty-state">
+                    <h3>NO TASK</h3>
+                </div>
+                <% } %>
     </div>
-</div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // --- PROCRASTINATE BUTTON LOGIC (Kept Same) ---
-        const btn = document.getElementById('procrastinate-btn');
-        const overlay = document.getElementById('regret-overlay');
-        let timeoutId = null;
+    <div id="regret-overlay">
+        <div class="fatal-error-box">
+            <h1>YOU WILL REGRET THIS LATER.</h1>
+        </div>
+    </div>
 
-        const fadeOut = () => {
-            overlay.classList.remove('active');
-            if (timeoutId) { clearTimeout(timeoutId); timeoutId = null; }
-        };
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- PROCRASTINATE BUTTON LOGIC (Kept Same) ---
+            const btn = document.getElementById('procrastinate-btn');
+            const overlay = document.getElementById('regret-overlay');
+            let timeoutId = null;
 
-        if(btn) {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                if(confirm("ARE YOU SURE?")) {
-                    overlay.style.transition = 'none';
-                    overlay.classList.add('active');
-                    void overlay.offsetWidth;
-                    overlay.style.transition = 'opacity 2s ease-in-out, visibility 2s';
-                    timeoutId = setTimeout(() => fadeOut(), 1000);
-                }
-            });
-        }
+            const fadeOut = () => {
+                overlay.classList.remove('active');
+                if (timeoutId) { clearTimeout(timeoutId); timeoutId = null; }
+            };
 
-        // --- AJAX SORTING & FILTERING LOGIC ---
-        
-        // 1. The Function to Fetch and Swap Data
-        async function updateTaskGrid() {
-            const form = document.getElementById('task-filter-form');
-            const formData = new FormData(form);
-            const params = new URLSearchParams(formData);
-            
-            // Update URL without refreshing (so bookmarks work)
-            const newUrl = `${window.location.pathname}?${params.toString()}`;
-            window.history.pushState({}, '', newUrl);
-
-            try {
-                // Fetch the full HTML of the filtered page
-                const response = await fetch(newUrl);
-                const htmlText = await response.text();
-
-                // Parse the HTML string into a virtual DOM
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(htmlText, 'text/html');
-
-                // Find the new grid and the new empty state
-                const newGrid = doc.querySelector('.tasks-grid');
-                const newEmptyState = doc.querySelector('.empty-state');
-                
-                // Find current containers
-                const currentContainer = document.querySelector('.dashboard');
-                const currentGrid = document.querySelector('.tasks-grid');
-                const currentEmpty = document.querySelector('.empty-state');
-
-                // Logic to swap content
-                if (newGrid) {
-                    // If we have tasks...
-                    if (currentGrid) {
-                        // Just replace inner content
-                        currentGrid.innerHTML = newGrid.innerHTML;
-                    } else {
-                        // We were empty, now we have tasks. Replace empty state with grid.
-                        if(currentEmpty) currentEmpty.remove();
-                        // We need to insert the grid after the controls
-                        const controls = document.querySelector('.task-controls');
-                        // Create wrapper if needed or insert raw HTML
-                        controls.insertAdjacentHTML('afterend', newGrid.outerHTML);
+            if (btn) {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (confirm("ARE YOU SURE?")) {
+                        overlay.style.transition = 'none';
+                        overlay.classList.add('active');
+                        void overlay.offsetWidth;
+                        overlay.style.transition = 'opacity 2s ease-in-out, visibility 2s';
+                        timeoutId = setTimeout(() => fadeOut(), 1000);
                     }
-                } else if (newEmptyState) {
-                    // If no tasks found...
-                    if (currentGrid) currentGrid.remove();
-                    if (currentEmpty) {
-                        currentEmpty.innerHTML = newEmptyState.innerHTML;
-                    } else {
-                        const controls = document.querySelector('.task-controls');
-                        controls.insertAdjacentHTML('afterend', newEmptyState.outerHTML);
-                    }
-                }
-
-            } catch (error) {
-                console.error('Error fetching tasks:', error);
+                });
             }
-        }
 
-        // --- CUSTOM TERMINAL DROPDOWN LOGIC ---
-        const selectWrappers = document.querySelectorAll('.custom-select-wrapper');
+            // --- AJAX SORTING & FILTERING LOGIC ---
 
-        selectWrappers.forEach(wrapper => {
-            const select = wrapper.querySelector('.custom-select');
-            const trigger = wrapper.querySelector('.custom-select-trigger');
-            const triggerSpan = trigger.querySelector('span');
-            const options = wrapper.querySelectorAll('.custom-option');
-            const hiddenInput = wrapper.querySelector('input[type="hidden"]');
+            // 1. The Function to Fetch and Swap Data
+            async function updateTaskGrid() {
+                const form = document.getElementById('task-filter-form');
+                const formData = new FormData(form);
+                const params = new URLSearchParams(formData);
 
-            trigger.addEventListener('click', function(e) {
-                e.stopPropagation();
-                document.querySelectorAll('.custom-select').forEach(s => {
-                    if(s !== select) s.classList.remove('open');
-                });
-                select.classList.toggle('open');
-            });
+                // Update URL without refreshing (so bookmarks work)
+                const newUrl = `${window.location.pathname}?${params.toString()}`;
+                window.history.pushState({}, '', newUrl);
 
-            options.forEach(option => {
-                option.addEventListener('click', function(e) {
+                try {
+                    // Fetch the full HTML of the filtered page
+                    const response = await fetch(newUrl);
+                    const htmlText = await response.text();
+
+                    // Parse the HTML string into a virtual DOM
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(htmlText, 'text/html');
+
+                    // Find the new grid and the new empty state
+                    const newGrid = doc.querySelector('.tasks-grid');
+                    const newEmptyState = doc.querySelector('.empty-state');
+
+                    // Find current containers
+                    const currentContainer = document.querySelector('.dashboard');
+                    const currentGrid = document.querySelector('.tasks-grid');
+                    const currentEmpty = document.querySelector('.empty-state');
+
+                    // Logic to swap content
+                    if (newGrid) {
+                        // If we have tasks...
+                        if (currentGrid) {
+                            // Just replace inner content
+                            currentGrid.innerHTML = newGrid.innerHTML;
+                        } else {
+                            // We were empty, now we have tasks. Replace empty state with grid.
+                            if (currentEmpty) currentEmpty.remove();
+                            // We need to insert the grid after the controls
+                            const controls = document.querySelector('.task-controls');
+                            // Create wrapper if needed or insert raw HTML
+                            controls.insertAdjacentHTML('afterend', newGrid.outerHTML);
+                        }
+                    } else if (newEmptyState) {
+                        // If no tasks found...
+                        if (currentGrid) currentGrid.remove();
+                        if (currentEmpty) {
+                            currentEmpty.innerHTML = newEmptyState.innerHTML;
+                        } else {
+                            const controls = document.querySelector('.task-controls');
+                            controls.insertAdjacentHTML('afterend', newEmptyState.outerHTML);
+                        }
+                    }
+
+                } catch (error) {
+                    console.error('Error fetching tasks:', error);
+                }
+            }
+
+            // --- CUSTOM TERMINAL DROPDOWN LOGIC ---
+            const selectWrappers = document.querySelectorAll('.custom-select-wrapper');
+
+            selectWrappers.forEach(wrapper => {
+                const select = wrapper.querySelector('.custom-select');
+                const trigger = wrapper.querySelector('.custom-select-trigger');
+                const triggerSpan = trigger.querySelector('span');
+                const options = wrapper.querySelectorAll('.custom-option');
+                const hiddenInput = wrapper.querySelector('input[type="hidden"]');
+
+                trigger.addEventListener('click', function (e) {
                     e.stopPropagation();
-                    
-                    // Visual updates
-                    triggerSpan.textContent = this.textContent;
-                    options.forEach(opt => opt.classList.remove('selected'));
-                    this.classList.add('selected');
-                    
-                    // Data updates
-                    hiddenInput.value = this.getAttribute('data-value');
-                    select.classList.remove('open');
+                    document.querySelectorAll('.custom-select').forEach(s => {
+                        if (s !== select) s.classList.remove('open');
+                    });
+                    select.classList.toggle('open');
+                });
 
-                    // TRIGGER THE AJAX UPDATE INSTEAD OF SUBMIT
-                    updateTaskGrid(); 
+                options.forEach(option => {
+                    option.addEventListener('click', function (e) {
+                        e.stopPropagation();
+
+                        // Visual updates
+                        triggerSpan.textContent = this.textContent;
+                        options.forEach(opt => opt.classList.remove('selected'));
+                        this.classList.add('selected');
+
+                        // Data updates
+                        hiddenInput.value = this.getAttribute('data-value');
+                        select.classList.remove('open');
+
+                        // TRIGGER THE AJAX UPDATE INSTEAD OF SUBMIT
+                        updateTaskGrid();
+                    });
                 });
             });
-        });
 
-        // Handle the manual Search Button click too
-        const filterForm = document.getElementById('task-filter-form');
-        filterForm.addEventListener('submit', (e) => {
-            e.preventDefault(); // Stop standard reload
-            updateTaskGrid();
-        });
-
-        document.addEventListener('click', function() {
-            document.querySelectorAll('.custom-select').forEach(select => {
-                select.classList.remove('open');
+            // Handle the manual Search Button click too
+            const filterForm = document.getElementById('task-filter-form');
+            filterForm.addEventListener('submit', (e) => {
+                e.preventDefault(); // Stop standard reload
+                updateTaskGrid();
             });
+
+            document.addEventListener('click', function () {
+                document.querySelectorAll('.custom-select').forEach(select => {
+                    select.classList.remove('open');
+                });
+            });
+
+            // --- COUNTDOWN TIMER LOGIC ---
+            setInterval(() => {
+                const timers = document.querySelectorAll('.task-countdown');
+                if (timers.length === 0) return;
+
+                // Get time once per tick for performance
+                const now = new Date().getTime();
+
+                timers.forEach(timer => {
+                    const dueStr = timer.getAttribute('data-due');
+                    if (!dueStr) return;
+
+                    const dueDate = new Date(dueStr).getTime();
+                    const diff = dueDate - now;
+
+                    if (diff <= 0) {
+                        if (!timer.classList.contains('overdue')) {
+                            // Use simple text for failure state
+                            timer.innerHTML = "<span class='timer-main' style='text-align:center; width:auto;'>OVERDUE</span>";
+                            timer.classList.add('overdue');
+                        }
+                    } else {
+                        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                        const ms = Math.floor(diff % 1000);
+
+                        const d = String(days).padStart(2, '0');
+                        const h = String(hours).padStart(2, '0');
+                        const m = String(minutes).padStart(2, '0');
+                        const s = String(seconds).padStart(2, '0');
+
+                        // 1. Get the milliseconds as a string (e.g., "045")
+                        const msStr = String(ms).padStart(3, '0');
+
+                        // 2. Wrap EACH digit in a span
+                        // "045" -> <span class="ms-digit">0</span><span class="ms-digit">4</span><span class="ms-digit">5</span>
+                        const msHtml = msStr.split('')
+                            .map(digit => `<span class="ms-digit">${digit}</span>`)
+                            .join('');
+
+                        // 3. Inject the stable structure
+                        timer.innerHTML = `
+                    <div class="timer-container">
+                        <span class="timer-main">${d}D ${h}:${m}:${s}</span>
+                        <span class="timer-ms-container">.${msHtml}</span>
+                    </div>
+                `;
+
+                        timer.classList.remove('overdue');
+                    }
+                });
+            }, 41);
         });
-    });
-</script>
+    </script>
 
-<!-- Add CRT overlay -->
-<div class="crt-container">
-    <div class="scanlines"></div>
-    <div class="vignette"></div>
-    <div class="refresh-line"></div>
-</div>
+    <!-- Add CRT overlay -->
+    <div class="crt-container">
+        <div class="scanlines"></div>
+        <div class="vignette"></div>
+        <div class="refresh-line"></div>
+    </div>
 
-<%- include('partials/footer') %>
+    <%- include('partials/footer') %>
