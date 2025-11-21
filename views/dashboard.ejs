@@ -2,10 +2,10 @@
 
 <div class="dashboard">
     <div class="dashboard-header">
-        <h2>My Tasks</h2>
+        <h2>█ LOAD PROGRESS █</h2>
         <div class="user-info">
-            <a href="/tasks/new" class="btn btn-primary">+ Create New Task</a>
-            <a href="/logout" class="btn btn-secondary">Logout</a>
+            <a href="/tasks/new" class="btn btn-primary">+ ADD TASK</a>
+            <a href="/logout" class="btn btn-secondary">LOG OUT</a>
         </div>
     </div>
 
@@ -14,63 +14,78 @@
             <input
                 type="text"
                 name="search"
-                placeholder="Search tasks..."
+                placeholder="SEARCH TASKS"
                 value="<%= filters.search || '' %>"
             >
 
             <select name="status">
-                <option value="">All Statuses</option>
-                <option value="pending" <%= filters.status === 'pending' ? 'selected' : '' %>>Pending</option>
-                <option value="in-progress" <%= filters.status === 'in-progress' ? 'selected' : '' %>>In Progress</option>
-                <option value="completed" <%= filters.status === 'completed' ? 'selected' : '' %>>Completed</option>
+                <option value="">ALL STATUS</option>
+                <option value="pending" <%= filters.status === 'pending' ? 'selected' : '' %>>PENDING</option>
+                <option value="in-progress" <%= filters.status === 'in-progress' ? 'selected' : '' %>>IN PROGRESS</option>
+                <option value="completed" <%= filters.status === 'completed' ? 'selected' : '' %>>COMPLETED</option>
             </select>
 
             <select name="priority">
-                <option value="">All Priorities</option>
-                <option value="low" <%= filters.priority === 'low' ? 'selected' : '' %>>Low</option>
-                <option value="medium" <%= filters.priority === 'medium' ? 'selected' : '' %>>Medium</option>
-                <option value="high" <%= filters.priority === 'high' ? 'selected' : '' %>>High</option>
+                <option value="">ALL PRIORITY</option>
+                <option value="low" <%= filters.priority === 'low' ? 'selected' : '' %>>LOW</option>
+                <option value="medium" <%= filters.priority === 'medium' ? 'selected' : '' %>>MEDIUM</option>
+                <option value="high" <%= filters.priority === 'high' ? 'selected' : '' %>>HIGH</option>
             </select>
 
             <select name="sort">
-                <option value="newest">Newest First</option>
-                <option value="oldest" <%= filters.sort === 'oldest' ? 'selected' : '' %>>Oldest First</option>
-                <option value="dueDate" <%= filters.sort === 'dueDate' ? 'selected' : '' %>>By Due (include date and time)</option>
+                <option value="newest">NEWEST FIRST</option>
+                <option value="oldest" <%= filters.sort === 'oldest' ? 'selected' : '' %>>OLDEST FIRST</option>
+                <option value="dueDate" <%= filters.sort === 'dueDate' ? 'selected' : '' %>>BY DUE DATE</option>
             </select>
 
-            <button type="submit" class="btn btn-primary btn-small">Search</button>
-            <a href="/tasks" class="btn btn-secondary btn-small">Clear</a>
+            <button type="submit" class="btn btn-primary btn-small">SEARCH</button>
+            <a href="/tasks" class="btn btn-secondary btn-small">CLEAR</a>
         </form>
     </div>
 
     <% if (typeof tasks !== 'undefined' && tasks.length > 0) { %>
         <div class="tasks-grid">
-            <% tasks.forEach(task => { %>
-                <div class="task-card">
-                    <h3><%= task.title %></h3>
+            <% tasks.forEach((task, index) => { %>
+                <div class="task-card" data-file-number="<%= String(index + 1).padStart(2, '0') %>">
+                    <h3><%= task.title.toUpperCase() %></h3>
+                    
+                    <div class="task-timestamp">
+                        <%= new Date(task.createdAt || Date.now()).toLocaleDateString('en-GB').replace(/\//g, '/') %> 
+                        <%= new Date(task.createdAt || Date.now()).toLocaleTimeString('en-GB', { hour12: false }) %>
+                    </div>
+
                     <% if (task.description) { %>
                         <p><%= task.description %></p>
+                    <% } else { %>
+                        <div class="no-data">NO DATA</div>
                     <% } %>
 
                     <div class="task-meta">
                         <span class="task-status status-<%= task.status %>">
-                            <%= task.status %>
+                            <%= task.status.toUpperCase() %>
                         </span>
                         <span class="task-priority priority-<%= task.priority %>">
-                            <%= task.priority %> priority
+                            <%= task.priority.toUpperCase() %>
                         </span>
                         <% if (task.dueDate) { %>
                             <span>
-                                Due: <%= new Date(task.dueDate).toLocaleString() %>
+                                DUE: <%= new Date(task.dueDate).toLocaleString('en-GB', { 
+                                    day: '2-digit',
+                                    month: '2-digit', 
+                                    year: 'numeric',
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                    hour12: false
+                                }).replace(',', '') %>
                             </span>
                         <% } %>
                     </div>
 
                     <div class="task-actions">
-                        <a href="/tasks/<%= task._id %>" class="btn btn-secondary btn-small">View</a>
-                        <a href="/tasks/<%= task._id %>/edit" class="btn btn-secondary btn-small">Edit</a>
+                        <a href="/tasks/<%= task._id %>" class="btn btn-secondary btn-small">VIEW</a>
+                        <a href="/tasks/<%= task._id %>/edit" class="btn btn-secondary btn-small">EDIT</a>
                         <form action="/tasks/<%= task._id %>?_method=DELETE" method="POST" style="display: inline;">
-                            <button type="submit" class="btn btn-danger btn-small" onclick="return confirm('Are you sure you want to delete this task?')">Delete</button>
+                            <button type="submit" class="btn btn-danger btn-small" onclick="return confirm('DELETE FILE <%= String(index + 1).padStart(2, '0') %>?')">DELETE</button>
                         </form>
                     </div>
                 </div>
@@ -78,11 +93,22 @@
         </div>
     <% } else { %>
         <div class="empty-state">
-            <h3>No tasks found</h3>
-            <p>Create your first task to get started!</p>
-            <a href="/tasks/new" class="btn btn-primary">Create New Task</a>
+            <h3>NO TASK</h3>
+            <a href="/tasks/new" class="btn btn-primary">ADD NEW TASK</a>
         </div>
     <% } %>
+</div>
+
+<!-- PROCRASTINATE Button -->
+<div class="procrastinate-container">
+    <a href="/procrastinate" class="btn btn-procrastinate">PROCRASTINATE</a>
+</div>
+
+<!-- Add CRT overlay -->
+<div class="crt-container">
+    <div class="scanlines"></div>
+    <div class="vignette"></div>
+    <div class="refresh-line"></div>
 </div>
 
 <%- include('partials/footer') %>
