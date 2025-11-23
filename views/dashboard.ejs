@@ -118,25 +118,24 @@
                                     </div>
                                 <% } %>
 
-                                <% if (task.description) { %>
-                                    <div class="signalis-actions signalis-actions--inline">
-                                        <form action="/tasks/<%= task._id %>?_method=DELETE" method="POST" style="display: inline;" onclick="event.stopPropagation();">
-                                            <button type="submit" class="btn-secondary btn-small" onclick="return confirm('DELETE FILE?')" style="color: inherit;">
-                                                <span class="btn-label--baseline-fix signalis-glitch" data-text="DELETE">DELETE</span>
-                                            </button>
-                                        </form>
-                                    </div>
-                                <% } else { %>
-                                    <div class="signalis-actions signalis-actions--overlay">
-                                        <form action="/tasks/<%= task._id %>?_method=DELETE" method="POST" style="display: inline;" onclick="event.stopPropagation();">
-                                            <button type="submit" class="btn-secondary btn-small" onclick="return confirm('DELETE FILE?')" style="color: inherit;">
-                                                <span class="btn-label--baseline-fix signalis-glitch" data-text="DELETE">DELETE</span>
-                                            </button>
-                                        </form>
-                                    </div>
-                                <% } %>
-
                             </div>
+                            <% if (task.description) { %>
+                                <div class="signalis-actions signalis-actions--inline">
+                                    <form action="/tasks/<%= task._id %>?_method=DELETE" method="POST" style="display: inline; width: 100%;" onclick="event.stopPropagation();">
+                                        <button type="submit" class="btn-secondary btn-small" onclick="return confirm('DELETE FILE?')" style="color: inherit; width: 100%;">
+                                            <span class="btn-label--baseline-fix signalis-glitch" data-text="DELETE">DELETE</span>
+                                        </button>
+                                    </form>
+                                </div>
+                            <% } else { %>
+                                <div class="signalis-actions signalis-actions--overlay">
+                                    <form action="/tasks/<%= task._id %>?_method=DELETE" method="POST" style="display: inline; width: 100%;" onclick="event.stopPropagation();">
+                                        <button type="submit" class="btn-secondary btn-small" onclick="return confirm('DELETE FILE?')" style="color: inherit; width: 100%;">
+                                            <span class="btn-label--baseline-fix signalis-glitch" data-text="DELETE">DELETE</span>
+                                        </button>
+                                    </form>
+                                </div>
+                            <% } %>
                         </div>
                     </a>
                 <% }) %>

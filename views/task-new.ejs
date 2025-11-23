@@ -1,14 +1,13 @@
 <%- include('partials/header') %>
 
 <div class="dashboard">
-    <div class="dashboard-header">
-        <h2 class="signalis-glitch" data-text="Create New Task">Create New Task</h2>
-        <div class="user-info">
-            <a href="/tasks" class="btn btn-secondary">
-                <span class="btn-label--baseline-fix signalis-glitch" data-text="← Back to Tasks">← Back to Tasks</span>
-            </a>
-        </div>
-    </div>
+
+    <% 
+        const defaultStatus = typeof task !== 'undefined' && task.status ? task.status : 'pending';
+        const defaultPriority = typeof task !== 'undefined' && task.priority ? task.priority : 'medium';
+        const defaultStatusLabel = defaultStatus.toUpperCase().replace('-', ' ');
+        const defaultPriorityLabel = defaultPriority.toUpperCase();
+    %>
 
     <div style="max-width: 600px; margin: 0 auto;">
         <% if (typeof error !== 'undefined') { %>
@@ -43,26 +42,54 @@
 
             <div class="form-row">
                 <div class="form-group">
-                    <label for="status" class="signalis-glitch" data-text="Status">Status</label>
-                    <select id="status" name="status">
-                        <option value="pending">Pending</option>
-                        <option value="in-progress">In Progress</option>
-                        <option value="completed">Completed</option>
-                    </select>
+                    <label class="signalis-glitch" data-text="Status">Status</label>
+                    <div class="custom-select-wrapper custom-select-wrapper--form">
+                        <div class="custom-select">
+                            <div class="custom-select-trigger">
+                                <span class="btn-label--baseline-fix signalis-glitch" data-text="<%= defaultStatusLabel %>"><%= defaultStatusLabel %></span>
+                            </div>
+                            <div class="custom-options">
+                                <span class="custom-option <%= defaultStatus === 'pending' ? 'selected' : '' %>" data-value="pending">
+                                    <span class="btn-label--baseline-fix signalis-glitch" data-text="PENDING">PENDING</span>
+                                </span>
+                                <span class="custom-option <%= defaultStatus === 'in-progress' ? 'selected' : '' %>" data-value="in-progress">
+                                    <span class="btn-label--baseline-fix signalis-glitch" data-text="IN PROGRESS">IN PROGRESS</span>
+                                </span>
+                                <span class="custom-option <%= defaultStatus === 'completed' ? 'selected' : '' %>" data-value="completed">
+                                    <span class="btn-label--baseline-fix signalis-glitch" data-text="COMPLETED">COMPLETED</span>
+                                </span>
+                            </div>
+                        </div>
+                        <input type="hidden" id="status" name="status" value="<%= defaultStatus %>">
+                    </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="priority" class="signalis-glitch" data-text="Priority">Priority</label>
-                    <select id="priority" name="priority">
-                        <option value="low">Low</option>
-                        <option value="medium" selected>Medium</option>
-                        <option value="high">High</option>
-                    </select>
+                    <label class="signalis-glitch" data-text="Priority">Priority</label>
+                    <div class="custom-select-wrapper custom-select-wrapper--form">
+                        <div class="custom-select">
+                            <div class="custom-select-trigger">
+                                <span class="btn-label--baseline-fix signalis-glitch" data-text="<%= defaultPriorityLabel %>"><%= defaultPriorityLabel %></span>
+                            </div>
+                            <div class="custom-options">
+                                <span class="custom-option <%= defaultPriority === 'low' ? 'selected' : '' %>" data-value="low">
+                                    <span class="btn-label--baseline-fix signalis-glitch" data-text="LOW">LOW</span>
+                                </span>
+                                <span class="custom-option <%= defaultPriority === 'medium' ? 'selected' : '' %>" data-value="medium">
+                                    <span class="btn-label--baseline-fix signalis-glitch" data-text="MEDIUM">MEDIUM</span>
+                                </span>
+                                <span class="custom-option <%= defaultPriority === 'high' ? 'selected' : '' %>" data-value="high">
+                                    <span class="btn-label--baseline-fix signalis-glitch" data-text="HIGH">HIGH</span>
+                                </span>
+                            </div>
+                        </div>
+                        <input type="hidden" id="priority" name="priority" value="<%= defaultPriority %>">
+                    </div>
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="dueDate" class="signalis-glitch" data-text="Due (include date and time)">Due (include date and time)</label>
+                <label for="dueDate" class="signalis-glitch" data-text="Due">Due time</label>
                 <input
                     type="datetime-local"
                     id="dueDate"
@@ -82,5 +109,66 @@
         </form>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const wrappers = document.querySelectorAll('.task-edit-form .custom-select-wrapper');
+        if (!wrappers.length) return;
+
+        const closeAllSelects = () => {
+            document.querySelectorAll('.task-edit-form .custom-select.open').forEach(select => select.classList.remove('open'));
+        };
+
+        wrappers.forEach(wrapper => {
+            const select = wrapper.querySelector('.custom-select');
+            const trigger = wrapper.querySelector('.custom-select-trigger');
+            const triggerLabel = trigger ? trigger.querySelector('.btn-label--baseline-fix') : null;
+            const options = wrapper.querySelectorAll('.custom-option');
+            const hiddenInput = wrapper.querySelector('input[type="hidden"]');
+
+            if (!select || !trigger || !triggerLabel || !hiddenInput) return;
+
+            const applySelection = (option) => {
+                const optionLabel = option.querySelector('.btn-label--baseline-fix');
+                const labelText = optionLabel && optionLabel.dataset.text
+                    ? optionLabel.dataset.text
+                    : option.textContent.trim();
+
+                triggerLabel.dataset.text = labelText;
+                triggerLabel.textContent = labelText;
+                hiddenInput.value = option.dataset.value;
+
+                options.forEach(opt => opt.classList.remove('selected'));
+                option.classList.add('selected');
+            };
+
+            const currentValue = hiddenInput.value;
+            const defaultOption = Array.from(options).find(opt => opt.dataset.value === currentValue);
+            if (defaultOption) {
+                applySelection(defaultOption);
+            }
+
+            trigger.addEventListener('click', (event) => {
+                event.stopPropagation();
+                document.querySelectorAll('.task-edit-form .custom-select').forEach(other => {
+                    if (other !== select) {
+                        other.classList.remove('open');
+                    }
+                });
+                select.classList.toggle('open');
+            });
+
+            options.forEach(option => {
+                option.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    applySelection(option);
+                    select.classList.remove('open');
+                });
+            });
+        });
+
+        document.addEventListener('click', closeAllSelects);
+    });
+</script>
 
 <%- include('partials/footer') %>
