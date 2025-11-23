@@ -1,17 +1,18 @@
 <%- include('partials/header') %>
 
-<div class="auth-container">
-    <div class="auth-box">
-        <h2><span class="signalis-text-effect">Logged Out</span></h2>
+    <div class="auth-container">
+        <div class="auth-box">
+        <h2><span class="signalis-glitch" data-text="Logged Out">Logged Out</span></h2>
 
         <div class="logout-message">
-            <p class="logout-text signalis-text-effect">REDIRECT TO LOG IN <span id="countdown" class="countdown-number signalis-text-effect">3</span>...</p>
+            <% const logoutCountdown = typeof countdown !== 'undefined' ? countdown : 3; %>
+            <p class="logout-text signalis-glitch" data-text="REDIRECT TO LOG IN <%= logoutCountdown %>...">REDIRECT TO LOG IN <span id="countdown" class="countdown-number signalis-glitch" data-text="<%= logoutCountdown %>"><%= logoutCountdown %></span>...</p>
         </div>
 
         <div class="redirect-info">
-            <p class="signalis-text-effect">If you are not redirected automatically,</p>
+            <p class="signalis-glitch" data-text="If you are not redirected automatically,">If you are not redirected automatically,</p>
             <a href="/login" class="btn btn-primary">
-                <span class="btn-label--baseline-fix">Click here</span>
+                <span class="btn-label--baseline-fix signalis-glitch" data-text="Click here">Click here</span>
             </a>
         </div>
     </div>
@@ -21,11 +22,16 @@
     // Countdown timer
     let seconds = <%= countdown || 3 %>;
     const countdownElement = document.getElementById('countdown');
+    const logoutText = document.querySelector('.logout-text');
 
     const timer = setInterval(() => {
         seconds--;
         if (countdownElement) {
             countdownElement.textContent = seconds;
+            countdownElement.dataset.text = seconds;
+            if (logoutText) {
+                logoutText.dataset.text = `REDIRECT TO LOG IN ${seconds}...`;
+            }
         }
 
         if (seconds <= 0) {

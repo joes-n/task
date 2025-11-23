@@ -2,10 +2,10 @@
 
 <div class="dashboard">
     <div class="dashboard-header">
-        <h2>Edit Task</h2>
+        <h2 class="signalis-glitch" data-text="Edit Task">Edit Task</h2>
         <div class="user-info">
             <a href="/tasks" class="btn btn-secondary">
-                <span class="btn-label--baseline-fix">← Back to Tasks</span>
+                <span class="btn-label--baseline-fix signalis-glitch" data-text="← Back to Tasks">← Back to Tasks</span>
             </a>
         </div>
     </div>
@@ -13,13 +13,13 @@
     <div style="max-width: 600px; margin: 0 auto;">
         <% if (typeof error !== 'undefined') { %>
             <div class="alert alert-error">
-                <%= error %>
+                <span class="signalis-glitch" data-text="<%= error %>"><%= error %></span>
             </div>
         <% } %>
 
         <form action="/tasks/<%= task._id %>?_method=PUT" method="POST" class="task-edit-form">
             <div class="form-group">
-                <label for="title">Title *</label>
+                <label for="title" class="signalis-glitch" data-text="Title *">Title *</label>
                 <input
                     type="text"
                     id="title"
@@ -32,7 +32,7 @@
             </div>
 
             <div class="form-group">
-                <label for="description">Description</label>
+                <label for="description" class="signalis-glitch" data-text="Description">Description</label>
                 <textarea
                     id="description"
                     name="description"
@@ -43,7 +43,7 @@
 
             <div class="form-row">
                 <div class="form-group">
-                    <label for="status">Status</label>
+                    <label for="status" class="signalis-glitch" data-text="Status">Status</label>
                     <select id="status" name="status">
                         <option value="pending" <%= task.status === 'pending' ? 'selected' : '' %>>Pending</option>
                         <option value="in-progress" <%= task.status === 'in-progress' ? 'selected' : '' %>>In Progress</option>
@@ -52,7 +52,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="priority">Priority</label>
+                    <label for="priority" class="signalis-glitch" data-text="Priority">Priority</label>
                     <select id="priority" name="priority">
                         <option value="low" <%= task.priority === 'low' ? 'selected' : '' %>>Low</option>
                         <option value="medium" <%= task.priority === 'medium' ? 'selected' : '' %>>Medium</option>
@@ -62,7 +62,7 @@
             </div>
 
             <div class="form-group">
-                <label for="dueDate">Due (include date and time)</label>
+                <label for="dueDate" class="signalis-glitch" data-text="Due (include date and time)">Due (include date and time)</label>
                 <input
                     type="datetime-local"
                     id="dueDate"
@@ -81,10 +81,10 @@
 
             <div style="display: flex; gap: 10px;">
                 <button type="submit" class="btn btn-primary">
-                    <span class="btn-label--baseline-fix">Update Task</span>
+                    <span class="btn-label--baseline-fix signalis-glitch" data-text="Update Task">Update Task</span>
                 </button>
                 <a href="/tasks" class="btn btn-secondary">
-                    <span class="btn-label--baseline-fix">Cancel</span>
+                    <span class="btn-label--baseline-fix signalis-glitch" data-text="Cancel">Cancel</span>
                 </a>
             </div>
         </form>

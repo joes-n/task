@@ -1,15 +1,15 @@
 <%- include('partials/header') %>
 
 <div class="error-container">
-    <h2>Error</h2>
+    <h2 class="signalis-glitch" data-text="Error">Error</h2>
     <% if (error && error.message) { %>
-        <p><%= error.message %></p>
+        <p class="signalis-glitch" data-text="<%= error.message %>"><%= error.message %></p>
     <% } else { %>
-        <p>An error occurred. Please try again later.</p>
+        <p class="signalis-glitch" data-text="An error occurred. Please try again later.">An error occurred. Please try again later.</p>
     <% } %>
     <div style="margin-top: 30px;">
         <a href="/tasks" class="btn btn-primary">
-            <span class="btn-label--baseline-fix">Back to Dashboard</span>
+            <span class="btn-label--baseline-fix signalis-glitch" data-text="Back to Dashboard">Back to Dashboard</span>
         </a>
     </div>
 </div>

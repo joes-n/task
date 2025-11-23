@@ -5,13 +5,13 @@
 
         <% if (typeof error !== 'undefined') { %>
             <div class="alert alert-error">
-                <span class="btn-label--baseline-fix"><%= error %></span>
+                <span class="btn-label--baseline-fix signalis-glitch" data-text="<%= error %>"><%= error %></span>
             </div>
         <% } %>
 
         <form action="/register" method="POST" class="auth-form">
             <div class="form-group">
-                <label for="username">Username:</label>
+                <label for="username" class="signalis-glitch" data-text="Username:">Username:</label>
                 <input
                     type="text"
                     id="username"
@@ -24,7 +24,7 @@
             </div>
 
             <div class="form-group">
-                <label for="email">Email:</label>
+                <label for="email" class="signalis-glitch" data-text="Email:">Email:</label>
                 <input
                     type="email"
                     id="email"
@@ -35,7 +35,7 @@
             </div>
 
             <div class="form-group">
-                <label for="password">Password:</label>
+                <label for="password" class="signalis-glitch" data-text="Password:">Password:</label>
                 <input
                     type="password"
                     id="password"
@@ -46,7 +46,7 @@
             </div>
 
             <div class="form-group">
-                <label for="confirmPassword">Confirm Password:</label>
+                <label for="confirmPassword" class="signalis-glitch" data-text="Confirm Password:">Confirm Password:</label>
                 <input
                     type="password"
                     id="confirmPassword"
@@ -57,12 +57,13 @@
             </div>
 
             <button type="submit" class="btn btn-primary">
-                <span class="btn-label--baseline-fix">REGISTER</span>
+                <span class="btn-label--baseline-fix signalis-glitch" data-text="REGISTER">REGISTER</span>
             </button>
         </form>
 
         <p class="auth-link">
-            Already have an account? <a href="/login">Login here</a>
+            <span class="signalis-glitch" data-text="Already have an account?">Already have an account?</span>
+            <a href="/login" class="signalis-glitch" data-text="Login here">Login here</a>
         </p>
     </div>
 </div>

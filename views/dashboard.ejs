@@ -3,10 +3,10 @@
     <div class="dashboard">
         <div class="dashboard-header dashboard-header--actions">
             <a href="/tasks/new" class="btn btn-primary header-btn header-btn--add">
-                <span class="btn-label--baseline-fix">ADD TASK</span>
+                <span class="btn-label--baseline-fix signalis-glitch" data-text="ADD TASK">ADD TASK</span>
             </a>
             <a href="/logout" class="btn btn-secondary header-btn header-btn--logout">
-                <span class="btn-label--baseline-fix">LOG OUT</span>
+                <span class="btn-label--baseline-fix signalis-glitch" data-text="LOG OUT">LOG OUT</span>
             </a>
         </div>
 
@@ -17,19 +17,20 @@
                 <div class="custom-select-wrapper">
                     <div class="custom-select">
                         <div class="custom-select-trigger">
-                            <span class="btn-label--baseline-fix">
-                                <%= !filters.status ? 'ALL STATUS' : filters.status.toUpperCase().replace('-', ' ' ) %>
+                            <% const statusLabel = !filters.status ? 'ALL STATUS' : filters.status.toUpperCase().replace('-', ' ' ); %>
+                            <span class="btn-label--baseline-fix signalis-glitch" data-text="<%= statusLabel %>">
+                                <%= statusLabel %>
                             </span>
                         </div>
                         <div class="custom-options">
                             <span class="custom-option <%= !filters.status ? 'selected' : '' %>" data-value=""><span
-                                    class="btn-label--baseline-fix">ALL STATUS</span></span>
+                                    class="btn-label--baseline-fix signalis-glitch" data-text="ALL STATUS">ALL STATUS</span></span>
                             <span class="custom-option <%= filters.status === 'pending' ? 'selected' : '' %>"
-                                data-value="pending"><span class="btn-label--baseline-fix">PENDING</span></span>
+                                data-value="pending"><span class="btn-label--baseline-fix signalis-glitch" data-text="PENDING">PENDING</span></span>
                             <span class="custom-option <%= filters.status === 'in-progress' ? 'selected' : '' %>"
-                                data-value="in-progress"><span class="btn-label--baseline-fix">IN PROGRESS</span></span>
+                                data-value="in-progress"><span class="btn-label--baseline-fix signalis-glitch" data-text="IN PROGRESS">IN PROGRESS</span></span>
                             <span class="custom-option <%= filters.status === 'completed' ? 'selected' : '' %>"
-                                data-value="completed"><span class="btn-label--baseline-fix">COMPLETED</span></span>
+                                data-value="completed"><span class="btn-label--baseline-fix signalis-glitch" data-text="COMPLETED">COMPLETED</span></span>
                         </div>
                     </div>
                     <input type="hidden" name="status" value="<%= filters.status || '' %>">
@@ -38,19 +39,20 @@
                 <div class="custom-select-wrapper">
                     <div class="custom-select">
                         <div class="custom-select-trigger">
-                            <span class="btn-label--baseline-fix">
-                                <%= !filters.priority ? 'ALL PRIORITY' : filters.priority.toUpperCase() %>
+                            <% const priorityLabel = !filters.priority ? 'ALL PRIORITY' : filters.priority.toUpperCase(); %>
+                            <span class="btn-label--baseline-fix signalis-glitch" data-text="<%= priorityLabel %>">
+                                <%= priorityLabel %>
                             </span>
                         </div>
                         <div class="custom-options">
                             <span class="custom-option <%= !filters.priority ? 'selected' : '' %>" data-value=""><span
-                                    class="btn-label--baseline-fix">ALL PRIORITY</span></span>
+                                    class="btn-label--baseline-fix signalis-glitch" data-text="ALL PRIORITY">ALL PRIORITY</span></span>
                             <span class="custom-option <%= filters.priority === 'low' ? 'selected' : '' %>"
-                                data-value="low"><span class="btn-label--baseline-fix">LOW</span></span>
+                                data-value="low"><span class="btn-label--baseline-fix signalis-glitch" data-text="LOW">LOW</span></span>
                             <span class="custom-option <%= filters.priority === 'medium' ? 'selected' : '' %>"
-                                data-value="medium"><span class="btn-label--baseline-fix">MEDIUM</span></span>
+                                data-value="medium"><span class="btn-label--baseline-fix signalis-glitch" data-text="MEDIUM">MEDIUM</span></span>
                             <span class="custom-option <%= filters.priority === 'high' ? 'selected' : '' %>"
-                                data-value="high"><span class="btn-label--baseline-fix">HIGH</span></span>
+                                data-value="high"><span class="btn-label--baseline-fix signalis-glitch" data-text="HIGH">HIGH</span></span>
                         </div>
                     </div>
                     <input type="hidden" name="priority" value="<%= filters.priority || '' %>">
@@ -59,27 +61,27 @@
                 <div class="custom-select-wrapper">
                     <div class="custom-select">
                         <div class="custom-select-trigger">
-                            <span class="btn-label--baseline-fix">
-                                <% if(filters.sort==='oldest' ) { %> OLDEST FIRST
-                                    <% } else if(filters.sort==='dueDate' ) { %> BY DUE DATE
-                                        <% } else { %> NEWEST FIRST <% } %>
-                            </span>
+                            <% let sortLabel = 'NEWEST FIRST';
+                               if (filters.sort === 'oldest') { sortLabel = 'OLDEST FIRST'; }
+                               else if (filters.sort === 'dueDate') { sortLabel = 'BY DUE DATE'; }
+                            %>
+                            <span class="btn-label--baseline-fix signalis-glitch" data-text="<%= sortLabel %>"><%= sortLabel %></span>
                         </div>
                         <div class="custom-options">
                             <span
                                 class="custom-option <%= filters.sort === 'newest' || !filters.sort ? 'selected' : '' %>"
-                                data-value="newest"><span class="btn-label--baseline-fix">NEWEST FIRST</span></span>
+                                data-value="newest"><span class="btn-label--baseline-fix signalis-glitch" data-text="NEWEST FIRST">NEWEST FIRST</span></span>
                             <span class="custom-option <%= filters.sort === 'oldest' ? 'selected' : '' %>"
-                                data-value="oldest"><span class="btn-label--baseline-fix">OLDEST FIRST</span></span>
+                                data-value="oldest"><span class="btn-label--baseline-fix signalis-glitch" data-text="OLDEST FIRST">OLDEST FIRST</span></span>
                             <span class="custom-option <%= filters.sort === 'dueDate' ? 'selected' : '' %>"
-                                data-value="dueDate"><span class="btn-label--baseline-fix">BY DUE DATE</span></span>
+                                data-value="dueDate"><span class="btn-label--baseline-fix signalis-glitch" data-text="BY DUE DATE">BY DUE DATE</span></span>
                         </div>
                     </div>
                     <input type="hidden" name="sort" value="<%= filters.sort || 'newest' %>">
                 </div>
 
                 <button type="submit" class="btn btn-primary">
-                    <span class="btn-label--baseline-fix">SEARCH</span>
+                    <span class="btn-label--baseline-fix signalis-glitch" data-text="SEARCH">SEARCH</span>
                 </button>
             </form>
         </div>
@@ -91,28 +93,28 @@
                         <div class="task-card">
                             
                             <div class="signalis-header">
-                                <span class="btn-label--baseline-fix"><%= task.title.toUpperCase() %></span>
+                                <span class="btn-label--baseline-fix signalis-glitch" data-text="<%= task.title.toUpperCase() %>"><%= task.title.toUpperCase() %></span>
                             </div>
 
                             <div class="signalis-body<%= task.description ? '' : ' signalis-body--empty' %>">
                                 
                                 <div style="align-self: flex-end; font-size: 0.8rem;">
-                                    <span class="signalis-text-effect">[<%= task.priority.toUpperCase().substring(0,3) %>]</span>
+                                    <span class="signalis-glitch" data-text="[<%= task.priority.toUpperCase().substring(0,3) %>]">[<%= task.priority.toUpperCase().substring(0,3) %>]</span>
                                 </div>
 
                                 <% if (task.description) { %>
-                                    <div class="signalis-title">
-                                        <%= task.description %>
+                                    <div class="signalis-description">
+                                        <span class="signalis-glitch" data-text="<%= task.description %>"><%= task.description %></span>
                                     </div>
                                 <% } else { %>
-                                    <div class="signalis-no-description">
-                                        <span class="signalis-text-effect">NO DESCRIPTION</span>
+                                    <div class="signalis-no-description signalis-description">
+                                        <span class="signalis-glitch" data-text="NO DESCRIPTION">NO DESCRIPTION</span>
                                     </div>
                                 <% } %>
 
                                 <% if (task.dueDate) { %>
                                     <div class="signalis-timer">
-                                        <span class="task-countdown signalis-text-effect" data-due="<%= task.dueDate %>"></span>
+                                        <span class="task-countdown signalis-glitch" data-due="<%= task.dueDate %>" data-text=""></span>
                                     </div>
                                 <% } %>
 
@@ -120,7 +122,7 @@
                                     <div class="signalis-actions signalis-actions--inline">
                                         <form action="/tasks/<%= task._id %>?_method=DELETE" method="POST" style="display: inline;" onclick="event.stopPropagation();">
                                             <button type="submit" class="btn-secondary btn-small" onclick="return confirm('DELETE FILE?')" style="color: inherit;">
-                                                <span class="btn-label--baseline-fix">DELETE</span>
+                                                <span class="btn-label--baseline-fix signalis-glitch" data-text="DELETE">DELETE</span>
                                             </button>
                                         </form>
                                     </div>
@@ -128,7 +130,7 @@
                                     <div class="signalis-actions signalis-actions--overlay">
                                         <form action="/tasks/<%= task._id %>?_method=DELETE" method="POST" style="display: inline;" onclick="event.stopPropagation();">
                                             <button type="submit" class="btn-secondary btn-small" onclick="return confirm('DELETE FILE?')" style="color: inherit;">
-                                                <span class="btn-label--baseline-fix">DELETE</span>
+                                                <span class="btn-label--baseline-fix signalis-glitch" data-text="DELETE">DELETE</span>
                                             </button>
                                         </form>
                                     </div>
@@ -143,19 +145,19 @@
             <!-- PROCRASTINATE Button -->
             <div class="procrastinate-container">
                 <button id="procrastinate-btn" class="btn btn-procrastinate">
-                    <span class="btn-label--baseline-fix">PROCRASTINATE</span>
+                    <span class="btn-label--baseline-fix signalis-glitch" data-text="PROCRASTINATE">PROCRASTINATE</span>
                 </button>
             </div>
             <% } else { %>
                 <div class="empty-state">
-                    <h3 class="signalis-text-effect">NO TASK</h3>
+                    <h3 class="signalis-glitch" data-text="NO TASK">NO TASK</h3>
                 </div>
                 <% } %>
     </div>
 
     <div id="regret-overlay">
         <div class="fatal-error-box">
-            <h1 class="signalis-text-effect">YOU WILL REGRET THIS LATER.</h1>
+            <h1 class="signalis-glitch" data-text="YOU WILL REGRET THIS LATER.">YOU WILL REGRET THIS LATER.</h1>
         </div>
     </div>
 
@@ -296,7 +298,10 @@
                         e.stopPropagation();
 
                         // Visual updates
-                        triggerSpan.textContent = this.textContent;
+                        const optionLabel = this.querySelector('.btn-label--baseline-fix');
+                        const newLabel = optionLabel && optionLabel.dataset.text ? optionLabel.dataset.text : this.textContent.trim();
+                        triggerSpan.textContent = newLabel;
+                        triggerSpan.dataset.text = newLabel;
                         options.forEach(opt => opt.classList.remove('selected'));
                         this.classList.add('selected');
 
@@ -340,8 +345,9 @@
 
                     if (diff <= 0) {
                         if (!timer.classList.contains('overdue')) {
-                            // Use simple text for failure state
-                            timer.innerHTML = "<span class='timer-main' style='text-align:center; width:auto;'>OVERDUE</span>";
+                            const overdueText = 'OVERDUE';
+                            timer.innerHTML = "<span class='timer-main signalis-glitch' data-text='" + overdueText + "' style='text-align:center; width:auto;'>" + overdueText + "</span>";
+                            timer.dataset.text = overdueText;
                             timer.classList.add('overdue');
                         }
                     } else {
@@ -360,18 +366,24 @@
                         const msStr = String(ms).padStart(3, '0');
 
                         // 2. Wrap EACH digit in a span
-                        // "045" -> <span class="ms-digit">0</span><span class="ms-digit">4</span><span class="ms-digit">5</span>
+                        // "045" -> <span class="ms-digit signalis-glitch" data-text="0">0</span>...
                         const msHtml = msStr.split('')
-                            .map(digit => `<span class="ms-digit">${digit}</span>`)
+                            .map(digit => `<span class="ms-digit signalis-glitch" data-text="${digit}">${digit}</span>`)
                             .join('');
+
+                        const mainTime = `${d}D ${h}:${m}:${s}`;
 
                         // 3. Inject the stable structure
                         timer.innerHTML = `
                     <div class="timer-container">
-                        <span class="timer-main">${d}D ${h}:${m}:${s}</span>
-                        <span class="timer-ms-container">.${msHtml}</span>
+                        <span class="timer-main signalis-glitch" data-text="${mainTime}">${mainTime}</span>
+                        <span class="timer-ms-container">
+                            <span class="signalis-glitch" data-text=".">.</span>${msHtml}
+                        </span>
                     </div>
                 `;
+
+                        timer.dataset.text = `${mainTime}.${msStr}`;
 
                         timer.classList.remove('overdue');
                     }
@@ -386,5 +398,6 @@
         <div class="vignette"></div>
         <div class="refresh-line"></div>
     </div>
+
 
     <%- include('partials/footer') %>
