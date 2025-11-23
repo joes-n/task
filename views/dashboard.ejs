@@ -114,7 +114,7 @@
 
                                 <% if (task.dueDate) { %>
                                     <div class="signalis-timer">
-                                        <span class="task-countdown signalis-glitch" data-due="<%= task.dueDate %>" data-text=""></span>
+                                        <span class="task-countdown" data-due="<%= task.dueDate %>"></span>
                                     </div>
                                 <% } %>
 
@@ -382,8 +382,6 @@
                         </span>
                     </div>
                 `;
-
-                        timer.dataset.text = `${mainTime}.${msStr}`;
 
                         timer.classList.remove('overdue');
                     }

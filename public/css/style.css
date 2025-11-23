@@ -403,14 +403,13 @@ input:focus, select:focus, textarea:focus {
 /* We give it a min-width so it doesn't shift when seconds change from 1 to 0 */
 .timer-main {
     display: inline-block;
-    min-width: 140px;      /* Fixed width large enough for "00D 00:00:00" */
     text-align: right;     /* Anchors text to the right side of this box */
 }
 
 /* The Millisecond Container */
 .timer-ms-container {
     display: inline-flex;  /* Flex keeps the digits in a row */
-    width: 30px;           /* STRICT WIDTH: Prevents the whole timer from moving */
+    width: 20px;           /* STRICT WIDTH: Prevents the whole timer from moving */
     justify-content: flex-start;
 }
 
@@ -906,10 +905,6 @@ input:focus, select:focus, textarea:focus {
     transition: all 0.3s;
 }
 
-.task-card:hover {
-    color: #ffffff;
-}
-
 /* The Top Bar: "FILE 02" */
 .signalis-header {
     background-color: var(--primary-red);
@@ -933,12 +928,21 @@ input:focus, select:focus, textarea:focus {
     font-family: var(--terminal-font);
 }
 
+/* Hover effects for task card - affect both header and body */
+.task-card:hover .signalis-header {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+.task-card:hover .signalis-body {
+    border-color: #ffffff;
+}
+
 /* The Timer/Countdown styling */
 .signalis-timer {
     font-size: 1rem;
     color: #fff;
     margin-top: 10px;
-    border-bottom: 1px solid #333;
     font-family: var(--terminal-font);
 }
 
@@ -975,6 +979,18 @@ input:focus, select:focus, textarea:focus {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    margin: 0;
+    z-index: 5;
+    pointer-events: none;
+}
+
+.signalis-body--empty .signalis-no-description .signalis-glitch {
+    display: inline-block;
+    white-space: nowrap;
 }
 
 /* 1. The Wrapper: Remove borders/bg from here */
