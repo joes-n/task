@@ -96,8 +96,8 @@
 
                             <div class="signalis-body<%= task.description ? '' : ' signalis-body--empty' %>">
                                 
-                                <div style="align-self: flex-end; font-size: 0.8rem; color: #888;">
-                                    [<%= task.priority.toUpperCase().substring(0,3) %>]
+                                <div style="align-self: flex-end; font-size: 0.8rem;">
+                                    <span class="signalis-text-effect">[<%= task.priority.toUpperCase().substring(0,3) %>]</span>
                                 </div>
 
                                 <% if (task.description) { %>
@@ -106,13 +106,13 @@
                                     </div>
                                 <% } else { %>
                                     <div class="signalis-no-description">
-                                        NO DESCRIPTION
+                                        <span class="signalis-text-effect">NO DESCRIPTION</span>
                                     </div>
                                 <% } %>
 
                                 <% if (task.dueDate) { %>
                                     <div class="signalis-timer">
-                                        <span class="task-countdown" data-due="<%= task.dueDate %>"></span>
+                                        <span class="task-countdown signalis-text-effect" data-due="<%= task.dueDate %>"></span>
                                     </div>
                                 <% } %>
 
@@ -120,7 +120,7 @@
                                     <div class="signalis-actions signalis-actions--inline">
                                         <form action="/tasks/<%= task._id %>?_method=DELETE" method="POST" style="display: inline;" onclick="event.stopPropagation();">
                                             <button type="submit" class="btn-secondary btn-small" onclick="return confirm('DELETE FILE?')" style="color: inherit;">
-                                                DELETE
+                                                <span class="btn-label--baseline-fix">DELETE</span>
                                             </button>
                                         </form>
                                     </div>
@@ -128,7 +128,7 @@
                                     <div class="signalis-actions signalis-actions--overlay">
                                         <form action="/tasks/<%= task._id %>?_method=DELETE" method="POST" style="display: inline;" onclick="event.stopPropagation();">
                                             <button type="submit" class="btn-secondary btn-small" onclick="return confirm('DELETE FILE?')" style="color: inherit;">
-                                                DELETE
+                                                <span class="btn-label--baseline-fix">DELETE</span>
                                             </button>
                                         </form>
                                     </div>
@@ -148,14 +148,14 @@
             </div>
             <% } else { %>
                 <div class="empty-state">
-                    <h3>NO TASK</h3>
+                    <h3 class="signalis-text-effect">NO TASK</h3>
                 </div>
                 <% } %>
     </div>
 
     <div id="regret-overlay">
         <div class="fatal-error-box">
-            <h1>YOU WILL REGRET THIS LATER.</h1>
+            <h1 class="signalis-text-effect">YOU WILL REGRET THIS LATER.</h1>
         </div>
     </div>
 

@@ -23,6 +23,11 @@ body {
     font-family: var(--terminal-font);
     background-color: var(--bg-color);
     color: var(--text-main);
+    /* ADD THESE LINES */
+    -webkit-font-smoothing: none;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeSpeed;
+    /* This ensures the font base is sharp before we add effects */
 }
 
 .container {
@@ -122,6 +127,11 @@ body.light-mode {
     display: inline-block;
     position: relative;
     top: 2px;
+    color: #fff;
+    text-shadow:
+        2px 0 0 rgba(255, 30, 30, 0.9),
+        -1px 0 0 rgba(255, 30, 30, 0.6),
+        0 0 3px rgba(255, 0, 0, 0.4);
 }
 
 .btn-primary {
@@ -918,6 +928,14 @@ input:focus, select:focus, textarea:focus {
     margin-bottom: 4px; /* Spacing between header and body */
 }
 
+.signalis-header span {
+    color: #fff;
+    text-shadow:
+        2px 0 0 rgba(255, 30, 30, 0.9),
+        -1px 0 0 rgba(255, 30, 30, 0.6),
+        0 0 3px rgba(255, 0, 0, 0.4);
+}
+
 /* The Main Box: Black bg, Red Border */
 .signalis-body {
     border: 2px solid var(--primary-red);
@@ -934,13 +952,16 @@ input:focus, select:focus, textarea:focus {
 
 /* The Task Title (Replaces "NO DATA") */
 .signalis-title {
-    color: var(--primary-red);
+    color: #fff;
     font-size: 2rem;
     text-transform: uppercase;
     text-align: center;
     letter-spacing: 4px;
     margin: auto 0; /* Vertically center in the available space */
-    text-shadow: 0 0 5px rgba(255, 51, 51, 0.5);
+    text-shadow:
+        2px 0 0 rgba(255, 30, 30, 0.9),
+        -1px 0 0 rgba(255, 30, 30, 0.6),
+        0 0 3px rgba(255, 0, 0, 0.4);
     font-family: var(--terminal-font);
 }
 
@@ -1035,4 +1056,12 @@ input:focus, select:focus, textarea:focus {
 /* Hide elements we don't want cluttering the Signalis look */
 .task-timestamp {
     display: none; /* Hide creation date to keep it clean */
+}
+
+.signalis-text-effect {
+    color: #e0e0e0;
+    text-shadow:
+        2px 0px 0px rgba(255, 50, 50, 0.8),
+        -1px 0px 1px rgba(255, 0, 0, 0.5),
+        0px 0px 4px rgba(255, 50, 50, 0.3);
 }
