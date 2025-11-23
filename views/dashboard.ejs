@@ -172,14 +172,43 @@
             };
 
             if (btn) {
-                btn.addEventListener('click', (e) => {
+                btn.addEventListener('click', async (e) => {
                     e.preventDefault();
-                    if (confirm("ARE YOU SURE?")) {
-                        overlay.style.transition = 'none';
-                        overlay.classList.add('active');
-                        void overlay.offsetWidth;
-                        overlay.style.transition = 'opacity 2s ease-in-out, visibility 2s';
-                        timeoutId = setTimeout(() => fadeOut(), 1000);
+                    if (!confirm("ARE YOU SURE?")) {
+                        return;
+                    }
+
+                    overlay.style.transition = 'none';
+                    overlay.classList.add('active');
+                    void overlay.offsetWidth;
+                    overlay.style.transition = 'opacity 2s ease-in-out, visibility 2s';
+                    timeoutId = setTimeout(() => fadeOut(), 1000);
+
+                    try {
+                        const response = await fetch('/tasks/procrastinate', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-Requested-With': 'XMLHttpRequest'
+                            }
+                        });
+
+                        const payload = await response.json().catch(() => ({}));
+
+                        if (!response.ok) {
+                            throw new Error(payload.error || 'Failed to procrastinate tasks.');
+                        }
+
+                        if (typeof updateTaskGrid === 'function') {
+                            await updateTaskGrid();
+                        } else {
+                            window.location.reload();
+                        }
+
+                        alert(payload.message || 'All tasks postponed by one day.');
+                    } catch (err) {
+                        console.error('Error procrastinating tasks:', err);
+                        alert(err.message || 'Failed to procrastinate tasks.');
                     }
                 });
             }

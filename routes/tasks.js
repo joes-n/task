@@ -3,6 +3,8 @@ const router = express.Router();
 const Task = require('../models/Task');
 const { ensureAuthenticated } = require('../middleware/auth');
 
+const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000;
+
 // Get all tasks (dashboard)
 router.get('/', ensureAuthenticated, async (req, res) => {
   try {
@@ -173,6 +175,49 @@ router.delete('/:id', ensureAuthenticated, async (req, res) => {
   } catch (error) {
     console.error('Error deleting task:', error);
     res.status(500).render('error', { title: 'Error', error });
+  }
+});
+
+// Procrastinate - push all tasks out by one day
+router.post('/procrastinate', ensureAuthenticated, async (req, res) => {
+  try {
+    const tasks = await Task.find({ user: req.session.userId }).select('_id dueDate');
+
+    if (!tasks.length) {
+      return res.status(404).json({
+        success: false,
+        error: 'No tasks found to procrastinate.'
+      });
+    }
+
+    const postponedTaskIds = tasks.map(task => task._id.toString());
+
+    const bulkOps = tasks.map(task => {
+      const currentDueDate = task.dueDate ? new Date(task.dueDate) : new Date();
+      const postponedDueDate = new Date(currentDueDate.getTime() + ONE_DAY_IN_MS);
+
+      return {
+        updateOne: {
+          filter: { _id: task._id },
+          update: { $set: { dueDate: postponedDueDate } }
+        }
+      };
+    });
+
+    await Task.bulkWrite(bulkOps);
+
+    res.json({
+      success: true,
+      message: `Postponed ${bulkOps.length} task${bulkOps.length === 1 ? '' : 's'} by one day.`,
+      updatedCount: bulkOps.length,
+      taskIds: postponedTaskIds
+    });
+  } catch (error) {
+    console.error('Error postponing tasks:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to procrastinate tasks. Please try again.'
+    });
   }
 });
 
