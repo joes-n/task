@@ -134,6 +134,14 @@ The server will start on `http://localhost:3000`
   - Body: `{ title, description, status, priority, dueDate }`
 - **DELETE /api/tasks/:id** - Delete a task
 
+### Accounts API (No Authentication Required)
+
+- **GET /api/accounts** - Get all accounts (with optional query params: `search`, `email`, `username`, `sort`)
+- **GET /api/accounts/:id** - Get a specific account
+- **POST /api/accounts** - Create a new account
+  - Body: `{ username, email, password, confirmPassword }`
+- **DELETE /api/accounts/:id** - Delete an account (also deletes all associated tasks)
+
 ### Web Routes
 
 - **GET /** - Redirect to dashboard (if logged in) or login
@@ -141,6 +149,7 @@ The server will start on `http://localhost:3000`
 - **POST /login** - Login user
 - **GET /register** - Registration page
 - **POST /register** - Register new user
+- **GET /logout** - Logout page (with countdown)
 - **POST /logout** - Logout user
 - **GET /tasks** - Dashboard (requires authentication)
 - **GET /tasks/new** - Create task form (requires authentication)
@@ -149,6 +158,7 @@ The server will start on `http://localhost:3000`
 - **GET /tasks/:id/edit** - Edit task form (requires authentication)
 - **PUT /tasks/:id** - Update task (requires authentication)
 - **DELETE /tasks/:id** - Delete task (requires authentication)
+- **POST /tasks/procrastinate** - Postpone all tasks by one day (requires authentication)
 
 ## Testing the Application
 
