@@ -131,16 +131,16 @@
                             </div>
                             <% if (task.description) { %>
                                 <div class="signalis-actions signalis-actions--inline">
-                                    <form action="/tasks/<%= task._id %>?_method=DELETE" method="POST" style="display: inline; width: 100%;" onclick="event.stopPropagation();">
-                                        <button type="submit" class="btn-secondary btn-small" onclick="return confirm('DELETE FILE?')" style="color: inherit; width: 100%;">
+                                    <form action="/tasks/<%= task._id %>?_method=DELETE" method="POST" style="display: inline; width: 100%;" class="delete-task-form">
+                                        <button type="submit" class="btn-secondary btn-small delete-task-btn" data-task-id="<%= task._id %>" data-task-title="<%= task.title %>" style="color: inherit; width: 100%;">
                                             <span class="btn-label--baseline-fix signalis-glitch" data-text="DELETE">DELETE</span>
                                         </button>
                                     </form>
                                 </div>
                             <% } else { %>
                                 <div class="signalis-actions signalis-actions--overlay">
-                                    <form action="/tasks/<%= task._id %>?_method=DELETE" method="POST" style="display: inline; width: 100%;" onclick="event.stopPropagation();">
-                                        <button type="submit" class="btn-secondary btn-small" onclick="return confirm('DELETE FILE?')" style="color: inherit; width: 100%;">
+                                    <form action="/tasks/<%= task._id %>?_method=DELETE" method="POST" style="display: inline; width: 100%;" class="delete-task-form">
+                                        <button type="submit" class="btn-secondary btn-small delete-task-btn" data-task-id="<%= task._id %>" data-task-title="<%= task.title %>" style="color: inherit; width: 100%;">
                                             <span class="btn-label--baseline-fix signalis-glitch" data-text="DELETE">DELETE</span>
                                         </button>
                                     </form>
@@ -168,6 +168,24 @@
                             <span class="btn-label--baseline-fix signalis-glitch" data-text="YES">YES</span>
                         </button>
                         <button type="button" class="btn cancel-action" id="cancel-procrastinate">
+                            <span class="btn-label--baseline-fix signalis-glitch" data-text="NO">NO</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Delete Task Confirmation Overlay -->
+            <div id="delete-confirm-overlay" class="confirm-overlay" aria-hidden="true">
+                <div class="confirm-dialog" role="alertdialog" aria-labelledby="delete-confirm-title" aria-describedby="delete-confirm-note">
+                    <div class="confirm-dialog__message">
+                        <p id="delete-confirm-title" class="signalis-glitch" data-text="ARE YOU SURE?">ARE YOU SURE?</p>
+                        <p id="delete-confirm-note" class="signalis-glitch confirm-message">THIS WILL DELETE THE TASK PERMANENTLY.</p>
+                    </div>
+                    <div class="confirm-actions">
+                        <button type="button" class="btn confirm-action" id="confirm-delete">
+                            <span class="btn-label--baseline-fix signalis-glitch" data-text="YES">YES</span>
+                        </button>
+                        <button type="button" class="btn cancel-action" id="cancel-delete">
                             <span class="btn-label--baseline-fix signalis-glitch" data-text="NO">NO</span>
                         </button>
                     </div>
@@ -244,8 +262,11 @@
                     overlay.style.transition = 'none';
                     overlay.classList.add('active');
                     void overlay.offsetWidth;
-                    overlay.style.transition = 'opacity 3s ease-in-out, visibility 3s';
-                    timeoutId = setTimeout(() => fadeOut(), 300);
+                    overlay.style.transition = 'opacity 0.1s ease-in-out, visibility 0.1s';
+                    timeoutId = setTimeout(() => {
+                        overlay.style.transition = 'opacity 3s ease-in-out, visibility 3s';
+                        fadeOut();
+                    }, 100);
                 }
 
                 try {
@@ -301,13 +322,101 @@
                 }
             });
 
+            // --- DELETE TASK CONFIRMATION LOGIC ---
+            const deleteOverlay = document.getElementById('delete-confirm-overlay');
+            const confirmDeleteBtn = document.getElementById('confirm-delete');
+            const cancelDeleteBtn = document.getElementById('cancel-delete');
+            const deleteConfirmNote = document.getElementById('delete-confirm-note');
+            let deleteFormToSubmit = null;
+            let pendingSubmit = false;
+
+            const openDeleteConfirm = (taskTitle, formElement) => {
+                if (!deleteOverlay) return;
+                lastFocusedElement = document.activeElement;
+                // Update the confirmation message with the task title
+                if (deleteConfirmNote) {
+                    const message = `DELETE "${taskTitle.toUpperCase()}"?`;
+                    deleteConfirmNote.textContent = message;
+                    deleteConfirmNote.dataset.text = message;
+                }
+                deleteFormToSubmit = formElement;
+                deleteOverlay.classList.add('confirm-overlay--visible');
+                deleteOverlay.setAttribute('aria-hidden', 'false');
+                confirmDeleteBtn?.focus();
+            };
+
+            const closeDeleteConfirm = (resetPending = true) => {
+                if (!deleteOverlay) return;
+                deleteOverlay.classList.remove('confirm-overlay--visible');
+                deleteOverlay.setAttribute('aria-hidden', 'true');
+                if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
+                    lastFocusedElement.focus();
+                }
+                deleteFormToSubmit = null;
+                if (resetPending) {
+                    pendingSubmit = false;
+                }
+            };
+
+            // Handle form submission - prevent it and show confirmation
+            const deleteForms = document.querySelectorAll('.delete-task-form');
+            deleteForms.forEach(form => {
+                form.addEventListener('submit', (e) => {
+                    if (pendingSubmit) {
+                        // Form is confirmed, allow submission
+                        pendingSubmit = false;
+                        return;
+                    }
+                    e.preventDefault();
+                    const deleteBtn = form.querySelector('.delete-task-btn');
+                    const taskTitle = deleteBtn?.getAttribute('data-task-title') || 'TASK';
+                    openDeleteConfirm(taskTitle, form);
+                });
+            });
+
+            confirmDeleteBtn?.addEventListener('click', () => {
+                if (deleteFormToSubmit) {
+                    // Capture the form in a local variable BEFORE closing the modal
+                    const formToSubmit = deleteFormToSubmit;
+
+                    pendingSubmit = true;
+                    closeDeleteConfirm(false); // This clears the global deleteFormToSubmit
+
+                    // Submit using the local variable
+                    setTimeout(() => {
+                        formToSubmit.submit();
+                    }, 50);
+                }
+            });
+
+            cancelDeleteBtn?.addEventListener('click', () => closeDeleteConfirm());
+
+            deleteOverlay?.addEventListener('click', (event) => {
+                if (event.target === deleteOverlay) {
+                    closeDeleteConfirm();
+                }
+            });
+
             document.addEventListener('keydown', (event) => {
-                if (!confirmOverlay?.classList.contains('confirm-overlay--visible')) return;
-                if (event.key === 'Escape') {
-                    closeConfirmOverlay();
-                } else if (event.key === 'Enter') {
-                    event.preventDefault();
-                    confirmProceedBtn?.click();
+                // Handle procrastinate overlay
+                if (confirmOverlay?.classList.contains('confirm-overlay--visible')) {
+                    if (event.key === 'Escape') {
+                        closeConfirmOverlay();
+                    } else if (event.key === 'Enter') {
+                        event.preventDefault();
+                        confirmProceedBtn?.click();
+                    }
+                    return;
+                }
+
+                // Handle delete overlay
+                if (deleteOverlay?.classList.contains('confirm-overlay--visible')) {
+                    if (event.key === 'Escape') {
+                        closeDeleteConfirm();
+                    } else if (event.key === 'Enter') {
+                        event.preventDefault();
+                        confirmDeleteBtn?.click();
+                    }
                 }
             });
 
@@ -486,11 +595,12 @@
         });
     </script>
 
-    <!-- Add CRT overlay -->
-    <div class="crt-container">
-        <div class="scanlines"></div>
-        <div class="vignette"></div>
-        <div class="refresh-line"></div>
+    <div class="visual-effects-container">
+        <div class="phosphor-mask"></div>
+
+        <div class="interference-line"></div>
+        <div class="interference-line"></div>
+        <div class="interference-line"></div>
     </div>
 
 

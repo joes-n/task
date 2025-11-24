@@ -6,9 +6,9 @@
 }
 
 :root {
-    --terminal-font: 'Silver', monospace; 
+    --terminal-font: 'Silver', monospace;
     --bg-color: #000000;
-    --primary-red: #ff3333;
+    --primary-red: #e23d0e;
     --text-main: #f0f0f0;
     --border-red: #cc0000;
     --main-font-size: 1.6rem;
@@ -29,6 +29,7 @@ body {
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeSpeed;
     /* This ensures the font base is sharp before we add effects */
+    text-shadow: 0 0 1px rgba(255, 51, 51, 0.4); /* Slight bleed for text */
 }
 
 .container {
@@ -91,7 +92,7 @@ body {
     padding: 15px !important;
     border: 3px solid #333;
     font-size: var(--main-font-size) !important;
-    transition: all 0.3s;
+    transition: all 0.2s;
     font-family: var(--terminal-font) !important;
     background: #000 !important;
     color: #fff !important;
@@ -119,11 +120,15 @@ body {
     display: flex !important;
     align-items: center;
     justify-content: center;
-    background: var(--primary-red);
+    background: transparent;
     color: #000;
-    border: 1px solid #666;
+    border: 2px solid #666;
+    border-left: 0;
+    border-right: 0;
     width: 100%;
     text-decoration: none;
+    position: relative;
+    --btn-border-color: #666;
 }
 
 .auth-box .form-group input {
@@ -133,31 +138,78 @@ body {
 }
 
 .btn-primary:hover {
-    border-color: #fff
+    border-color: #fff;
+    --btn-border-color: #fff;
 }
 
 .btn-outline-primary {
     background: transparent;
-    border: 1px solid #666;
+    border: 2px solid #666;
+    border-left: 0;
+    border-right: 0;
     color: var(--primary-red);
-}
-
-.btn-outline-primary:hover {
-    background: var(--primary-red);
-    color: #000;
+    --btn-border-color: #666;
 }
 
 .btn-secondary {
     background: transparent;
     white-space: nowrap;
     color: var(--primary-red);
-    border: 1px solid #333;
+    border: 2px solid #666;
+    border-left: 0;
+    border-right: 0;
     font-family: var(--terminal-font);
     text-align: center;
+    position: relative;
+    --btn-border-color: #666;
 }
 
 .btn-secondary:hover {
-    border: 1px solid #fff;
+    border-color: #fff;
+    --btn-border-color: #fff;
+}
+
+.btn-primary::before,
+.btn-primary::after,
+.btn-secondary::before,
+.btn-secondary::after,
+.btn-procrastinate::before,
+.btn-procrastinate::after,
+.confirm-action::before,
+.confirm-action::after,
+.cancel-action::before,
+.cancel-action::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: var(--btn-border-thickness, 2px);
+    background-image: linear-gradient(
+        to bottom,
+        var(--btn-border-color) 0%,
+        var(--btn-border-color) 30%,
+        transparent 30%,
+        transparent 70%,
+        var(--btn-border-color) 70%,
+        var(--btn-border-color) 100%
+    );
+    pointer-events: none;
+}
+
+.btn-primary::before,
+.btn-secondary::before,
+.btn-procrastinate::before,
+.confirm-action::before,
+.cancel-action::before {
+    left: 0;
+}
+
+.btn-primary::after,
+.btn-secondary::after,
+.btn-procrastinate::after,
+.confirm-action::after,
+.cancel-action::after {
+    right: 0;
 }
 
 .btn-danger {
@@ -262,12 +314,16 @@ body {
 .dashboard-header--actions .header-btn--add {
     margin-right: auto;
     background: transparent !important;
-    border: 1px solid #666;
+    border: 2px solid #666;
+    border-left: 0;
+    border-right: 0;
     color: transparent;
+    --btn-border-color: #666;
 }
 
 .dashboard-header--actions .header-btn--add:hover {
-    border: 1px solid #fff;
+    border-color: #fff;
+    --btn-border-color: #fff;
 }
 
 .dashboard-header--actions .header-btn--logout {
@@ -378,14 +434,17 @@ input:focus, select:focus, textarea:focus {
 
 .search-box button.btn-primary {
     background: transparent !important;
-    border: 1px solid #666
+    border: 2px solid #666;
+    border-left: 0;
+    border-right: 0;
     color: var(--primary-red);
+    --btn-border-color: #666;
 }
 
 .search-box button.btn-primary:hover {
-    background: var(--primary-red) !important;
-    border-color: var(--primary-red);
+    border-color: #fff;
     color: #000;
+    --btn-border-color: #fff;
 }
 
 /* Tasks Grid - Surveillance Style */
@@ -410,7 +469,7 @@ input:focus, select:focus, textarea:focus {
     background: rgba(0, 0, 0, 0.9);
     border: 2px solid var(--primary-red);
     padding: 0px;
-    transition: all 0.3s;
+    transition: all 0.2s;
     position: relative;
 }
 
@@ -678,7 +737,7 @@ input:focus, select:focus, textarea:focus {
 
 .task-meta span:not(.task-status):not(.task-priority) {
     color: #888;
-    border: 1px solid #666
+    border: 2px solid #666;
     padding: 5px 10px;
 }
 
@@ -691,22 +750,25 @@ input:focus, select:focus, textarea:focus {
 .btn-procrastinate {
     background: #000000;
     color: #333;
-    border: 2px solid #333;
+    border: 2px solid #666;
+    border-left: 0;
+    border-right: 0;
     padding: 5px 20px;
     font-size: var(--main-font-size);
     text-transform: uppercase;
     letter-spacing: 1px;
-    transition: all 0.3s;
+    transition: all 0.2s;
     width: 100%;
     display: block;
     text-align: center;
+    position: relative;
+    --btn-border-color: #666;
+    --btn-border-thickness: 2px;
 }
 
 .btn-procrastinate:hover {
-    background: #ff0000;
     border-color: #ff0000;
-    box-shadow: 0 0 40px rgba(255, 51, 51, 0.5);
-    color: #000000;
+    --btn-border-color: #ff0000;
 }
 
 #regret-overlay {
@@ -745,95 +807,6 @@ input:focus, select:focus, textarea:focus {
     visibility: visible;
 }
 
-/* Procrastinate confirm modal */
-.confirm-overlay {
-    position: fixed;
-    inset: 0;
-    background: radial-gradient(circle at center, rgba(85, 0, 0, 0.96) 0%, rgba(42, 0, 0, 0.98) 80%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transition: opacity 0.2s ease, visibility 0.2s ease;
-    z-index: 11000;
-}
-
-.confirm-overlay.confirm-overlay--visible {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-}
-
-.confirm-dialog {
-    background: transparent;
-    border: none;
-    padding: 0;
-    width: auto;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    align-items: center;
-}
-
-.confirm-dialog__message {
-    background: #150000;
-    border: 2px solid #ff2a2a;
-    padding: 22px 48px 18px;
-}
-
-.confirm-dialog p {
-    margin: 0 0 12px;
-    font-size: calc(var(--main-font-size) * 0.9);
-    letter-spacing: 1px;
-    color: #fbeaea;
-}
-
-.confirm-dialog .confirm-message {
-    white-space: nowrap;
-    margin-top: 4px;
-}
-
-.confirm-actions {
-    display: flex;
-    gap: 18px;
-    justify-content: center;
-    width: 100%;
-}
-
-.confirm-actions .btn {
-    flex: 1;
-    text-transform: uppercase;
-    border: 2px solid transparent;
-    font-family: var(--terminal-font);
-    letter-spacing: 2px;
-    transition: filter 0.15s ease, transform 0.1s ease;
-    padding: 10px 0;
-    min-width: 125px;
-}
-
-.confirm-action {
-    background: #060000;
-    color: #b6b6b6;
-    border-color: #2b0000;
-}
-
-.confirm-action:hover {
-    filter: brightness(1.4);
-}
-
-.cancel-action {
-    background: #fdfdfb;
-    color: #120000;
-    border-color: #ffffff;
-}
-
-.cancel-action:hover {
-    filter: brightness(1.05);
-}
-
 /* Custom Terminal Dropdown */
 .custom-select-wrapper {
     position: relative;
@@ -863,7 +836,7 @@ input:focus, select:focus, textarea:focus {
     color: #fff;
     border: 3px solid #333;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.2s;
 }
 
 .custom-select-trigger:after {
@@ -871,7 +844,7 @@ input:focus, select:focus, textarea:focus {
     font-family: monospace;
     margin-left: 10px;
     color: var(--primary-red);
-    transition: transform 0.3s;
+    transition: transform 0.2s;
 }
 
 .custom-select.open .custom-select-trigger {
@@ -950,7 +923,7 @@ input:focus, select:focus, textarea:focus {
     transition: transform 0.2s;
     margin-bottom: 20px;
     font-family: var(--terminal-font);
-    transition: all 0.3s;
+    transition: all 0.2s;
 }
 
 /* The Top Bar: "FILE 02" */
@@ -1063,9 +1036,10 @@ input:focus, select:focus, textarea:focus {
 /* 2. The Button: Give IT the border and background */
 .signalis-actions button {
     background: #000;
-    border: 1px solid var(--primary-red) !important; /* !important overrides inline styles */
+    border-top: 1px solid #666;
+    border-bottom: 1px solid #666;
     color: inherit;
-    padding: 2px 10px;      /* Padding moves here */
+    padding: 1px 10px;      /* Padding moves here */
     cursor: pointer;        /* Shows hand cursor */
     font-family: inherit;
     font-size: inherit;
@@ -1075,9 +1049,13 @@ input:focus, select:focus, textarea:focus {
 
 /* 3. Hover Effect: Invert colors when hovering the button */
 .signalis-actions button:hover {
-    background: var(--primary-red);
-    color: #000;
-    box-shadow: 0 0 10px rgba(255, 51, 51, 0.5);
+    color: #000 !important;
+}
+
+
+/* Make DELETE text bigger */
+.signalis-actions button .btn-label--baseline-fix {
+    font-size: 1.6rem !important;
 }
 
 .signalis-actions--inline,
@@ -1143,16 +1121,16 @@ input:focus, select:focus, textarea:focus {
 .confirm-overlay {
     position: fixed;
     inset: 0;
-    /* Darker, flatter background to match the horror vibe */
-    background: #571011;
+    background: rgba(40, 0, 0, 0.9);
     display: flex;
     align-items: center;
     justify-content: center;
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
-    transition: opacity 0.1s steps(2), visibility 0.1s steps(2); /* Choppy transition */
+    transition: opacity 0.1s ease-out, visibility 0.1s ease-out;
     z-index: 110;
+    backdrop-filter: blur(2px);
 }
 
 .confirm-overlay.confirm-overlay--visible {
@@ -1165,22 +1143,55 @@ input:focus, select:focus, textarea:focus {
     background: transparent;
     border: none;
     padding: 0;
-    /* Constrain width to look like a system popup */
-    width: 500px; 
-    max-width: 90%;
+    /* Wider to match the cinematic aspect ratio */
+    width: 650px;
+    max-width: 95%;
     display: flex;
     flex-direction: column;
-    gap: 20px; /* Gap between Text Box and Buttons */
+    gap: 15px;
 }
 
 /* 1. The Text Box (Top Part) */
 .confirm-dialog__message {
-    background: #231113;
-    border: 1px solid var(--primary-red);
-    padding: 30px 20px;
-    box-shadow: 0 0 0 1px #000; /* Double border effect */
+    background: #100505;
+    /* Remove Left/Right borders to make room for the 'bracket' effect */
+    border: 2px solid var(--primary-red);
+    border-left: 0;
+    border-right: 0;
+
+    padding: 40px 20px;
     text-align: center;
+    box-shadow: 0 0 15px rgba(255, 51, 51, 0.15);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative; /* Essential for the pseudo-element borders */
 }
+
+/* Manually create the "Bracket" border for the message box */
+.confirm-dialog__message::before,
+.confirm-dialog__message::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    /* This gradient creates the "missing middle" effect */
+    background-image: linear-gradient(
+        to bottom,
+        var(--primary-red) 0%,
+        var(--primary-red) 30%,
+        transparent 30%,
+        transparent 70%,
+        var(--primary-red) 70%,
+        var(--primary-red) 100%
+    );
+    pointer-events: none;
+}
+
+.confirm-dialog__message::before { left: 0; }
+.confirm-dialog__message::after { right: 0; }
 
 .confirm-dialog p {
     margin: 0;
@@ -1188,79 +1199,257 @@ input:focus, select:focus, textarea:focus {
     font-size: var(--main-font-size);
     color: #fff;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
+    line-height: 1.4;
 }
 
-/* Make the title and note flow together more like the screenshot */
 #procrastinate-confirm-title {
-    display: inline;
-    margin-right: 10px;
+    display: block;
     color: var(--primary-red);
+    font-size: 2rem;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 0px #000;
 }
 
 #procrastinate-confirm-note {
-    display: inline;
+    display: block;
+    color: #cccccc;
 }
 
 /* 2. The Buttons (Bottom Part) */
 .confirm-actions {
     display: flex;
     gap: 15px;
-    justify-content: center; /* Center buttons under the box */
     width: 100%;
+    justify-content: space-between;
 }
 
 .confirm-actions .btn {
     flex: 1;
-    height: 50px;
-    border: none;
+    height: 60px;
+    padding: 0;
     border-radius: 0;
     font-family: var(--terminal-font);
-    font-size: var(--main-font-size);
+    font-size: 1.8rem;
+    letter-spacing: 2px;
     text-transform: uppercase;
     cursor: pointer;
-    transition: none; /* No smooth fade, instant switch */
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: all 0.2s;
+    position: relative;
+
+    /* Ensure buttons also use the bracket style */
+    border: 2px solid var(--btn-border-color);
+    border-left: 0;
+    border-right: 0;
 }
 
-.confirm-actions .btn .signalis-glitch {
-    color: inherit;
+/* Ensure the pseudo-elements (brackets) are visible on buttons */
+.confirm-actions .btn::before,
+.confirm-actions .btn::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-image: linear-gradient(
+        to bottom,
+        var(--btn-border-color) 0%,
+        var(--btn-border-color) 30%,
+        transparent 30%,
+        transparent 70%,
+        var(--btn-border-color) 70%,
+        var(--btn-border-color) 100%
+    );
+    pointer-events: none;
+    display: block !important; /* Force display in case overridden */
 }
 
-.confirm-actions .btn:hover .signalis-glitch::before,
-.confirm-actions .btn:hover .signalis-glitch::after {
-    color: #888888;
-}
+.confirm-actions .btn::before { left: 0; }
+.confirm-actions .btn::after { right: 0; }
 
-/* The "NO" Button - Styled as the 'Active/Highlighted' White Block */
+/* The "NO" Button */
 .cancel-action {
-    background: #000000;
-    color: #ffffff;
-    border: 1px solid #000000;
+    background: #000;
+    color: #fff;
+    --btn-border-color: #fff;
 }
 
 .cancel-action:hover {
-    background: #ffffff;
-    color: #000000;
-    border-color: #ffffff;
+    background: #fff;
+    color: #000;
 }
 
-/* The "YES" Button - Styled as the 'Inactive' Black Block */
+.cancel-action:hover .btn-label--baseline-fix {
+    color: #000;
+}
+
+/* The "YES" Button */
 .confirm-action {
     background: #000000;
-    color: #ffffff;
-    border: 1px solid var(--primary-red); /* Thin red border */
+    color: var(--primary-red);
+    --btn-border-color: #ffffff;
 }
 
 .confirm-action:hover {
     background: #ffffff;
-    color: #000000;
-    border-color: #ffffff;
+    color: #000;
 }
 
-.confirm-action:hover .signalis-glitch::before,
-.cancel-action:hover .signalis-glitch::after {
-    color: #888;
+.confirm-action:hover .btn-label--baseline-fix {
+    color: #000;
+}
+
+/* --- SIGNALIS MASTER FX SUITE --- */
+
+/* 1. Global Container */
+.visual-effects-container {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 9999;
+    overflow: hidden;
+    /* The Blur: Merges the pixels slightly for that CRT glow */
+    backdrop-filter: blur(0.6px);
+}
+
+/* 2. Phosphor Mask (The "Individual Pixels" Texture) */
+.phosphor-mask {
+    position: absolute;
+    inset: 0;
+    /* Creates the RGB sub-pixel columns */
+    background-image: repeating-linear-gradient(
+        90deg,
+        rgba(255, 0, 0, 0.25) 0px,
+        rgba(255, 0, 0, 0.25) 1px,
+        rgba(0, 255, 0, 0.15) 1px,
+        rgba(0, 255, 0, 0.15) 2px,
+        rgba(0, 0, 255, 0.15) 2px,
+        rgba(0, 0, 255, 0.15) 3px
+    );
+    background-size: 3px 100%;
+    z-index: 10;
+    opacity: 0.1;
+    mix-blend-mode: overlay;
+}
+
+/* 3. Moving Interference Lines */
+/* Thin lines that spawn, move up/down, and vanish */
+.interference-line {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2px; /* Super thin */
+    background-color: rgba(0, 0, 0, 0.8); /* Dark line cuts through the red */
+    opacity: 0;
+    z-index: 20;
+    mix-blend-mode: exclusion; /* Makes it look like a signal drop */
+}
+
+/* Line 1: Spawns high, moves down slightly */
+.interference-line:nth-child(2) {
+    height: 1px;
+    animation: scan-drop 4s infinite linear 0.5s;
+}
+
+
+/* Line 3: Spawns low, moves down fast */
+.interference-line:nth-child(4) {
+    height: 1px;
+    animation: scan-drop-fast 3s infinite linear 1.2s;
+}
+
+/* -- Animations for Lines --
+   Logic: Start at a random % top, opacity 0.
+   Then quickly turn opacity 1.
+   Move 'transform: translateY()' to slide it.
+   Then turn opacity 0 again. */
+
+@keyframes scan-drop {
+    0% { top: 15%; opacity: 0; transform: translateY(0); }
+    10% { opacity: 1; }
+    30% { opacity: 1; }
+    40% { top: 15%; opacity: 0; transform: translateY(15vh); } /* Moved down 15vh */
+    100% { top: 15%; opacity: 0; transform: translateY(15vh); }
+}
+
+@keyframes scan-rise {
+    0% { top: 70%; opacity: 0; transform: translateY(0); }
+    5% { opacity: 0.8; }
+    25% { opacity: 0.8; }
+    30% { top: 70%; opacity: 0; transform: translateY(-20vh); } /* Moved up 20vh */
+    100% { top: 70%; opacity: 0; transform: translateY(-20vh); }
+}
+
+@keyframes scan-drop-fast {
+    0% { top: 45%; opacity: 0; transform: translateY(0); }
+    2% { opacity: 1; }
+    15% { opacity: 1; }
+    18% { top: 45%; opacity: 0; transform: translateY(30vh); } /* Large drop */
+    100% { top: 45%; opacity: 0; transform: translateY(30vh); }
+}
+
+/* 4. Header Glitch (The "Box Slice" Effect) */
+/* This shifts the red box to the right without moving the text */
+
+.signalis-header {
+    position: relative;
+    background: transparent !important; /* Remove default bg */
+    z-index: 1;
+}
+
+/* The "Real" Background */
+.signalis-header::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: var(--primary-red);
+    z-index: -2;
+}
+
+/* The "Glitch" Clone */
+.signalis-header::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: var(--primary-red);
+    z-index: -1;
+    opacity: 0;
+    /* Default: hidden */
+    transform: translateX(0);
+    animation: box-slice-glitch 5s infinite linear;
+}
+
+/* We use clip-path to show only a "strip" of the clone,
+   then translate that strip to the right.
+*/
+@keyframes box-slice-glitch {
+    0% { opacity: 0; }
+
+    /* Random Glitch 1 */
+    92% { opacity: 0; transform: translateX(0); }
+    93% {
+        opacity: 1;
+        clip-path: inset(20% 0 60% 0); /* Top strip */
+        transform: translateX(10px);
+    }
+    94% { opacity: 0; }
+
+    /* Random Glitch 2 */
+    96% {
+        opacity: 1;
+        clip-path: inset(60% 0 10% 0); /* Bottom strip */
+        transform: translateX(15px);
+    }
+    97% { opacity: 0; }
+}
+
+/* Hover effect - change header background to white when hovering over task card */
+.task-card:hover .signalis-header::before,
+.task-card:hover .signalis-header::after {
+    background-color: #ffffff;
 }
