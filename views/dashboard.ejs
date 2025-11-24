@@ -12,7 +12,17 @@
 
         <div class="task-controls">
             <form action="/tasks" method="GET" class="search-box" id="task-filter-form">
-                <input type="text" name="search" placeholder="SEARCH TASKS" value="<%= filters.search || '' %>">
+                <div class="search-input-wrapper<%= filters.search ? ' has-value' : '' %>">
+                    <input
+                        type="text"
+                        name="search"
+                        placeholder="SEARCH TASKS"
+                        aria-label="Search tasks"
+                        value="<%= filters.search || '' %>">
+                    <span class="search-input-placeholder">
+                        <span class="signalis-glitch" data-text="SEARCH TASKS">SEARCH TASKS</span>
+                    </span>
+                </div>
 
                 <div class="custom-select-wrapper">
                     <div class="custom-select">
@@ -147,6 +157,22 @@
                     <span class="btn-label--baseline-fix signalis-glitch" data-text="PROCRASTINATE">PROCRASTINATE</span>
                 </button>
             </div>
+            <div id="procrastinate-confirm-overlay" class="confirm-overlay" aria-hidden="true">
+                <div class="confirm-dialog" role="alertdialog" aria-labelledby="procrastinate-confirm-title" aria-describedby="procrastinate-confirm-note">
+                    <div class="confirm-dialog__message">
+                        <p id="procrastinate-confirm-title" class="signalis-glitch" data-text="ARE YOU SURE?">ARE YOU SURE?</p>
+                        <p id="procrastinate-confirm-note" class="signalis-glitch confirm-message" data-text="THIS WILL POSTPONE ALL TASKS BY 1 DAY.">THIS WILL POSTPONE ALL TASKS BY 1 DAY.</p>
+                    </div>
+                    <div class="confirm-actions">
+                        <button type="button" class="btn confirm-action" id="confirm-procrastinate">
+                            <span class="btn-label--baseline-fix signalis-glitch" data-text="YES">YES</span>
+                        </button>
+                        <button type="button" class="btn cancel-action" id="cancel-procrastinate">
+                            <span class="btn-label--baseline-fix signalis-glitch" data-text="NO">NO</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
             <% } else { %>
                 <div class="empty-state">
                     <h3 class="signalis-glitch" data-text="NO TASK">NO TASK</h3>
@@ -162,57 +188,128 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // --- SEARCH PLACEHOLDER GLITCH SYNC ---
+            const searchInputWrapper = document.querySelector('.search-input-wrapper');
+            const searchInput = searchInputWrapper ? searchInputWrapper.querySelector('input[name="search"]') : null;
+
+            if (searchInput && searchInputWrapper) {
+                const syncSearchPlaceholder = () => {
+                    const hasValue = searchInput.value.trim().length > 0;
+                    searchInputWrapper.classList.toggle('has-value', hasValue);
+                };
+
+                syncSearchPlaceholder();
+                ['input', 'change'].forEach(evt => {
+                    searchInput.addEventListener(evt, syncSearchPlaceholder);
+                });
+            }
+
             // --- PROCRASTINATE BUTTON LOGIC (Kept Same) ---
             const btn = document.getElementById('procrastinate-btn');
             const overlay = document.getElementById('regret-overlay');
+            const confirmOverlay = document.getElementById('procrastinate-confirm-overlay');
+            const confirmProceedBtn = document.getElementById('confirm-procrastinate');
+            const confirmCancelBtn = document.getElementById('cancel-procrastinate');
             let timeoutId = null;
+            let lastFocusedElement = null;
+            let isProcrastinating = false;
 
             const fadeOut = () => {
                 overlay.classList.remove('active');
                 if (timeoutId) { clearTimeout(timeoutId); timeoutId = null; }
             };
 
-            if (btn) {
-                btn.addEventListener('click', async (e) => {
-                    e.preventDefault();
-                    if (!confirm("ARE YOU SURE?")) {
-                        return;
-                    }
+            const closeConfirmOverlay = () => {
+                if (!confirmOverlay) return;
+                confirmOverlay.classList.remove('confirm-overlay--visible');
+                confirmOverlay.setAttribute('aria-hidden', 'true');
+                if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
+                    lastFocusedElement.focus();
+                }
+            };
 
+            const openConfirmOverlay = () => {
+                if (!confirmOverlay) return;
+                lastFocusedElement = document.activeElement;
+                confirmOverlay.classList.add('confirm-overlay--visible');
+                confirmOverlay.setAttribute('aria-hidden', 'false');
+                confirmProceedBtn?.focus();
+            };
+
+            const executeProcrastinate = async () => {
+                if (isProcrastinating) return;
+                isProcrastinating = true;
+
+                if (overlay) {
                     overlay.style.transition = 'none';
                     overlay.classList.add('active');
                     void overlay.offsetWidth;
                     overlay.style.transition = 'opacity 2s ease-in-out, visibility 2s';
                     timeoutId = setTimeout(() => fadeOut(), 1000);
+                }
 
-                    try {
-                        const response = await fetch('/tasks/procrastinate', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-Requested-With': 'XMLHttpRequest'
-                            }
-                        });
-
-                        const payload = await response.json().catch(() => ({}));
-
-                        if (!response.ok) {
-                            throw new Error(payload.error || 'Failed to procrastinate tasks.');
+                try {
+                    const response = await fetch('/tasks/procrastinate', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
                         }
+                    });
 
-                        if (typeof updateTaskGrid === 'function') {
-                            await updateTaskGrid();
-                        } else {
-                            window.location.reload();
-                        }
+                    const payload = await response.json().catch(() => ({}));
 
-                        alert(payload.message || 'All tasks postponed by one day.');
-                    } catch (err) {
-                        console.error('Error procrastinating tasks:', err);
-                        alert(err.message || 'Failed to procrastinate tasks.');
+                    if (!response.ok) {
+                        throw new Error(payload.error || 'Failed to procrastinate tasks.');
+                    }
+
+                    if (typeof updateTaskGrid === 'function') {
+                        await updateTaskGrid();
+                    } else {
+                        window.location.reload();
+                    }
+
+                } catch (err) {
+                    console.error('Error procrastinating tasks:', err);
+                    alert(err.message || 'Failed to procrastinate tasks.');
+                } finally {
+                    isProcrastinating = false;
+                }
+            };
+
+            if (btn) {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (confirmOverlay) {
+                        openConfirmOverlay();
+                    } else {
+                        executeProcrastinate();
                     }
                 });
             }
+
+            confirmProceedBtn?.addEventListener('click', () => {
+                closeConfirmOverlay();
+                executeProcrastinate();
+            });
+
+            confirmCancelBtn?.addEventListener('click', () => closeConfirmOverlay());
+
+            confirmOverlay?.addEventListener('click', (event) => {
+                if (event.target === confirmOverlay) {
+                    closeConfirmOverlay();
+                }
+            });
+
+            document.addEventListener('keydown', (event) => {
+                if (!confirmOverlay?.classList.contains('confirm-overlay--visible')) return;
+                if (event.key === 'Escape') {
+                    closeConfirmOverlay();
+                } else if (event.key === 'Enter') {
+                    event.preventDefault();
+                    confirmProceedBtn?.click();
+                }
+            });
 
             // --- AJAX SORTING & FILTERING LOGIC ---
 

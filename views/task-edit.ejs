@@ -1,8 +1,8 @@
 <%- include('partials/header') %>
 
-<div class="dashboard">
+<div class="dashboard dashboard--centered">
 
-    <div style="max-width: 600px; margin: 0 auto;">
+    <div class="task-form-wrapper">
         <% if (typeof error !== 'undefined') { %>
             <div class="alert alert-error">
                 <span class="signalis-glitch" data-text="<%= error %>"><%= error %></span>
@@ -71,11 +71,11 @@
                 >
             </div>
 
-            <div style="display: flex; gap: 10px;">
-                <button type="submit" class="btn btn-primary">
+            <div style="display: flex; gap: 4%; width: 100%;">
+                <button type="submit" class="btn btn-primary btn-outline-primary" style="flex: 0 0 48%;">
                     <span class="btn-label--baseline-fix signalis-glitch" data-text="Update Task">Update Task</span>
                 </button>
-                <a href="/tasks" class="btn btn-secondary">
+                <a href="/tasks" class="btn btn-secondary" style="flex: 0 0 48%; text-align: center;">
                     <span class="btn-label--baseline-fix signalis-glitch" data-text="Cancel">Cancel</span>
                 </a>
             </div>

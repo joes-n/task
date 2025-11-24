@@ -48,7 +48,7 @@ router.get('/', ensureAuthenticated, async (req, res) => {
 
 // Create new task form
 router.get('/new', ensureAuthenticated, (req, res) => {
-  res.render('task-new', { title: 'Create New Task' });
+  res.render('task-new', { title: 'New Task' });
 });
 
 // Create new task
