@@ -1231,6 +1231,11 @@ input:focus, select:focus, textarea:focus {
     color: inherit;
 }
 
+.confirm-actions .btn:hover .signalis-glitch::before,
+.confirm-actions .btn:hover .signalis-glitch::after {
+    color: #888888;
+}
+
 /* The "NO" Button - Styled as the 'Active/Highlighted' White Block */
 .cancel-action {
     background: #000000;
