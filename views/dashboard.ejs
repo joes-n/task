@@ -126,6 +126,8 @@
                                     <div class="signalis-timer">
                                         <span class="task-countdown" data-due="<%= task.dueDate %>"></span>
                                     </div>
+                                <% } else { %>
+                                    <div class="signalis-timer signalis-timer--placeholder" aria-hidden="true"></div>
                                 <% } %>
 
                             </div>
@@ -266,7 +268,7 @@
                     timeoutId = setTimeout(() => {
                         overlay.style.transition = 'opacity 3s ease-in-out, visibility 3s';
                         fadeOut();
-                    }, 100);
+                    }, 500);
                 }
 
                 try {

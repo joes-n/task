@@ -394,11 +394,13 @@ input:focus, select:focus, textarea:focus {
     flex: 1;
     min-width: 200px;
     display: flex;
+    align-items: stretch;
 }
 
 .search-input-wrapper input {
     flex: 1;
     min-width: 0;
+    padding: 5px 15px;
 }
 
 .search-input-wrapper input::placeholder {
@@ -460,17 +462,22 @@ input:focus, select:focus, textarea:focus {
     display: block;
 }
 
-.task-card-link:hover .task-card {
-    color: #ffffff;
-    border-color: #ffffff;
-}
-
 .task-card {
     background: rgba(0, 0, 0, 0.9);
     border: 2px solid var(--primary-red);
     padding: 0px;
     transition: all 0.2s;
     position: relative;
+}
+
+.tasks-grid .task-card {
+    background: transparent;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    font-family: var(--terminal-font);
+    transition: transform 0.2s;
 }
 
 .task-card:hover {
@@ -664,10 +671,6 @@ input:focus, select:focus, textarea:focus {
 
 /* Responsive */
 @media (max-width: 768px) {
-    .header h1 {
-        font-size: 1.3rem;
-    }
-
     .dashboard {
         padding: 15px;
     }
@@ -914,25 +917,15 @@ input:focus, select:focus, textarea:focus {
     border: 1px solid #000;
 }
 
-.task-card {
-    background: transparent;
-    border: none; /* Remove old border */
-    padding: 0px;
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.2s;
-    margin-bottom: 20px;
-    font-family: var(--terminal-font);
-    transition: all 0.2s;
-}
-
 /* The Top Bar: "FILE 02" */
 .signalis-header {
-    background-color: var(--primary-red);
+    position: relative;
+    background: transparent;
     color: #000000;
     text-align: center;
     font-size: var(--main-font-size);
     margin-bottom: 4px; /* Spacing between header and body */
+    z-index: 1;
 }
 
 /* The Main Box: Black bg, Red Border */
@@ -943,17 +936,12 @@ input:focus, select:focus, textarea:focus {
     display: flex;
     flex-direction: column;
     align-items: center;     /* Center content like "NO DATA" */
-    justify-content: space-between;
+    justify-content: flex-start;
+    gap: 16px;
     min-height: 250px;       /* Force a vertical rectangle shape */
     position: relative;
     font-family: var(--terminal-font);
     font-size: var(--main-font-size);
-}
-
-/* Hover effects for task card - affect both header and body */
-.task-card:hover .signalis-header {
-    background-color: #ffffff;
-    color: #000000;
 }
 
 .task-card:hover .signalis-body {
@@ -974,8 +962,18 @@ input:focus, select:focus, textarea:focus {
 .signalis-timer {
     font-size: var(--main-font-size);
     color: #fff;
-    margin-top: 10px;
+    margin-top: auto;
     font-family: var(--terminal-font);
+    min-height: calc(var(--main-font-size) + 8px);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.signalis-timer--placeholder {
+    visibility: hidden;
+    pointer-events: none;
 }
 
 /* Empty-state cross fills the body */
@@ -1107,9 +1105,13 @@ input:focus, select:focus, textarea:focus {
 
 .signalis-description {
     width: 100%;
-    margin: 20px 0;
+    margin: 0;
     text-align: center;
     font-family: var(--terminal-font);
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
 }
 
 .signalis-description .signalis-glitch {
@@ -1395,12 +1397,6 @@ input:focus, select:focus, textarea:focus {
 
 /* 4. Header Glitch (The "Box Slice" Effect) */
 /* This shifts the red box to the right without moving the text */
-
-.signalis-header {
-    position: relative;
-    background: transparent !important; /* Remove default bg */
-    z-index: 1;
-}
 
 /* The "Real" Background */
 .signalis-header::before {
