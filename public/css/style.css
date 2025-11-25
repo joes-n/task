@@ -250,6 +250,9 @@ body {
 .auth-link {
     text-align: center;
     color: #888;
+    font-size: var(--main-font-size);
+    letter-spacing: 1px;
+    margin-top: 20px;
 }
 
 .auth-link a {
@@ -362,7 +365,7 @@ body {
 .search-box select {
     padding: 10px;
     padding-bottom: 0px;
-    border: 2px solid #333;
+    border: 2px solid #666;
     font-size: var(--main-font-size);
 }
 
@@ -837,7 +840,7 @@ input:focus, select:focus, textarea:focus {
     font-size: var(--main-font-size);
     background: #000;
     color: #fff;
-    border: 3px solid #333;
+    border: 3px solid #666;
     cursor: pointer;
     transition: all 0.2s;
 }
