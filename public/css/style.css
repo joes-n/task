@@ -62,7 +62,6 @@ body {
     margin-bottom: 30px;
     color: var(--primary-red);
     text-align: center;
-    letter-spacing: 1px;
 }
 
 .auth-box .form-group label {
@@ -134,7 +133,6 @@ body {
 .auth-box .form-group input {
     font-size: var(--main-font-size) !important;
     padding: 20px 15px !important;
-    letter-spacing: 1px;
 }
 
 .btn-primary:hover {
@@ -162,6 +160,14 @@ body {
     text-align: center;
     position: relative;
     --btn-border-color: #666;
+}
+
+.btn-secondary .btn-label--baseline-fix {
+    top: 3px;
+}
+
+.btn-primary .btn-label--baseline-fix {
+    top: 3px;
 }
 
 .btn-secondary:hover {
@@ -251,7 +257,6 @@ body {
     text-align: center;
     color: #888;
     font-size: var(--main-font-size);
-    letter-spacing: 1px;
     margin-top: 20px;
 }
 
@@ -294,7 +299,6 @@ body {
 .dashboard-header h2 {
     color: var(--primary-red);
     text-transform: uppercase;
-    letter-spacing: 1px;
 }
 
 .dashboard-header--actions {
@@ -494,7 +498,6 @@ input:focus, select:focus, textarea:focus {
     margin: 0;
     padding: 15px;
     font-size: var(--main-font-size);
-    letter-spacing: 1px;
     border-bottom: 2px solid var(--border-red);
     display: flex;             /* Align title and timer */
     justify-content: space-between;
@@ -562,7 +565,6 @@ input:focus, select:focus, textarea:focus {
     font-weight: normal;
     text-transform: uppercase;
     border: 1px solid;
-    letter-spacing: 1px;
 }
 
 .status-pending {
@@ -639,7 +641,6 @@ input:focus, select:focus, textarea:focus {
 .empty-state h3 {
     margin-bottom: 15px;
     text-transform: uppercase;
-    letter-spacing: 1px;
     font-size: var(--main-font-size);
 }
 
@@ -762,7 +763,6 @@ input:focus, select:focus, textarea:focus {
     padding: 5px 20px;
     font-size: var(--main-font-size);
     text-transform: uppercase;
-    letter-spacing: 1px;
     transition: all 0.2s;
     width: 100%;
     display: block;
@@ -927,13 +927,18 @@ input:focus, select:focus, textarea:focus {
     color: #000000;
     text-align: center;
     font-size: var(--main-font-size);
+    letter-spacing: 2px;
     margin-bottom: 4px; /* Spacing between header and body */
     z-index: 1;
 }
 
 /* The Main Box: Black bg, Red Border */
 .signalis-body {
-    border: 1px solid var(--primary-red);
+    --signalis-rail-color: var(--primary-red);
+    border-top: 2px solid var(--primary-red);
+    border-bottom: 2px solid var(--primary-red);
+    border-left: none;
+    border-right: none;
     background-color: transparent;
     padding: 20px;
     display: flex;
@@ -947,8 +952,47 @@ input:focus, select:focus, textarea:focus {
     font-size: var(--main-font-size);
 }
 
+.task-card-priority {
+    align-self: flex-end;
+    font-size: 1.4rem;
+    letter-spacing: 1px;
+}
+
+.signalis-body::before,
+.signalis-body::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    pointer-events: none;
+    background-image: linear-gradient(
+        to bottom,
+        var(--signalis-rail-color) 0%,
+        var(--signalis-rail-color) 5%,
+        transparent 5%,
+        transparent 7%,
+        var(--signalis-rail-color) 7%,
+        var(--signalis-rail-color) 93%,
+        transparent 93%,
+        transparent 95%,
+        var(--signalis-rail-color) 95%,
+        var(--signalis-rail-color) 100%
+    );
+}
+
+.signalis-body::before {
+    left: 0;
+}
+
+.signalis-body::after {
+    right: 0;
+}
+
 .task-card:hover .signalis-body {
-    border-color: #ffffff;
+    border-top-color: #ffffff;
+    border-bottom-color: #ffffff;
+    --signalis-rail-color: #ffffff;
 }
 
 /* Ensure only the header glitch text flips to black on hover */
@@ -996,7 +1040,6 @@ input:focus, select:focus, textarea:focus {
 .signalis-no-description {
     z-index: 3;
     padding: 6px 18px;
-    letter-spacing: 1px;
     color: var(--primary-red);
     font-size: var(--main-font-size);
     text-transform: uppercase;
@@ -1037,8 +1080,8 @@ input:focus, select:focus, textarea:focus {
 /* 2. The Button: Give IT the border and background */
 .signalis-actions button {
     background: #000;
-    border-top: 1px solid #666;
-    border-bottom: 1px solid #666;
+    border-top: 2px solid #666;
+    border-bottom: 2px solid #666;
     color: inherit;
     padding: 1px 10px;      /* Padding moves here */
     cursor: pointer;        /* Shows hand cursor */
@@ -1204,7 +1247,6 @@ input:focus, select:focus, textarea:focus {
     font-size: var(--main-font-size);
     color: #fff;
     text-transform: uppercase;
-    letter-spacing: 2px;
     line-height: 1.4;
 }
 
@@ -1236,7 +1278,6 @@ input:focus, select:focus, textarea:focus {
     border-radius: 0;
     font-family: var(--terminal-font);
     font-size: 1.8rem;
-    letter-spacing: 2px;
     text-transform: uppercase;
     cursor: pointer;
     display: flex;
@@ -1262,10 +1303,10 @@ input:focus, select:focus, textarea:focus {
     background-image: linear-gradient(
         to bottom,
         var(--btn-border-color) 0%,
-        var(--btn-border-color) 30%,
-        transparent 30%,
-        transparent 70%,
-        var(--btn-border-color) 70%,
+        var(--btn-border-color) 25%,
+        transparent 25%,
+        transparent 75%,
+        var(--btn-border-color) 75%,
         var(--btn-border-color) 100%
     );
     pointer-events: none;
