@@ -71,23 +71,23 @@
                 <div class="custom-select-wrapper">
                     <div class="custom-select">
                         <div class="custom-select-trigger">
-                            <% let sortLabel = 'NEWEST FIRST';
-                               if (filters.sort === 'oldest') { sortLabel = 'OLDEST FIRST'; }
-                               else if (filters.sort === 'dueDate') { sortLabel = 'BY DUE DATE'; }
+                            <% let sortLabel = 'BY DUE DATE';
+                               if (filters.sort === 'newest') { sortLabel = 'NEWEST FIRST'; }
+                               else if (filters.sort === 'oldest') { sortLabel = 'OLDEST FIRST'; }
                             %>
                             <span class="btn-label--baseline-fix signalis-glitch" data-text="<%= sortLabel %>"><%= sortLabel %></span>
                         </div>
                         <div class="custom-options">
                             <span
-                                class="custom-option <%= filters.sort === 'newest' || !filters.sort ? 'selected' : '' %>"
+                                class="custom-option <%= filters.sort === 'dueDate' || !filters.sort ? 'selected' : '' %>"
+                                data-value="dueDate"><span class="btn-label--baseline-fix signalis-glitch" data-text="BY DUE DATE">BY DUE DATE</span></span>
+                            <span class="custom-option <%= filters.sort === 'newest' ? 'selected' : '' %>"
                                 data-value="newest"><span class="btn-label--baseline-fix signalis-glitch" data-text="NEWEST FIRST">NEWEST FIRST</span></span>
                             <span class="custom-option <%= filters.sort === 'oldest' ? 'selected' : '' %>"
                                 data-value="oldest"><span class="btn-label--baseline-fix signalis-glitch" data-text="OLDEST FIRST">OLDEST FIRST</span></span>
-                            <span class="custom-option <%= filters.sort === 'dueDate' ? 'selected' : '' %>"
-                                data-value="dueDate"><span class="btn-label--baseline-fix signalis-glitch" data-text="BY DUE DATE">BY DUE DATE</span></span>
                         </div>
                     </div>
-                    <input type="hidden" name="sort" value="<%= filters.sort || 'newest' %>">
+                    <input type="hidden" name="sort" value="<%= filters.sort || 'dueDate' %>">
                 </div>
 
                 <button type="submit" class="btn btn-primary">
