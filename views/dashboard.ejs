@@ -162,15 +162,18 @@
             <div id="procrastinate-confirm-overlay" class="confirm-overlay" aria-hidden="true">
                 <div class="confirm-dialog" role="alertdialog" aria-labelledby="procrastinate-confirm-title" aria-describedby="procrastinate-confirm-note">
                     <div class="confirm-dialog__message">
-                        <p id="procrastinate-confirm-title" class="signalis-glitch" data-text="ARE YOU SURE?">ARE YOU SURE?</p>
-                        <p id="procrastinate-confirm-note" class="signalis-glitch confirm-message" data-text="THIS WILL POSTPONE ALL TASKS BY 1 DAY.">THIS WILL POSTPONE ALL TASKS BY 1 DAY.</p>
+                        <p id="procrastinate-confirm-note" class="signalis-glitch confirm-message" data-text="Postpone all tasks by 1 day?">Postpone all tasks by 1 day?</p>
                     </div>
                     <div class="confirm-actions">
                         <button type="button" class="btn confirm-action" id="confirm-procrastinate">
-                            <span class="btn-label--baseline-fix signalis-glitch" data-text="YES">YES</span>
+                            <span class="confirm-btn__plate">
+                                <span class="btn-label--baseline-fix signalis-glitch" data-text="YES">YES</span>
+                            </span>
                         </button>
                         <button type="button" class="btn cancel-action" id="cancel-procrastinate">
-                            <span class="btn-label--baseline-fix signalis-glitch" data-text="NO">NO</span>
+                            <span class="confirm-btn__plate">
+                                <span class="btn-label--baseline-fix signalis-glitch" data-text="NO">NO</span>
+                            </span>
                         </button>
                     </div>
                 </div>
@@ -180,15 +183,18 @@
             <div id="delete-confirm-overlay" class="confirm-overlay" aria-hidden="true">
                 <div class="confirm-dialog" role="alertdialog" aria-labelledby="delete-confirm-title" aria-describedby="delete-confirm-note">
                     <div class="confirm-dialog__message">
-                        <p id="delete-confirm-title" class="signalis-glitch" data-text="ARE YOU SURE?">ARE YOU SURE?</p>
                         <p id="delete-confirm-note" class="signalis-glitch confirm-message">THIS WILL DELETE THE TASK PERMANENTLY.</p>
                     </div>
                     <div class="confirm-actions">
                         <button type="button" class="btn confirm-action" id="confirm-delete">
-                            <span class="btn-label--baseline-fix signalis-glitch" data-text="YES">YES</span>
+                            <span class="confirm-btn__plate">
+                                <span class="btn-label--baseline-fix signalis-glitch" data-text="YES">YES</span>
+                            </span>
                         </button>
                         <button type="button" class="btn cancel-action" id="cancel-delete">
-                            <span class="btn-label--baseline-fix signalis-glitch" data-text="NO">NO</span>
+                            <span class="confirm-btn__plate">
+                                <span class="btn-label--baseline-fix signalis-glitch" data-text="NO">NO</span>
+                            </span>
                         </button>
                     </div>
                 </div>
@@ -337,7 +343,7 @@
                 lastFocusedElement = document.activeElement;
                 // Update the confirmation message with the task title
                 if (deleteConfirmNote) {
-                    const message = `DELETE "${taskTitle.toUpperCase()}"?`;
+                    const message = `Delete "${taskTitle}"?`;
                     deleteConfirmNote.textContent = message;
                     deleteConfirmNote.dataset.text = message;
                 }
