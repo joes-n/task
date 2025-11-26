@@ -156,6 +156,29 @@ router.put('/:id', ensureAuthenticated, async (req, res) => {
   }
 });
 
+// Mark task as completed
+router.post('/:id/complete', ensureAuthenticated, async (req, res) => {
+  try {
+    const task = await Task.findOneAndUpdate(
+      { _id: req.params.id, user: req.session.userId },
+      { status: 'completed' },
+      { new: true }
+    );
+
+    if (!task) {
+      return res.status(404).render('error', {
+        title: 'Error',
+        error: { message: 'Task not found' }
+      });
+    }
+
+    res.redirect('/tasks?success=Task marked as completed');
+  } catch (error) {
+    console.error('Error marking task as completed:', error);
+    res.status(500).render('error', { title: 'Error', error });
+  }
+});
+
 // Delete task
 router.delete('/:id', ensureAuthenticated, async (req, res) => {
   try {

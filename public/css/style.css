@@ -1110,6 +1110,10 @@ input:focus, select:focus, textarea:focus {
     justify-content: center;
 }
 
+.mark-complete-actions {
+    margin-top: 12px;
+}
+
 .signalis-glitch {
     position: relative;
     display: inline-block;
@@ -1197,6 +1201,15 @@ input:focus, select:focus, textarea:focus {
     display: flex;
     flex-direction: column;
     gap: 15px;
+    transform-origin: center center;
+    transform: scaleY(0);
+    opacity: 0;
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease;
+}
+
+.confirm-overlay.confirm-overlay--visible .confirm-dialog {
+    transform: scaleY(1);
+    opacity: 1;
 }
 
 /* 1. The Text Box (Top Part) */
@@ -1216,6 +1229,7 @@ input:focus, select:focus, textarea:focus {
     align-items: center;
     justify-content: center;
     position: relative; /* Essential for the pseudo-element borders */
+    transition: background-color 0.1s ease;
 }
 
 /* Manually create the "Bracket" border for the message box */
@@ -1241,6 +1255,43 @@ input:focus, select:focus, textarea:focus {
 
 .confirm-dialog__message::before { left: 0; }
 .confirm-dialog__message::after { right: 0; }
+
+.confirm-overlay.confirm-overlay--visible .confirm-dialog__message {
+    animation: confirm-bg-flash 0.5s linear forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .confirm-overlay.confirm-overlay--visible .confirm-dialog__message {
+        animation: none;
+    }
+
+    .confirm-dialog {
+        transform: scaleY(1);
+        opacity: 1;
+        transition: none;
+    }
+}
+
+@keyframes confirm-bg-flash {
+    0% {
+        background-color: rgba(0, 0, 0, 0);
+    }
+    20% {
+        background-color: #000000;
+    }
+    40% {
+        background-color: rgba(0, 0, 0, 0);
+    }
+    60% {
+        background-color: #000000;
+    }
+    80% {
+        background-color: rgba(0, 0, 0, 0);
+    }
+    100% {
+        background-color: #100505;
+    }
+}
 
 .confirm-dialog p {
     margin: 0;

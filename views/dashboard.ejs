@@ -131,6 +131,16 @@
                                 <% } %>
 
                             </div>
+
+                            <% if (task.status !== 'completed') { %>
+                                <div class="signalis-actions mark-complete-actions">
+                                    <form action="/tasks/<%= task._id %>/complete" method="POST" style="display: inline; width: 100%;">
+                                        <button type="submit" class="btn-secondary btn-small" style="color: inherit; width: 100%;">
+                                            <span class="btn-label--baseline-fix signalis-glitch" data-text="MARK AS DONE">MARK AS DONE</span>
+                                        </button>
+                                    </form>
+                                </div>
+                            <% } %>
                             <% if (task.description) { %>
                                 <div class="signalis-actions signalis-actions--inline">
                                     <form action="/tasks/<%= task._id %>?_method=DELETE" method="POST" style="display: inline; width: 100%;" class="delete-task-form">
