@@ -1272,6 +1272,74 @@ input:focus, select:focus, textarea:focus {
     }
 }
 
+/* --- ROUTE TRANSITION OVERLAY --- */
+.route-transition-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, rgba(0, 0, 0, 0.9) 45%, #050000 100%);
+    border-top: 2px solid var(--primary-red);
+    border-bottom: 2px solid var(--primary-red);
+    transform-origin: center center;
+    transform: scaleY(0);
+    opacity: 0;
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease;
+    z-index: 2000;
+}
+
+.route-transition-overlay::before,
+.route-transition-overlay::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--primary-red);
+    mix-blend-mode: screen;
+}
+
+.route-transition-overlay::before { top: 12%; }
+.route-transition-overlay::after { bottom: 12%; }
+
+.route-transition-overlay--active {
+    transform: scaleY(1);
+    opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .route-transition-overlay {
+        display: none;
+    }
+}
+
+/* --- NATIVE VIEW TRANSITION: DASHBOARD -> ADD TASK --- */
+@keyframes route-view-expand {
+    0% {
+        clip-path: inset(50% 0 50% 0);
+    }
+    100% {
+        clip-path: inset(0 0 0 0);
+    }
+}
+
+::view-transition-old(root) {
+    animation: none;
+    opacity: 1 !important;
+    mix-blend-mode: normal;
+}
+
+::view-transition-new(root) {
+    animation: route-view-expand 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    transform-origin: center center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    ::view-transition-new(root) {
+        animation: none;
+        clip-path: inset(0 0 0 0);
+    }
+}
+
 @keyframes confirm-bg-flash {
     0% {
         background-color: rgba(0, 0, 0, 0);

@@ -36,7 +36,7 @@ router.get('/', ensureAuthenticated, async (req, res) => {
     const tasks = await Task.find(query).sort(sortObj).lean();
 
     res.render('dashboard', {
-      title: 'Dashboard',
+      title: 'Tasks',
       tasks,
       filters: { search, status, priority, sort }
     });

@@ -224,6 +224,8 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
             // --- SEARCH PLACEHOLDER GLITCH SYNC ---
             const searchInputWrapper = document.querySelector('.search-input-wrapper');
             const searchInput = searchInputWrapper ? searchInputWrapper.querySelector('input[name="search"]') : null;
@@ -239,6 +241,48 @@
                     searchInput.addEventListener(evt, syncSearchPlaceholder);
                 });
             }
+
+            // --- ADD TASK VIEW TRANSITION ---
+            const addTaskLink = document.querySelector('.header-btn--add');
+
+            const ensureRouteOverlay = () => {
+                let overlayEl = document.querySelector('.route-transition-overlay');
+                if (!overlayEl) {
+                    overlayEl = document.createElement('div');
+                    overlayEl.className = 'route-transition-overlay';
+                    document.body.appendChild(overlayEl);
+                }
+                return overlayEl;
+            };
+
+            const runAddTaskTransition = (destination) => {
+                if (prefersReducedMotion) {
+                    window.location.href = destination;
+                    return;
+                }
+
+                if (document.startViewTransition) {
+                    document.startViewTransition(() => {
+                        window.location.href = destination;
+                    });
+                    return;
+                }
+
+                const overlayEl = ensureRouteOverlay();
+                void overlayEl.offsetWidth;
+                overlayEl.classList.add('route-transition-overlay--active');
+                setTimeout(() => {
+                    window.location.href = destination;
+                }, 500);
+            };
+
+            addTaskLink?.addEventListener('click', (event) => {
+                if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) {
+                    return;
+                }
+                event.preventDefault();
+                runAddTaskTransition(addTaskLink.href);
+            });
 
             // --- PROCRASTINATE BUTTON LOGIC (Kept Same) ---
             const btn = document.getElementById('procrastinate-btn');
@@ -284,7 +328,7 @@
                     timeoutId = setTimeout(() => {
                         overlay.style.transition = 'opacity 3s ease-in-out, visibility 3s';
                         fadeOut();
-                    }, 500);
+                    }, 300);
                 }
 
                 try {
@@ -346,7 +390,7 @@
             const cancelDeleteBtn = document.getElementById('cancel-delete');
             const deleteConfirmNote = document.getElementById('delete-confirm-note');
             let deleteFormToSubmit = null;
-            let pendingSubmit = false;
+            let pendingSubmitForm = null;
 
             const openDeleteConfirm = (taskTitle, formElement) => {
                 if (!deleteOverlay) return;
@@ -372,32 +416,35 @@
                 }
                 deleteFormToSubmit = null;
                 if (resetPending) {
-                    pendingSubmit = false;
+                    pendingSubmitForm = null;
                 }
             };
 
-            // Handle form submission - prevent it and show confirmation
-            const deleteForms = document.querySelectorAll('.delete-task-form');
-            deleteForms.forEach(form => {
-                form.addEventListener('submit', (e) => {
-                    if (pendingSubmit) {
-                        // Form is confirmed, allow submission
-                        pendingSubmit = false;
-                        return;
-                    }
-                    e.preventDefault();
-                    const deleteBtn = form.querySelector('.delete-task-btn');
-                    const taskTitle = deleteBtn?.getAttribute('data-task-title') || 'TASK';
-                    openDeleteConfirm(taskTitle, form);
-                });
-            });
+            const handleDeleteFormSubmit = (event) => {
+                const form = event.target;
+                if (!(form instanceof HTMLFormElement) || !form.classList.contains('delete-task-form')) {
+                    return;
+                }
+
+                if (pendingSubmitForm && pendingSubmitForm === form) {
+                    pendingSubmitForm = null;
+                    return;
+                }
+
+                event.preventDefault();
+                const deleteBtn = form.querySelector('.delete-task-btn');
+                const taskTitle = deleteBtn?.getAttribute('data-task-title') || 'TASK';
+                openDeleteConfirm(taskTitle, form);
+            };
+
+            document.addEventListener('submit', handleDeleteFormSubmit, true);
 
             confirmDeleteBtn?.addEventListener('click', () => {
                 if (deleteFormToSubmit) {
                     // Capture the form in a local variable BEFORE closing the modal
                     const formToSubmit = deleteFormToSubmit;
 
-                    pendingSubmit = true;
+                    pendingSubmitForm = formToSubmit;
                     closeDeleteConfirm(false); // This clears the global deleteFormToSubmit
 
                     // Submit using the local variable
