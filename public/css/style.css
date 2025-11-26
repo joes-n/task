@@ -1,3 +1,7 @@
+/* ========================================================
+   1. Variables & Base
+   ======================================================== */
+
 @font-face {
     font-family: 'Silver';
     src: url('/fonts/Silver.ttf') format('truetype');
@@ -31,6 +35,9 @@ body {
     /* This ensures the font base is sharp before we add effects */
     text-shadow: 0 0 1px rgba(255, 51, 51, 0.4); /* Slight bleed for text */
 }
+/* ========================================================
+   2. Layout & Containers
+   ======================================================== */
 
 .container {
     width: 85%;
@@ -64,6 +71,10 @@ body {
     text-align: center;
 }
 
+/* ========================================================
+   3. Forms & Inputs
+   ======================================================== */
+
 .auth-box .form-group label {
     font-size: var(--main-font-size) !important;
     text-transform: uppercase;
@@ -88,13 +99,9 @@ body {
 
 .form-group input {
     width: 100%;
-    padding: 15px !important;
+    padding: 15px;
     border: 3px solid #333;
-    font-size: var(--main-font-size) !important;
     transition: all 0.2s;
-    font-family: var(--terminal-font) !important;
-    background: #000 !important;
-    color: #fff !important;
 }
 
 .form-group input:focus {
@@ -102,6 +109,10 @@ body {
     border-color: var(--primary-red);
     box-shadow: 0 0 10px rgba(255, 51, 51, 0.3);
 }
+/* ========================================================
+   4. Buttons
+   ======================================================== */
+
 .btn {
     font-size: var(--main-font-size);
     padding: 5px 10px;
@@ -133,6 +144,237 @@ body {
 .auth-box .form-group input {
     font-size: var(--main-font-size) !important;
     padding: 20px 15px !important;
+}
+
+.search-box {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+
+.search-box input,
+.search-box select {
+    border: 2px solid #666;
+    font-size: var(--main-font-size);
+}
+
+.search-box select {
+    padding: 10px;
+}
+
+.search-box input {
+    padding: 5px 15px;
+    width: 100%;
+}
+
+.search-input-wrapper {
+    position: relative;
+    flex: 1;
+    min-width: 200px;
+    display: flex;
+    align-items: stretch;
+}
+
+.search-input-wrapper input {
+    flex: 1;
+    min-width: 0;
+    padding: 5px 15px;
+}
+
+.search-input-wrapper input::placeholder {
+    color: transparent;
+}
+
+.search-input-placeholder {
+    position: absolute;
+    inset: 0;
+    padding: 0 15px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    font-size: var(--main-font-size);
+    z-index: 2;
+}
+
+.search-input-placeholder .signalis-glitch {
+    display: block;
+    width: 100%;
+}
+
+.search-input-wrapper.has-value .search-input-placeholder,
+.search-input-wrapper input:focus + .search-input-placeholder {
+    opacity: 0;
+}
+
+.search-box button {
+    white-space: nowrap;
+}
+
+.search-box button.btn-primary {
+    background: transparent !important;
+    border: 2px solid #666;
+    border-left: 0;
+    border-right: 0;
+    color: var(--primary-red);
+    --btn-border-color: #666;
+}
+
+.search-box button.btn-primary:hover {
+    border-color: #fff;
+    color: #000;
+    --btn-border-color: #fff;
+}
+
+/* Form in task card */
+.task-edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.task-edit-form .form-group {
+    margin-bottom: 0;
+}
+
+.task-edit-form textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #333;
+    font-size: var(--main-font-size);
+    font-family: inherit;
+    resize: vertical;
+    min-height: 100px;
+}
+
+.task-edit-form .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+/* Custom Terminal Dropdown */
+.custom-select-wrapper {
+    position: relative;
+    flex: 1;
+    min-width: 200px;
+    font-family: var(--terminal-font);
+}
+
+.custom-select-wrapper--form {
+    width: 100%;
+}
+
+.custom-select {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.custom-select-trigger {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px !important;
+    font-size: var(--main-font-size);
+    background: #000;
+    color: #fff;
+    border: 3px solid #666;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.custom-select-trigger:after {
+    content: "V"; /* Retro ASCII arrow */
+    font-family: monospace;
+    margin-left: 10px;
+    color: var(--primary-red);
+    transition: transform 0.2s;
+}
+
+.custom-select.open .custom-select-trigger {
+    border-color: var(--primary-red);
+    box-shadow: 0 0 10px rgba(255, 51, 51, 0.3);
+}
+
+.custom-select.open .custom-select-trigger:after {
+    transform: rotate(180deg);
+}
+
+.custom-options {
+    position: absolute;
+    display: block;
+    top: 100%;
+    left: 0;
+    right: 0;
+    border: 3px solid var(--primary-red);
+    border-top: 0;
+    background: #000;
+    transition: all 0.2s;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 999;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.custom-select.open .custom-options {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: all;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.8);
+}
+
+.custom-option {
+    position: relative;
+    display: block;
+    padding: 12px 15px;
+    font-size: var(--main-font-size);
+    color: #888;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-bottom: 1px solid #666;
+}
+
+.custom-option:last-child {
+    border-bottom: none;
+}
+
+.custom-option:hover,
+.custom-option.selected {
+    color: #000;
+    background: var(--primary-red);
+}
+
+/* Scrollbar styling for the list */
+.custom-options::-webkit-scrollbar {
+    width: 10px;
+}
+.custom-options::-webkit-scrollbar-track {
+    background: #000;
+}
+.custom-options::-webkit-scrollbar-thumb {
+    background: var(--primary-red); 
+    border: 1px solid #000;
+}
+
+@media (max-width: 768px) {
+    .search-box {
+        flex-direction: column;
+    }
+
+    .search-box select,
+    .search-box button {
+        width: 100%;
+    }
+
+    .task-edit-form .form-row {
+        grid-template-columns: 1fr;
+    }
 }
 
 .btn-primary:hover {
@@ -237,6 +479,35 @@ body {
     font-size: var(--main-font-size);
     min-width: 150px;
     text-align: center;
+}
+
+/* PROCRASTINATE Button - At bottom of tasks */
+.procrastinate-container {
+    margin: 30px auto 0;
+    width: 100%;
+}
+
+.btn-procrastinate {
+    background: #000000;
+    color: #333;
+    border: 2px solid #666;
+    border-left: 0;
+    border-right: 0;
+    padding: 5px 20px;
+    font-size: var(--main-font-size);
+    text-transform: uppercase;
+    transition: all 0.2s;
+    width: 100%;
+    display: block;
+    text-align: center;
+    position: relative;
+    --btn-border-color: #666;
+    --btn-border-thickness: 2px;
+}
+
+.btn-procrastinate:hover {
+    border-color: #ff0000;
+    --btn-border-color: #ff0000;
 }
 
 /* Alerts */
@@ -359,22 +630,16 @@ body {
     margin-bottom: 30px;
 }
 
-.search-box {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-}
+@media (max-width: 768px) {
+    .dashboard {
+        padding: 15px;
+    }
 
-.search-box input,
-.search-box select {
-    padding: 10px;
-    padding-bottom: 0px;
-    border: 2px solid #666;
-    font-size: var(--main-font-size);
-}
-
-.search-box input {
-    padding-bottom: 5px;
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
 }
 
 /* Make inputs huge and blocky */
@@ -392,75 +657,21 @@ input:focus, select:focus, textarea:focus {
     box-shadow: 0 0 10px rgba(255, 51, 51, 0.3);
 }
 
-.search-box input {
-    width: 100%;
-}
-
-.search-input-wrapper {
-    position: relative;
-    flex: 1;
-    min-width: 200px;
-    display: flex;
-    align-items: stretch;
-}
-
-.search-input-wrapper input {
-    flex: 1;
-    min-width: 0;
-    padding: 5px 15px;
-}
-
-.search-input-wrapper input::placeholder {
-    color: transparent;
-}
-
-.search-input-placeholder {
-    position: absolute;
-    inset: 0;
-    padding: 0 15px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    pointer-events: none;
-    transition: opacity 0.2s ease;
-    font-size: var(--main-font-size);
-    z-index: 2;
-}
-
-.search-input-placeholder .signalis-glitch {
-    display: block;
-    width: 100%;
-}
-
-.search-input-wrapper.has-value .search-input-placeholder,
-.search-input-wrapper input:focus + .search-input-placeholder {
-    opacity: 0;
-}
-
-.search-box button {
-    white-space: nowrap;
-}
-
-.search-box button.btn-primary {
-    background: transparent !important;
-    border: 2px solid #666;
-    border-left: 0;
-    border-right: 0;
-    color: var(--primary-red);
-    --btn-border-color: #666;
-}
-
-.search-box button.btn-primary:hover {
-    border-color: #fff;
-    color: #000;
-    --btn-border-color: #fff;
-}
+/* ========================================================
+   5. Task Cards & Signalis Components
+   ======================================================== */
 
 /* Tasks Grid - Surveillance Style */
 .tasks-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
     gap: 25px;
+}
+
+@media (max-width: 768px) {
+    .tasks-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 .task-card-link {
@@ -603,32 +814,7 @@ input:focus, select:focus, textarea:focus {
     border-color: var(--primary-red);
 }
 
-/* Form in task card */
-.task-edit-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
 
-.task-edit-form .form-group {
-    margin-bottom: 0;
-}
-
-.task-edit-form textarea {
-    width: 100%;
-    padding: 12px;
-    border: 2px solid #333;
-    font-size: var(--main-font-size);
-    font-family: inherit;
-    resize: vertical;
-    min-height: 100px;
-}
-
-.task-edit-form .form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-}
 
 /* Empty state */
 .empty-state {
@@ -673,37 +859,6 @@ input:focus, select:focus, textarea:focus {
     margin-bottom: 30px;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-    .dashboard {
-        padding: 15px;
-    }
-
-    .dashboard-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 15px;
-    }
-
-    .search-box {
-        flex-direction: column;
-    }
-
-    .search-box input,
-    .search-box select,
-    .search-box button {
-        width: 100%;
-    }
-
-    .task-edit-form .form-row {
-        grid-template-columns: 1fr;
-    }
-
-    .tasks-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
 /* Logout page styles */
 .logout-message {
     text-align: center;
@@ -746,178 +901,6 @@ input:focus, select:focus, textarea:focus {
     color: #888;
     border: 2px solid #666;
     padding: 5px 10px;
-}
-
-/* PROCRASTINATE Button - At bottom of tasks */
-.procrastinate-container {
-    margin: 30px auto 0;
-    width: 100%;
-}
-
-.btn-procrastinate {
-    background: #000000;
-    color: #333;
-    border: 2px solid #666;
-    border-left: 0;
-    border-right: 0;
-    padding: 5px 20px;
-    font-size: var(--main-font-size);
-    text-transform: uppercase;
-    transition: all 0.2s;
-    width: 100%;
-    display: block;
-    text-align: center;
-    position: relative;
-    --btn-border-color: #666;
-    --btn-border-thickness: 2px;
-}
-
-.btn-procrastinate:hover {
-    border-color: #ff0000;
-    --btn-border-color: #ff0000;
-}
-
-#regret-overlay {
-        position: fixed;
-        top: 0; left: 0;
-        width: 100vw; height: 100vh;
-        background-color: #ff0000; /* Pure Signal Red */
-        z-index: 10000;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-family: 'Silver', monospace;
-        cursor: none; /* Hide mouse for immersion */
-        opacity: 0;
-        visibility: hidden; /* Prevents clicking while hidden */
-        transition: opacity 2s ease-in-out, visibility 2s; /* 2 second fade */
-        display: flex; /* Always keep it flex, we toggle visibility instead */
-    }
-
-    .fatal-error-box {
-        width: 60%;
-        text-align: center;
-        position: relative;
-        background: transparent;
-        color: white;
-    }
-
-    .fatal-error-box h1 {
-        font-size: calc(var(--main-font-size) * 2);
-        margin: 20px 0;
-        line-height: 1;
-    }
-
-#regret-overlay.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-/* Custom Terminal Dropdown */
-.custom-select-wrapper {
-    position: relative;
-    flex: 1;
-    min-width: 200px;
-    font-family: var(--terminal-font);
-}
-
-.custom-select-wrapper--form {
-    width: 100%;
-}
-
-.custom-select {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-}
-
-.custom-select-trigger {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 5px !important;
-    font-size: var(--main-font-size);
-    background: #000;
-    color: #fff;
-    border: 3px solid #666;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.custom-select-trigger:after {
-    content: "V"; /* Retro ASCII arrow */
-    font-family: monospace;
-    margin-left: 10px;
-    color: var(--primary-red);
-    transition: transform 0.2s;
-}
-
-.custom-select.open .custom-select-trigger {
-    border-color: var(--primary-red);
-    box-shadow: 0 0 10px rgba(255, 51, 51, 0.3);
-}
-
-.custom-select.open .custom-select-trigger:after {
-    transform: rotate(180deg);
-}
-
-.custom-options {
-    position: absolute;
-    display: block;
-    top: 100%;
-    left: 0;
-    right: 0;
-    border: 3px solid var(--primary-red);
-    border-top: 0;
-    background: #000;
-    transition: all 0.2s;
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    z-index: 999;
-    max-height: 300px;
-    overflow-y: auto;
-}
-
-.custom-select.open .custom-options {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: all;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.8);
-}
-
-.custom-option {
-    position: relative;
-    display: block;
-    padding: 12px 15px;
-    font-size: var(--main-font-size);
-    color: #888;
-    cursor: pointer;
-    transition: all 0.2s;
-    border-bottom: 1px solid #666;
-}
-
-.custom-option:last-child {
-    border-bottom: none;
-}
-
-.custom-option:hover, 
-.custom-option.selected {
-    color: #000;
-    background: var(--primary-red);
-}
-
-/* Scrollbar styling for the list */
-.custom-options::-webkit-scrollbar {
-    width: 10px;
-}
-.custom-options::-webkit-scrollbar-track {
-    background: #000; 
-}
-.custom-options::-webkit-scrollbar-thumb {
-    background: var(--primary-red); 
-    border: 1px solid #000;
 }
 
 /* The Top Bar: "FILE 02" */
@@ -1168,6 +1151,48 @@ input:focus, select:focus, textarea:focus {
     white-space: pre-wrap;
 }
 
+/* ========================================================
+   6. Modals & Overlays
+   ======================================================== */
+
+#regret-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #ff0000; /* Pure Signal Red */
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Silver', monospace;
+    cursor: none; /* Hide mouse for immersion */
+    opacity: 0;
+    visibility: hidden; /* Prevents clicking while hidden */
+    transition: opacity 2s ease-in-out, visibility 2s; /* 2 second fade */
+    display: flex; /* Always keep it flex, we toggle visibility instead */
+}
+
+.fatal-error-box {
+    width: 60%;
+    text-align: center;
+    position: relative;
+    background: transparent;
+    color: white;
+}
+
+.fatal-error-box h1 {
+    font-size: calc(var(--main-font-size) * 2);
+    margin: 20px 0;
+    line-height: 1;
+}
+
+#regret-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
 /* --- PROCRASTINATE MODAL OVERHAUL --- */
 
 .confirm-overlay {
@@ -1260,6 +1285,7 @@ input:focus, select:focus, textarea:focus {
     animation: confirm-bg-flash 0.5s linear forwards;
 }
 
+/* Reduced-motion users should see the static dialog state */
 @media (prefers-reduced-motion: reduce) {
     .confirm-overlay.confirm-overlay--visible .confirm-dialog__message {
         animation: none;
@@ -1312,75 +1338,6 @@ input:focus, select:focus, textarea:focus {
     }
 }
 
-/* --- NATIVE VIEW TRANSITION: DASHBOARD -> ADD TASK --- */
-@keyframes route-view-expand {
-    0% {
-        clip-path: inset(50% 0 50% 0);
-    }
-    100% {
-        clip-path: inset(0 0 0 0);
-    }
-}
-
-::view-transition-old(root) {
-    animation: none;
-    opacity: 1 !important;
-    mix-blend-mode: normal;
-}
-
-::view-transition-new(root) {
-    animation: route-view-expand 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-    transform-origin: center center;
-}
-
-@media (prefers-reduced-motion: reduce) {
-    ::view-transition-new(root) {
-        animation: none;
-        clip-path: inset(0 0 0 0);
-    }
-}
-
-@keyframes confirm-bg-flash {
-    0% {
-        background-color: rgba(0, 0, 0, 0);
-    }
-    20% {
-        background-color: #000000;
-    }
-    40% {
-        background-color: rgba(0, 0, 0, 0);
-    }
-    60% {
-        background-color: #000000;
-    }
-    80% {
-        background-color: rgba(0, 0, 0, 0);
-    }
-    100% {
-        background-color: #100505;
-    }
-}
-
-.confirm-dialog p {
-    margin: 0;
-    font-family: var(--terminal-font);
-    font-size: calc(var(--main-font-size) * 2);
-    color: #fff;
-    line-height: 1.4;
-}
-
-#procrastinate-confirm-title {
-    display: block;
-    color: var(--primary-red);
-    font-size: 2rem;
-    margin-bottom: 15px;
-    text-shadow: 2px 2px 0px #000;
-}
-
-#procrastinate-confirm-note {
-    display: block;
-    color: #cccccc;
-}
 
 /* 2. The Buttons (Bottom Part) */
 .confirm-actions {
@@ -1511,6 +1468,10 @@ input:focus, select:focus, textarea:focus {
 .confirm-action:hover .btn-label--baseline-fix {
     color: inherit;
 }
+
+/* ========================================================
+   7. Visual Effects
+   ======================================================== */
 
 /* --- SIGNALIS MASTER FX SUITE --- */
 
@@ -1657,3 +1618,80 @@ input:focus, select:focus, textarea:focus {
 .task-card:hover .signalis-header::after {
     background-color: #ffffff;
 }
+
+/* ========================================================
+   8. Animations
+   ======================================================== */
+
+/* --- NATIVE VIEW TRANSITION: DASHBOARD -> ADD TASK --- */
+@keyframes route-view-expand {
+    0% {
+        clip-path: inset(50% 0 50% 0);
+    }
+    100% {
+        clip-path: inset(0 0 0 0);
+    }
+}
+
+::view-transition-old(root) {
+    animation: none;
+    opacity: 1 !important;
+    mix-blend-mode: normal;
+}
+
+::view-transition-new(root) {
+    animation: route-view-expand 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    transform-origin: center center;
+}
+
+/* Skip fancy transitions entirely when motion is disabled */
+@media (prefers-reduced-motion: reduce) {
+    ::view-transition-new(root) {
+        animation: none;
+        clip-path: inset(0 0 0 0);
+    }
+}
+
+@keyframes confirm-bg-flash {
+    0% {
+        background-color: rgba(0, 0, 0, 0);
+    }
+    20% {
+        background-color: #000000;
+    }
+    40% {
+        background-color: rgba(0, 0, 0, 0);
+    }
+    60% {
+        background-color: #000000;
+    }
+    80% {
+        background-color: rgba(0, 0, 0, 0);
+    }
+    100% {
+        background-color: #100505;
+    }
+}
+
+.confirm-dialog p {
+    margin: 0;
+    font-family: var(--terminal-font);
+    font-size: calc(var(--main-font-size) * 2);
+    color: #fff;
+    line-height: 1.4;
+}
+
+#procrastinate-confirm-title {
+    display: block;
+    color: var(--primary-red);
+    font-size: 2rem;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 0px #000;
+}
+
+#procrastinate-confirm-note {
+    display: block;
+    color: #cccccc;
+}
+
+
