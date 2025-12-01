@@ -214,6 +214,8 @@
                     <h3 class="signalis-glitch" data-text="NO TASK">NO TASK</h3>
                 </div>
                 <% } %>
+
+    <div class="scanner-overlay"></div>
     </div>
 
     <div id="regret-overlay">
@@ -225,6 +227,47 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            // --- RANDOM SCAN BEAM DURATION ---
+            const scanner = document.querySelector('.scanner-overlay');
+
+            if (scanner && !prefersReducedMotion) {
+                // Randomly choose between scan-up and scan-down
+                const isScanningUp = Math.random() < 0.5;
+
+                // Random duration between 1s and 3s
+                const duration = (Math.random() * 2 + 1).toFixed(2) + 's';
+
+                if (isScanningUp) {
+                    // Configure for scan-up (bottom to top)
+                    scanner.style.setProperty('animation', `scan-up ${duration} linear infinite`);
+
+                    // Update gradient to point down
+                    scanner.style.setProperty('background', `linear-gradient(to bottom, transparent 0%, rgba(255, 50, 50, 0) 4%, rgba(255, 255, 255, 0.7) 5%, rgba(226, 61, 14, 0.4) 6%, rgba(226, 61, 14, 0.1) 25%, transparent 50%)`);
+
+                    // Start: 80vh to 150vh
+                    const startPos = (Math.random() * 70 + 80).toFixed(2) + 'vh';
+                    // End: -50vh to 50vh
+                    const endPos = (Math.random() * 100 - 50).toFixed(2) + 'vh';
+
+                    scanner.style.setProperty('--scan-start-pos', startPos);
+                    scanner.style.setProperty('--scan-end-pos', endPos);
+                } else {
+                    // Configure for scan-down (top to bottom)
+                    scanner.style.setProperty('animation', `scan-down ${duration} linear infinite`);
+
+                    // Update gradient to point up
+                    scanner.style.setProperty('background', `linear-gradient(to top, transparent 0%, rgba(255, 50, 50, 0) 4%, rgba(255, 255, 255, 0.7) 5%, rgba(226, 61, 14, 0.4) 6%, rgba(226, 61, 14, 0.1) 25%, transparent 50%)`);
+
+                    // Start: -50vh to 20vh
+                    const startPos = (Math.random() * 70 - 50).toFixed(2) + 'vh';
+                    // End: 50vh to 120vh
+                    const endPos = (Math.random() * 70 + 50).toFixed(2) + 'vh';
+
+                    scanner.style.setProperty('--scan-start-pos', startPos);
+                    scanner.style.setProperty('--scan-end-pos', endPos);
+                }
+            }
 
             // --- SEARCH PLACEHOLDER GLITCH SYNC ---
             const searchInputWrapper = document.querySelector('.search-input-wrapper');
@@ -660,15 +703,14 @@
 
             // --- FULL ROW / SCREEN TEAR GLITCH LOGIC ---
             const startGridGlitch = () => {
-                const grid = document.querySelector('.tasks-grid');
-                // If no grid exists (e.g., empty state), we can't glitch it
+                const grid = document.querySelector('.dashboard');
                 if (!grid) return;
 
-                // 1. Clone the container (this clones all cards inside it visually)
+                // 1. Clone the container
                 const clone = grid.cloneNode(true);
                 clone.classList.add('grid-glitch-clone');
 
-                // 2. Remove IDs to prevent DOM conflicts (good practice)
+                // 2. Remove IDs to prevent DOM conflicts
                 clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
                 clone.removeAttribute('id');
 
@@ -710,7 +752,7 @@
                     // 7. Remove quickly (The "Flash")
                     setTimeout(() => {
                         clone.remove();
-                    }, Math.random() * 300 + 200); // 50ms to 150ms
+                    }, Math.random() * 700 + 300); // 50ms to 150ms
                 }
 
                 // 8. Loop
@@ -721,10 +763,5 @@
             startGridGlitch();
         });
     </script>
-
-    <div class="visual-effects-container">
-        <div class="phosphor-mask"></div>
-    </div>
-
 
     <%- include('partials/footer') %>

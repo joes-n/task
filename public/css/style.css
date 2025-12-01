@@ -1014,6 +1014,8 @@ input:focus, select:focus, textarea:focus {
         linear-gradient(to bottom right, transparent calc(50% - 1px), var(--primary-red) 50%, transparent calc(50% + 1px));
     background-repeat: no-repeat;
     background-size: 100% 100%;
+    position: relative; /* Ensures z-index applies */
+    z-index: 9200;      /* Lifts the box above the scanner overlay (9100) */
 }
 
 .task-card:hover .signalis-body--empty {
@@ -1487,6 +1489,85 @@ input:focus, select:focus, textarea:focus {
     backdrop-filter: blur(0.6px);
 }
 
+/* ========================================================
+   Scanner / God-Ray Effect
+   ======================================================== */
+
+.scanner-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 9100; /* Just below the grain/CRT effects */
+
+    /* ADD THIS: Prevents the beam from tiling vertically */
+    background-repeat: no-repeat;
+
+    /* THE PHYSICS EXPLAINED:
+       1. The gradient will point either "to top" or "to bottom" depending on scan direction.
+       2. The bottom (0%) is transparent (this is the space underneath the line).
+       3. The "Line" is at ~5-10% (Brightest point).
+       4. The "Shadow" trails in the opposite direction of the scan.
+    */
+    background: linear-gradient(
+        to top,
+        transparent 0%,
+        rgba(255, 50, 50, 0) 4%,
+        rgba(255, 255, 255, 0.7) 5%,    /* The "Invisible Line" impact point */
+        rgba(226, 61, 14, 0.4) 6%,      /* Primary Red trail start */
+        rgba(226, 61, 14, 0.1) 25%,     /* Shadow fading upward */
+        transparent 50%
+    );
+
+    background-size: 100% 200%;     /* Make background tall so we can scroll it */
+    background-position: 0% 0%;     /* Start position */
+
+    /* This blend mode makes the background transparent UNTIL it hits a color,
+       then it drastically brightens that color. */
+    mix-blend-mode: color-dodge;
+
+    /* Optional: Slight blur to make the "shadow" look dreamy/dispersed */
+    backdrop-filter: blur(0.5px);
+
+    animation: scan-down 7s linear infinite;
+
+    /* Random start/end positions */
+    --scan-start-pos: 0vh;
+    --scan-end-pos: 100vh;
+}
+
+/* REPLACE THE KEYFRAMES COMPLETELY */
+@keyframes scan-down {
+    0% {
+        /* Start with the beam at random position */
+        background-position: 0% var(--scan-start-pos);
+    }
+    100% {
+        /* End with the beam at random position */
+        background-position: 0% var(--scan-end-pos);
+    }
+}
+
+@keyframes scan-up {
+    0% {
+        /* Start with the beam at random position */
+        background-position: 0% var(--scan-start-pos);
+    }
+    100% {
+        /* End with the beam at random position */
+        background-position: 0% var(--scan-end-pos);
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .scanner-overlay {
+        display: none;
+    }
+}
+
 /* 2. Phosphor Mask (The "Individual Pixels" Texture) */
 .phosphor-mask {
     position: absolute;
@@ -1548,7 +1629,7 @@ input:focus, select:focus, textarea:focus {
 .grid-glitch-clone {
     position: absolute; /* Allows us to place it exactly over the original */
     pointer-events: none; /* Ignore clicks so the real grid still works */
-    z-index: 9999; /* Sit on top of everything */
+    z-index: 9000; /* Sit on top of everything */
     overflow: hidden;
     background: var(--bg-color); /* Ensure transparent parts don't reveal background */
     /* Optional: Slight brightness boost to make the tear visible */
