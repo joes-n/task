@@ -657,15 +657,73 @@
                     }
                 });
             }, 41);
+
+            // --- FULL ROW / SCREEN TEAR GLITCH LOGIC ---
+            const startGridGlitch = () => {
+                const grid = document.querySelector('.tasks-grid');
+                // If no grid exists (e.g., empty state), we can't glitch it
+                if (!grid) return;
+
+                // 1. Clone the container (this clones all cards inside it visually)
+                const clone = grid.cloneNode(true);
+                clone.classList.add('grid-glitch-clone');
+
+                // 2. Remove IDs to prevent DOM conflicts (good practice)
+                clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+                clone.removeAttribute('id');
+
+                // 3. Position the clone EXACTLY over the real grid
+                const rect = grid.getBoundingClientRect();
+                const scrollTop = window.scrollY || document.documentElement.scrollTop;
+                const scrollLeft = window.scrollX || document.documentElement.scrollLeft;
+
+                clone.style.top = `${rect.top + scrollTop}px`;
+                clone.style.left = `${rect.left + scrollLeft}px`;
+                clone.style.width = `${rect.width}px`;
+                clone.style.height = `${rect.height}px`;
+
+                // 4. Calculate the "Scanline" Slice
+                // We use Pixels instead of % so the glitch thickness is consistent
+                const gridHeight = rect.height;
+
+                // Random starting Y position (somewhere within the grid)
+                const startY = Math.floor(Math.random() * gridHeight);
+
+                // Random height for the row/strip (e.g., 5px to 50px thick)
+                const sliceHeight = Math.floor(Math.random() * 45) + 5;
+
+                // Random Horizontal Shift (e.g., -15px to +15px)
+                const shiftX = Math.floor(Math.random() * 31) - 15;
+
+                // 5. Apply the Clip and Shift
+                // inset( top  right  bottom  left )
+                const clipBottom = gridHeight - startY - sliceHeight;
+
+                // Safety check: ensure we don't clip outside bounds
+                if (clipBottom > 0) {
+                    clone.style.clipPath = `inset(${startY}px 0 ${clipBottom}px 0)`;
+                    clone.style.transform = `translateX(${shiftX}px)`;
+
+                    // 6. Append to body (to ensure absolute positioning works relative to page)
+                    document.body.appendChild(clone);
+
+                    // 7. Remove quickly (The "Flash")
+                    setTimeout(() => {
+                        clone.remove();
+                    }, Math.random() * 300 + 200); // 50ms to 150ms
+                }
+
+                // 8. Loop
+                setTimeout(startGridGlitch, Math.random() * 2000 + 500);
+            };
+
+            // Start the glitch loop
+            startGridGlitch();
         });
     </script>
 
     <div class="visual-effects-container">
         <div class="phosphor-mask"></div>
-
-        <div class="interference-line"></div>
-        <div class="interference-line"></div>
-        <div class="interference-line"></div>
     </div>
 
 
