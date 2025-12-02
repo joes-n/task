@@ -87,8 +87,6 @@ MONGODB_URI=mongodb://localhost:27017/taskmanager
 **For MongoDB Atlas (Cloud):**
 ```
 MONGODB_URI=mongodb+srv://<username>:<password>@<cluster>/<database>?retryWrites=true&w=majority
-SESSION_SECRET=your-super-secret-key-change-this
-PORT=3000
 ```
 
 ### 3. Start MongoDB
@@ -171,7 +169,7 @@ The server will start on `http://localhost:3000`
 
 ### 2. API Testing
 
-Use curl or Postman to test the API:
+Use cURL to test the API:
 
 **Create a task:**
 ```bash
@@ -229,14 +227,6 @@ curl -X DELETE http://localhost:3000/api/tasks/:id
 3. Connect your GitHub repository
 4. Add environment variables
 5. Use MongoDB Atlas for database
-
-## Security Notes
-
-- Change the `SESSION_SECRET` in production
-- Use strong passwords
-- Consider implementing rate limiting
-- Enable HTTPS in production
-- Use MongoDB Atlas IP whitelist for additional security
 
 ## Troubleshooting
 

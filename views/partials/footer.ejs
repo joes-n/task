@@ -5,5 +5,84 @@
 <div class="visual-effects-container">
     <div class="phosphor-mask"></div>
 </div>
+
+<script>
+    const cursor = document.getElementById('custom-cursor');
+    const trails = document.querySelectorAll('.cursor-trail');
+
+    const positionHistory = [];
+    const maxHistory = 10; // Number of trail cursors
+
+    const fadeDuration = 500;
+
+    // Update cursor position on mouse move
+    document.addEventListener('mousemove', (e) => {
+        const x = e.clientX;
+        const y = e.clientY;
+
+        // Update main cursor
+        cursor.style.left = x + 'px';
+        cursor.style.top = y + 'px';
+
+        positionHistory.unshift({ x, y, time: Date.now() });
+
+        // Limit history length
+        if (positionHistory.length > maxHistory) {
+            positionHistory.pop();
+        }
+    });
+
+    // Animation loop to update trail positions and opacity
+    const updateTrails = () => {
+        const now = Date.now();
+
+        trails.forEach((trail, index) => {
+            // Get position from history
+            const pos = positionHistory[index];
+
+            if (pos) {
+                trail.style.left = pos.x + 'px';
+                trail.style.top = pos.y + 'px';
+
+                const timeElapsed = now - pos.time;
+                let life = 1 - (timeElapsed / fadeDuration);
+
+                if (life < 0) life = 0;
+
+                const baseOpacity = 1 - (index * 0.15);
+                const finalOpacity = baseOpacity * life;
+
+                trail.style.opacity = finalOpacity.toFixed(2);
+
+                // Hide completely if dead to save rendering
+                trail.style.display = finalOpacity <= 0 ? 'none' : 'grid';
+            } else {
+                // Hide trail segments that don't have history data yet
+                trail.style.opacity = 0;
+            }
+        });
+    };
+
+    // Update trails every frame
+    setInterval(updateTrails, 20); // Faster update rate (20ms) for smoother fading
+
+    // Hide cursor when mouse leaves the window
+    document.addEventListener('mouseout', (e) => {
+        if (!e.relatedTarget || e.relatedTarget.nodeName === 'HTML') {
+            cursor.style.display = 'none';
+            trails.forEach(trail => {
+                trail.style.display = 'none';
+            });
+        }
+    });
+
+    // Show cursor when mouse enters the window
+    document.addEventListener('mouseover', () => {
+        cursor.style.display = 'grid';
+        trails.forEach(trail => {
+            trail.style.display = 'grid';
+        });
+    });
+</script>
 </body>
 </html>

@@ -1,6 +1,4 @@
-/* ========================================================
-   1. Variables & Base
-   ======================================================== */
+/* 1. Variables & Base */
 
 @font-face {
     font-family: 'Silver';
@@ -28,16 +26,14 @@ body {
     font-family: var(--terminal-font);
     background-color: var(--bg-color);
     color: var(--text-main);
-    /* ADD THESE LINES */
     -webkit-font-smoothing: none;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeSpeed;
-    /* This ensures the font base is sharp before we add effects */
-    text-shadow: 0 0 1px rgba(255, 51, 51, 0.4); /* Slight bleed for text */
+    text-shadow: 0 0 1px rgba(255, 51, 51, 0.4);
+    /* Hide the default system cursor */
+    cursor: none;
 }
-/* ========================================================
-   2. Layout & Containers
-   ======================================================== */
+/* 2. Layout & Containers */
 
 .container {
     width: 85%;
@@ -71,9 +67,7 @@ body {
     text-align: center;
 }
 
-/* ========================================================
-   3. Forms & Inputs
-   ======================================================== */
+/* 3. Forms & Inputs */
 
 .auth-box .form-group label {
     font-size: var(--main-font-size) !important;
@@ -109,9 +103,7 @@ body {
     border-color: var(--primary-red);
     box-shadow: 0 0 10px rgba(255, 51, 51, 0.3);
 }
-/* ========================================================
-   4. Buttons
-   ======================================================== */
+/* 4. Buttons */
 
 .btn {
     font-size: var(--main-font-size);
@@ -119,7 +111,6 @@ body {
     font-family: var(--terminal-font);
 }
 
-/* Pixel fonts sit a little high; use a helper to nudge button labels back to center */
 .btn-label--baseline-fix {
     display: inline-block;
     position: relative;
@@ -228,7 +219,6 @@ body {
     --btn-border-color: #fff;
 }
 
-/* Form in task card */
 .task-edit-form {
     display: flex;
     flex-direction: column;
@@ -255,7 +245,6 @@ body {
     gap: 10px;
 }
 
-/* Custom Terminal Dropdown */
 .custom-select-wrapper {
     position: relative;
     flex: 1;
@@ -288,7 +277,7 @@ body {
 }
 
 .custom-select-trigger:after {
-    content: "V"; /* Retro ASCII arrow */
+    content: "V";
     font-family: monospace;
     margin-left: 10px;
     color: var(--primary-red);
@@ -350,7 +339,6 @@ body {
     background: var(--primary-red);
 }
 
-/* Scrollbar styling for the list */
 .custom-options::-webkit-scrollbar {
     width: 10px;
 }
@@ -481,7 +469,6 @@ body {
     text-align: center;
 }
 
-/* PROCRASTINATE Button - At bottom of tasks */
 .procrastinate-container {
     margin: 30px auto 0;
     width: 100%;
@@ -510,7 +497,6 @@ body {
     --btn-border-color: #ff0000;
 }
 
-/* Alerts */
 .alert {
     padding: 12px 16px;
     margin-bottom: 20px;
@@ -541,7 +527,6 @@ body {
     text-decoration: underline;
 }
 
-/* Dashboard/Tasks */
 .dashboard {
     padding: 30px;
     flex: 1;
@@ -574,19 +559,18 @@ body {
 
 .dashboard-header--actions {
     display: flex;
-    justify-content: space-between; /* Pushes items to far left and far right */
+    justify-content: space-between;
     align-items: center;
     width: 100%;
     padding: 0;
     margin-bottom: 30px;
 }
 
-/* Override the global 100% width */
 .dashboard-header--actions .header-btn {
-    width: auto !important; /* CRITICAL: Stops the button from filling the row */
-    min-width: 48%;       /* Keeps them chunky */
-    flex: 0 0 auto;         /* Prevents shrinking/growing */
-    margin: 0;              /* Removes auto margins */
+    width: auto !important;
+    min-width: 48%;
+    flex: 0 0 auto;
+    margin: 0;
 }
 
 .dashboard-header--actions .header-btn--add {
@@ -615,7 +599,7 @@ body {
     }
 
     .dashboard-header--actions .header-btn {
-        width: 100% !important; /* Go back to full width on phone */
+        width: 100% !important;
     }
 }
 
@@ -642,7 +626,6 @@ body {
     }
 }
 
-/* Make inputs huge and blocky */
 input, select, textarea, .form-group input {
     font-size: var(--main-font-size) !important; /* ~42px */
     border-width: 3px !important;
@@ -657,11 +640,8 @@ input:focus, select:focus, textarea:focus {
     box-shadow: 0 0 10px rgba(255, 51, 51, 0.3);
 }
 
-/* ========================================================
-   5. Task Cards & Signalis Components
-   ======================================================== */
+/* 5. Task Cards Components */
 
-/* Tasks Grid - Surveillance Style */
 .tasks-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -710,13 +690,13 @@ input:focus, select:focus, textarea:focus {
     padding: 15px;
     font-size: var(--main-font-size);
     border-bottom: 2px solid var(--border-red);
-    display: flex;             /* Align title and timer */
+    display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
 .task-countdown {
-    font-family: monospace;    /* Keeps numbers from jumping */
+    font-family: monospace;
     color: #000000;
     opacity: 0.8;
     font-family: var(--terminal-font);
@@ -726,32 +706,27 @@ input:focus, select:focus, textarea:focus {
     font-family: var(--terminal-font);
 }
 
-/* Container for the whole timer block */
 .timer-container {
     display: inline-flex;
     align-items: baseline;
     font-variant-numeric: tabular-nums;
 }
 
-/* The Main Time (Days/Hours/Mins/Secs) */
-/* We give it a min-width so it doesn't shift when seconds change from 1 to 0 */
 .timer-main {
     display: inline-block;
-    text-align: right;     /* Anchors text to the right side of this box */
+    text-align: right;
 }
 
-/* The Millisecond Container */
 .timer-ms-container {
-    display: inline-flex;  /* Flex keeps the digits in a row */
-    width: 20px;           /* STRICT WIDTH: Prevents the whole timer from moving */
+    display: inline-flex;
+    width: 20px;
     justify-content: flex-start;
 }
 
-/* The Individual Digit Box */
 .ms-digit {
     display: inline-block;
-    width: 14px;           /* Forces every number to take up exact same space */
-    text-align: center;    /* Centers the thin '1' inside the 14px box */
+    width: 14px;
+    text-align: center;
     color: #000000;
 }
 
@@ -814,9 +789,6 @@ input:focus, select:focus, textarea:focus {
     border-color: var(--primary-red);
 }
 
-
-
-/* Empty state */
 .empty-state {
     text-align: center;
     padding: 80px 20px;
@@ -835,7 +807,6 @@ input:focus, select:focus, textarea:focus {
     margin-bottom: 25px;
 }
 
-/* Error and 404 pages */
 .error-container {
     flex: 1;
     display: flex;
@@ -859,7 +830,6 @@ input:focus, select:focus, textarea:focus {
     margin-bottom: 30px;
 }
 
-/* Logout page styles */
 .logout-message {
     text-align: center;
     padding: 20px 0;
@@ -890,7 +860,6 @@ input:focus, select:focus, textarea:focus {
     margin-bottom: 10px;
 }
 
-/* Additional date/time stamp styling */
 .task-meta span {
     display: flex;
     align-items: center;
@@ -903,7 +872,6 @@ input:focus, select:focus, textarea:focus {
     padding: 5px 10px;
 }
 
-/* The Top Bar: "FILE 02" */
 .signalis-header {
     position: relative;
     background: transparent;
@@ -911,11 +879,10 @@ input:focus, select:focus, textarea:focus {
     text-align: center;
     font-size: var(--main-font-size);
     letter-spacing: 2px;
-    margin-bottom: 4px; /* Spacing between header and body */
+    margin-bottom: 4px;
     z-index: 1;
 }
 
-/* The Main Box: Black bg, Red Border */
 .signalis-body {
     --signalis-rail-color: var(--primary-red);
     border-top: 2px solid var(--primary-red);
@@ -926,10 +893,10 @@ input:focus, select:focus, textarea:focus {
     padding: 20px;
     display: flex;
     flex-direction: column;
-    align-items: center;     /* Center content like "NO DATA" */
+    align-items: center;
     justify-content: flex-start;
     gap: 16px;
-    min-height: 250px;       /* Force a vertical rectangle shape */
+    min-height: 250px;
     position: relative;
     font-family: var(--terminal-font);
     font-size: var(--main-font-size);
@@ -978,7 +945,6 @@ input:focus, select:focus, textarea:focus {
     --signalis-rail-color: #ffffff;
 }
 
-/* Ensure only the header glitch text flips to black on hover */
 .task-card:hover .signalis-header .signalis-glitch {
     color: #000000;
 }
@@ -988,7 +954,6 @@ input:focus, select:focus, textarea:focus {
     color: #888;
 }
 
-/* The Timer/Countdown styling */
 .signalis-timer {
     font-size: var(--main-font-size);
     color: #fff;
@@ -1006,7 +971,6 @@ input:focus, select:focus, textarea:focus {
     pointer-events: none;
 }
 
-/* Empty-state cross fills the body */
 .signalis-body--empty {
     background-color: rgba(20, 0, 0, 0.85);
     background-image:
@@ -1014,8 +978,6 @@ input:focus, select:focus, textarea:focus {
         linear-gradient(to bottom right, transparent calc(50% - 1px), var(--primary-red) 50%, transparent calc(50% + 1px));
     background-repeat: no-repeat;
     background-size: 100% 100%;
-    position: relative; /* Ensures z-index applies */
-    z-index: 9200;      /* Lifts the box above the scanner overlay (9100) */
 }
 
 .task-card:hover .signalis-body--empty {
@@ -1052,37 +1014,33 @@ input:focus, select:focus, textarea:focus {
     white-space: nowrap;
 }
 
-/* 1. The Wrapper: Remove borders/bg from here */
 .signalis-actions {
     z-index: 2;
-    background: transparent; /* Changed from #000 */
-    border: none;           /* Changed from 1px solid */
-    padding: 0;             /* Changed from padding: 2px 10px */
+    background: transparent;
+    border: none; 
+    padding: 0; 
     font-family: var(--terminal-font);
-    display: flex;          /* Ensures button centers correctly */
+    display: flex;
 }
 
-/* 2. The Button: Give IT the border and background */
 .signalis-actions button {
     background: #000;
     border-top: 2px solid #666;
     border-bottom: 2px solid #666;
     color: inherit;
-    padding: 1px 10px;      /* Padding moves here */
-    cursor: pointer;        /* Shows hand cursor */
+    padding: 1px 10px;
+    cursor: pointer;
     font-family: inherit;
     font-size: inherit;
     transition: all 0.2s;
-    width: 100%;            /* Ensures it fills the wrapper if needed */
+    width: 100%;
 }
 
-/* 3. Hover Effect: Invert colors when hovering the button */
 .signalis-actions button:hover {
     color: #000 !important;
 }
 
 
-/* Make DELETE text bigger */
 .signalis-actions button .btn-label--baseline-fix {
     font-size: 1.6rem !important;
 }
@@ -1208,7 +1166,7 @@ input:focus, select:focus, textarea:focus {
     visibility: hidden;
     pointer-events: none;
     transition: opacity 0.1s ease-out, visibility 0.1s ease-out;
-    z-index: 110;
+    z-index: 9500;
     backdrop-filter: blur(2px);
 }
 
@@ -1470,11 +1428,7 @@ input:focus, select:focus, textarea:focus {
     color: inherit;
 }
 
-/* ========================================================
-   7. Visual Effects
-   ======================================================== */
-
-/* --- SIGNALIS MASTER FX SUITE --- */
+/* 7. Visual Effects */
 
 /* 1. Global Container */
 .visual-effects-container {
@@ -1485,13 +1439,10 @@ input:focus, select:focus, textarea:focus {
     pointer-events: none;
     z-index: 9999;
     overflow: hidden;
-    /* The Blur: Merges the pixels slightly for that CRT glow */
     backdrop-filter: blur(0.6px);
 }
 
-/* ========================================================
-   Scanner / God-Ray Effect
-   ======================================================== */
+/* Scanner Effect */
 
 .scanner-overlay {
     position: fixed;
@@ -1500,68 +1451,59 @@ input:focus, select:focus, textarea:focus {
     width: 100vw;
     height: 100vh;
     pointer-events: none;
-    z-index: 9100; /* Just below the grain/CRT effects */
-
-    /* ADD THIS: Prevents the beam from tiling vertically */
+    z-index: 9100;
     background-repeat: no-repeat;
 
-    /* THE PHYSICS EXPLAINED:
-       1. The gradient will point either "to top" or "to bottom" depending on scan direction.
+    /* 1. The gradient will point either "to top" or "to bottom" depending on scan direction.
        2. The bottom (0%) is transparent (this is the space underneath the line).
        3. The "Line" is at ~5-10% (Brightest point).
-       4. The "Shadow" trails in the opposite direction of the scan.
-    */
+       4. The "Shadow" trails in the opposite direction of the scan. */
+
     background: linear-gradient(
         to top,
         transparent 0%,
         rgba(255, 50, 50, 0) 4%,
-        rgba(255, 255, 255, 0.7) 5%,    /* The "Invisible Line" impact point */
-        rgba(226, 61, 14, 0.4) 6%,      /* Primary Red trail start */
-        rgba(226, 61, 14, 0.1) 25%,     /* Shadow fading upward */
+        rgba(255, 255, 255, 0.7) 5%,
+        rgba(226, 61, 14, 0.4) 6%,
+        rgba(226, 61, 14, 0.1) 25%,
         transparent 50%
     );
 
-    background-size: 100% 200%;     /* Make background tall so we can scroll it */
-    background-position: 0% 0%;     /* Start position */
+    background-size: 100% 200%;
+    background-position: 0% 0%;
 
-    /* This blend mode makes the background transparent UNTIL it hits a color,
-       then it drastically brightens that color. */
     mix-blend-mode: color-dodge;
 
-    /* Optional: Slight blur to make the "shadow" look dreamy/dispersed */
     backdrop-filter: blur(0.5px);
 
     animation: scan-down 7s linear infinite;
 
-    /* Random start/end positions */
     --scan-start-pos: 0vh;
     --scan-end-pos: 100vh;
 }
 
-/* REPLACE THE KEYFRAMES COMPLETELY */
 @keyframes scan-down {
     0% {
-        /* Start with the beam at random position */
-        background-position: 0% var(--scan-start-pos);
+        /* Start with the beam 100vh above the viewport */
+        background-position: 0% -100vh;
     }
     100% {
-        /* End with the beam at random position */
-        background-position: 0% var(--scan-end-pos);
+        /* End with the beam at the normal position */
+        background-position: 0% 0%;
     }
 }
 
 @keyframes scan-up {
     0% {
-        /* Start with the beam at random position */
-        background-position: 0% var(--scan-start-pos);
+        /* Start with the beam 100vh below the viewport */
+        background-position: 0% 100vh;
     }
     100% {
-        /* End with the beam at random position */
-        background-position: 0% var(--scan-end-pos);
+        /* End with the beam at the normal position */
+        background-position: 0% 0%;
     }
 }
 
-/* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
     .scanner-overlay {
         display: none;
@@ -1588,10 +1530,9 @@ input:focus, select:focus, textarea:focus {
     mix-blend-mode: overlay;
 }
 
-/* 4. Header Background */
-/* This creates the red background box for the header */
+/* 4. Header */
 
-/* The Header Background */
+/* Creates the red background box for the header */
 .signalis-header::before {
     content: "";
     position: absolute;
@@ -1600,14 +1541,12 @@ input:focus, select:focus, textarea:focus {
     z-index: -1;
 }
 
-/* Hover effect - change header background to white when hovering over task card */
+/* Change header background to white when hovering over task card */
 .task-card:hover .signalis-header::before {
     background-color: #ffffff;
 }
 
-/* ========================================================
-   8. Glitch Clone Effect
-   ======================================================== */
+/* 8. Glitch Clone Effect */
 
 /* The clone that sits on top of the original card */
 .glitch-clone {
@@ -1617,31 +1556,26 @@ input:focus, select:focus, textarea:focus {
     width: 100%;
     height: 100%;
     z-index: 999; /* Sit above the original content */
-    pointer-events: none; /* CRITICAL: Lets clicks pass through to the real card */
-    overflow: hidden; /* Ensure nothing spills out */
+    pointer-events: none; /* Lets clicks pass through to the real card */
+    overflow: hidden;
 
-    /* Optional: Add a mix-blend-mode to make the glitch look more digital/interference-like */
     mix-blend-mode: hard-light;
-    filter: brightness(1.5) contrast(1.2); /* Make the glitch slightly brighter */
+    filter: brightness(1.5) contrast(1.2);
 }
 
 /* Grid glitch clone for full row/screen tear effect */
 .grid-glitch-clone {
     position: absolute; /* Allows us to place it exactly over the original */
     pointer-events: none; /* Ignore clicks so the real grid still works */
-    z-index: 9000; /* Sit on top of everything */
+    z-index: 9000;
     overflow: hidden;
     background: var(--bg-color); /* Ensure transparent parts don't reveal background */
-    /* Optional: Slight brightness boost to make the tear visible */
     filter: brightness(1.2);
     will-change: transform, clip-path;
 }
 
-/* ========================================================
-   9. Animations
-   ======================================================== */
+/* 9. Animations */
 
-/* --- NATIVE VIEW TRANSITION: DASHBOARD -> ADD TASK --- */
 @keyframes route-view-expand {
     0% {
         clip-path: inset(50% 0 50% 0);
@@ -1662,7 +1596,6 @@ input:focus, select:focus, textarea:focus {
     transform-origin: center center;
 }
 
-/* Skip fancy transitions entirely when motion is disabled */
 @media (prefers-reduced-motion: reduce) {
     ::view-transition-new(root) {
         animation: none;
@@ -1709,5 +1642,159 @@ input:focus, select:focus, textarea:focus {
 #procrastinate-confirm-note {
     display: block;
     color: #cccccc;
+}
+
+/* ========================================================
+   10. Custom Cursor
+   ======================================================== */
+
+/* The Custom Cursor Container */
+#custom-cursor,
+.cursor-trail {
+    position: fixed;
+    top: 0;
+    left: 0;
+    /* 3x3 grid, each block is 15px (45px total / 3) */
+    width: 10px;
+    height: 10px;
+
+    /* Use Grid to create the 3x3 layout */
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+
+    /* Lets clicks pass through the custom cursor to elements behind it */
+    pointer-events: none;
+
+    /* Center the grid on the mouse tip */
+    transform: translate(-50%, -50%);
+}
+
+/* Main cursor on top */
+#custom-cursor {
+    z-index: 9999;
+}
+
+/* Trail cursors with decreasing z-index (newer trails have higher z-index) */
+.cursor-trail.trail-0 { z-index: 9998; }
+.cursor-trail.trail-1 { z-index: 9997; }
+.cursor-trail.trail-2 { z-index: 9996; }
+.cursor-trail.trail-3 { z-index: 9995; }
+.cursor-trail.trail-4 { z-index: 9994; }
+.cursor-trail.trail-5 { z-index: 9993; }
+.cursor-trail.trail-6 { z-index: 9992; }
+
+/* The Cursor Blocks */
+.cursor-block {
+    width: 100%;
+    height: 100%;
+}
+
+/* Coloring specific blocks white (for cross pattern) */
+.cursor-block.white {
+    background-color: white;
+}
+
+/* Center block is black */
+.cursor-block.black {
+    background-color: black;
+}
+
+/* Trail cursor blocks - different shades of red */
+.cursor-trail .cursor-block.white {
+    background-color: var(--primary-red);
+}
+
+.cursor-trail.trail-1 .cursor-block.white {
+    background-color: rgba(226, 61, 14, 0.9);
+}
+
+.cursor-trail.trail-2 .cursor-block.white {
+    background-color: rgba(226, 61, 14, 0.8);
+}
+
+.cursor-trail.trail-3 .cursor-block.white {
+    background-color: rgba(226, 61, 14, 0.7);
+}
+
+.cursor-trail.trail-4 .cursor-block.white {
+    background-color: rgba(226, 61, 14, 0.6);
+}
+
+.cursor-trail.trail-5 .cursor-block.white {
+    background-color: rgba(226, 61, 14, 0.5);
+}
+
+.cursor-trail.trail-6 .cursor-block.white {
+    background-color: rgba(226, 61, 14, 0.4);
+}
+
+.cursor-trail.trail-7 .cursor-block.white {
+    background-color: rgba(226, 61, 14, 0.3);
+}
+
+.cursor-trail.trail-8 .cursor-block.white {
+    background-color: rgba(226, 61, 14, 0.2);
+}
+
+.cursor-trail.trail-9 .cursor-block.white {
+    background-color: rgba(226, 61, 14, 0.1);
+}
+
+/* Trail center blocks - darker red */
+.cursor-trail .cursor-block.black {
+    background-color: #660000;
+}
+
+.cursor-trail.trail-1 .cursor-block.black {
+    background-color: #5a0000;
+}
+
+.cursor-trail.trail-2 .cursor-block.black {
+    background-color: #520000;
+}
+
+.cursor-trail.trail-3 .cursor-block.black {
+    background-color: #4a0000;
+}
+
+.cursor-trail.trail-4 .cursor-block.black {
+    background-color: #420000;
+}
+
+.cursor-trail.trail-5 .cursor-block.black {
+    background-color: #3a0000;
+}
+
+.cursor-trail.trail-6 .cursor-block.black {
+    background-color: #320000;
+}
+
+.cursor-trail.trail-7 .cursor-block.black {
+    background-color: #2a0000;
+}
+
+.cursor-trail.trail-8 .cursor-block.black {
+    background-color: #220000;
+}
+
+.cursor-trail.trail-9 .cursor-block.black {
+    background-color: #1a0000;
+}
+
+/* Hide cursor on all interactive elements */
+button,
+a,
+input,
+select,
+textarea,
+[role="button"],
+.task-card-link {
+    cursor: none !important;
+}
+
+/* Ensure cursor stays hidden on regret overlay */
+#regret-overlay {
+    cursor: none !important;
 }
 

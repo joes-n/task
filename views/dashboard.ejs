@@ -232,44 +232,61 @@
             const scanner = document.querySelector('.scanner-overlay');
 
             if (scanner && !prefersReducedMotion) {
-                // Randomly choose between scan-up and scan-down
-                const isScanningUp = Math.random() < 0.5;
+                // Function to configure a random scan direction
+                const configureRandomScan = () => {
+                    // Ensure scanner is visible for the new run
+                    scanner.style.opacity = '1';
 
-                // Random duration between 1s and 3s
-                const duration = (Math.random() * 2 + 1).toFixed(2) + 's';
+                    // Randomly choose between scan-up and scan-down
+                    const isScanningUp = Math.random() < 0.5;
 
-                if (isScanningUp) {
-                    // Configure for scan-up (bottom to top)
-                    scanner.style.setProperty('animation', `scan-up ${duration} linear infinite`);
+                    // Random duration between 1s and 3s
+                    const duration = (Math.random() * 1 + 0.5).toFixed(1) + 's';
 
-                    // Update gradient to point down
-                    scanner.style.setProperty('background', `linear-gradient(to bottom, transparent 0%, rgba(255, 50, 50, 0) 4%, rgba(255, 255, 255, 0.7) 5%, rgba(226, 61, 14, 0.4) 6%, rgba(226, 61, 14, 0.1) 25%, transparent 50%)`);
+                    if (isScanningUp) {
+                        // Configure for scan-up (bottom to top) - NOTE: Changed 'infinite' to '1'
+                        scanner.style.setProperty('animation', `scan-up ${duration} linear 1`);
 
-                    // Start: 80vh to 150vh
-                    const startPos = (Math.random() * 70 + 80).toFixed(2) + 'vh';
-                    // End: -50vh to 50vh
-                    const endPos = (Math.random() * 100 - 50).toFixed(2) + 'vh';
+                        // Update gradient to point down (reversed)
+                        scanner.style.setProperty('background', `linear-gradient(to bottom, transparent 0%, rgba(255, 50, 50, 0) 4%, rgba(255, 255, 255, 0.9) 5%, rgba(226, 61, 14, 0.5) 6%, rgba(226, 61, 14, 0.2) 25%, transparent 50%)`);
 
-                    scanner.style.setProperty('--scan-start-pos', startPos);
-                    scanner.style.setProperty('--scan-end-pos', endPos);
-                } else {
-                    // Configure for scan-down (top to bottom)
-                    scanner.style.setProperty('animation', `scan-down ${duration} linear infinite`);
+                        // Start: 0vh to 100vh (random start position for visual variety)
+                        const startPos = (Math.random() * 100).toFixed(2) + 'vh';
 
-                    // Update gradient to point up
-                    scanner.style.setProperty('background', `linear-gradient(to top, transparent 0%, rgba(255, 50, 50, 0) 4%, rgba(255, 255, 255, 0.7) 5%, rgba(226, 61, 14, 0.4) 6%, rgba(226, 61, 14, 0.1) 25%, transparent 50%)`);
+                        scanner.style.setProperty('--scan-start-pos', startPos);
+                    } else {
+                        // Configure for scan-down (top to bottom) - NOTE: Changed 'infinite' to '1'
+                        scanner.style.setProperty('animation', `scan-down ${duration} linear 1`);
 
-                    // Start: -50vh to 20vh
-                    const startPos = (Math.random() * 70 - 50).toFixed(2) + 'vh';
-                    // End: 50vh to 120vh
-                    const endPos = (Math.random() * 70 + 50).toFixed(2) + 'vh';
+                        // Update gradient to point up
+                        scanner.style.setProperty('background', `linear-gradient(to top, transparent 0%, rgba(255, 50, 50, 0) 4%, rgba(255, 255, 255, 0.7) 5%, rgba(226, 61, 14, 0.4) 6%, rgba(226, 61, 14, 0.1) 25%, transparent 50%)`);
 
-                    scanner.style.setProperty('--scan-start-pos', startPos);
-                    scanner.style.setProperty('--scan-end-pos', endPos);
-                }
+                        // Start: 0vh to 100vh (random start position for visual variety)
+                        const startPos = (Math.random() * 100).toFixed(2) + 'vh';
+
+                        scanner.style.setProperty('--scan-start-pos', startPos);
+                    }
+                };
+
+                configureRandomScan();
+
+                // Listen for animation END and randomize the next scan with delay
+                scanner.addEventListener('animationend', () => {
+                    // Hide scanner during the pause so it doesn't sit statically on screen
+                    scanner.style.opacity = '0';
+
+                    // Remove animation property to reset state
+                    scanner.style.animation = 'none';
+
+                    // Add random delay between 1s and 3s before next scan
+                    const randomDelay = Math.random() * 2000 + 1000; // 1000-3000ms
+                    setTimeout(() => {
+                        configureRandomScan();
+                    }, randomDelay);
+                });
             }
 
-            // --- SEARCH PLACEHOLDER GLITCH SYNC ---
+            // SEARCH PLACEHOLDER GLITCH SYNC
             const searchInputWrapper = document.querySelector('.search-input-wrapper');
             const searchInput = searchInputWrapper ? searchInputWrapper.querySelector('input[name="search"]') : null;
 
@@ -285,7 +302,7 @@
                 });
             }
 
-            // --- ADD TASK VIEW TRANSITION ---
+            // ADD TASK VIEW TRANSITION
             const addTaskLink = document.querySelector('.header-btn--add');
 
             const ensureRouteOverlay = () => {
@@ -327,7 +344,7 @@
                 runAddTaskTransition(addTaskLink.href);
             });
 
-            // --- PROCRASTINATE BUTTON LOGIC (Kept Same) ---
+            // PROCRASTINATE BUTTON LOGIC
             const btn = document.getElementById('procrastinate-btn');
             const overlay = document.getElementById('regret-overlay');
             const confirmOverlay = document.getElementById('procrastinate-confirm-overlay');
@@ -427,7 +444,7 @@
                 }
             });
 
-            // --- DELETE TASK CONFIRMATION LOGIC ---
+            // DELETE TASK CONFIRMATION LOGIC
             const deleteOverlay = document.getElementById('delete-confirm-overlay');
             const confirmDeleteBtn = document.getElementById('confirm-delete');
             const cancelDeleteBtn = document.getElementById('cancel-delete');
@@ -528,7 +545,7 @@
                 }
             });
 
-            // --- AJAX SORTING & FILTERING LOGIC ---
+            // AJAX SORTING & FILTERING LOGIC
 
             // 1. The Function to Fetch and Swap Data
             async function updateTaskGrid() {
@@ -536,44 +553,33 @@
                 const formData = new FormData(form);
                 const params = new URLSearchParams(formData);
 
-                // Update URL without refreshing (so bookmarks work)
                 const newUrl = `${window.location.pathname}?${params.toString()}`;
                 window.history.pushState({}, '', newUrl);
 
                 try {
-                    // Fetch the full HTML of the filtered page
                     const response = await fetch(newUrl);
                     const htmlText = await response.text();
 
-                    // Parse the HTML string into a virtual DOM
                     const parser = new DOMParser();
                     const doc = parser.parseFromString(htmlText, 'text/html');
 
-                    // Find the new grid and the new empty state
                     const newGrid = doc.querySelector('.tasks-grid');
                     const newEmptyState = doc.querySelector('.empty-state');
 
-                    // Find current containers
                     const currentContainer = document.querySelector('.dashboard');
                     const currentGrid = document.querySelector('.tasks-grid');
                     const currentEmpty = document.querySelector('.empty-state');
 
-                    // Logic to swap content
                     if (newGrid) {
-                        // If we have tasks...
                         if (currentGrid) {
-                            // Just replace inner content
                             currentGrid.innerHTML = newGrid.innerHTML;
                         } else {
-                            // We were empty, now we have tasks. Replace empty state with grid.
+                            // Replace empty state with grid.
                             if (currentEmpty) currentEmpty.remove();
-                            // We need to insert the grid after the controls
                             const controls = document.querySelector('.task-controls');
-                            // Create wrapper if needed or insert raw HTML
                             controls.insertAdjacentHTML('afterend', newGrid.outerHTML);
                         }
                     } else if (newEmptyState) {
-                        // If no tasks found...
                         if (currentGrid) currentGrid.remove();
                         if (currentEmpty) {
                             currentEmpty.innerHTML = newEmptyState.innerHTML;
@@ -588,7 +594,7 @@
                 }
             }
 
-            // --- CUSTOM TERMINAL DROPDOWN LOGIC ---
+            // CUSTOM TERMINAL DROPDOWN LOGIC
             const selectWrappers = document.querySelectorAll('.custom-select-wrapper');
 
             selectWrappers.forEach(wrapper => {
@@ -641,7 +647,7 @@
                 });
             });
 
-            // --- COUNTDOWN TIMER LOGIC ---
+            // COUNTDOWN TIMER LOGIC
             setInterval(() => {
                 const timers = document.querySelectorAll('.task-countdown');
                 if (timers.length === 0) return;
@@ -701,7 +707,7 @@
                 });
             }, 41);
 
-            // --- FULL ROW / SCREEN TEAR GLITCH LOGIC ---
+            // FULL ROW / SCREEN TEAR GLITCH LOGIC
             const startGridGlitch = () => {
                 const grid = document.querySelector('.dashboard');
                 if (!grid) return;
@@ -725,7 +731,7 @@
                 clone.style.height = `${rect.height}px`;
 
                 // 4. Calculate the "Scanline" Slice
-                // We use Pixels instead of % so the glitch thickness is consistent
+                // Use Pixels instead of % so the glitch thickness is consistent
                 const gridHeight = rect.height;
 
                 // Random starting Y position (somewhere within the grid)
@@ -741,7 +747,7 @@
                 // inset( top  right  bottom  left )
                 const clipBottom = gridHeight - startY - sliceHeight;
 
-                // Safety check: ensure we don't clip outside bounds
+                // Make sure we don't clip outside bounds
                 if (clipBottom > 0) {
                     clone.style.clipPath = `inset(${startY}px 0 ${clipBottom}px 0)`;
                     clone.style.transform = `translateX(${shiftX}px)`;
@@ -752,7 +758,7 @@
                     // 7. Remove quickly (The "Flash")
                     setTimeout(() => {
                         clone.remove();
-                    }, Math.random() * 700 + 300); // 50ms to 150ms
+                    }, Math.random() * 700 + 300); // 300ms to 1000ms
                 }
 
                 // 8. Loop

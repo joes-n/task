@@ -516,20 +516,3 @@ curl -X POST http://localhost:3000/api/accounts \
     "confirmPassword": "password123"
   }'
 ```
-
-## Testing with Postman
-
-1. Create a new request
-2. Set the request type (GET, POST, PUT, DELETE)
-3. Enter the URL: `http://localhost:3000/api/tasks` or `http://localhost:3000/api/tasks/{id}`
-4. For POST/PUT requests, go to "Body" tab, select "raw" and "JSON"
-5. Enter the JSON data
-6. Click "Send"
-
-## Rate Limiting
-
-Currently, no rate limiting is implemented. For production use, consider implementing rate limiting to prevent API abuse.
-
-## CORS
-
-Cross-Origin Resource Sharing (CORS) is not configured by default. If you need to access the API from a different domain, you may need to configure CORS middleware.
