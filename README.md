@@ -1,24 +1,46 @@
 # Task Management System
 
-A full-stack web application built with Express.js and MongoDB featuring user authentication and CRUD operations.
+**Course:** COMP3810SEF
+**Group:** 39
 
-## Features
+**Group Members:**
+* [Name 1] - [Student ID]
+* [Name 2] - [Student ID]
+* [Name 3] - [Student ID]
 
-- **User Authentication**: Secure login/logout with session management
-- **Protected Routes**: Only authenticated users can access CRUD operations
-- **CRUD Web Interface**: Create, read, update, and delete tasks through a user-friendly web UI
-- **RESTful APIs**: Programmatic access to task data via API endpoints
-- **Advanced Search**: Filter tasks by title, description, status, and priority
-- **Responsive Design**: Mobile-friendly UI with modern styling
+## Cloud-Based Server URL
+**Live Demo:** [INSERT YOUR RENDER/RAILWAY URL HERE]
 
-## Technology Stack
+## server.js functionalities
 
-- **Backend**: Express.js (Node.js)
-- **Database**: MongoDB with Mongoose ODM
-- **Views**: EJS templating engine
-- **Authentication**: express-session
-- **Password Hashing**: bcrypt
-- **Styling**: CSS
+The main server.js file handles:
+
+- **Database Connection**: Connects to MongoDB using the connectDB() function from config/database.js
+- **Express.js Setup**: Initializes Express app with view engine (EJS) and static file serving
+- **Middleware Configuration**: Sets up body parsing, method override, session management, and static assets
+- **Route Registration**: Registers three main route modules:
+  - `/` - Authentication routes (login, register, logout)
+  - `/tasks` - Task management routes (CRUD operations with authentication)
+  - `/api` - RESTful API endpoints (public access)
+- **Home Route**: Redirects authenticated users to `/tasks` and unauthenticated users to `/login`
+- **Error Handling**: Provides 404 page for undefined routes and global error handler for server errors
+- **Server Startup**: Listens on PORT (from environment variable or defaults to 3000)
+
+## Package Dependencies
+
+The application uses the following dependencies:
+
+### Dependencies (Production)
+- **bcrypt** (^6.0.0) - Password hashing library for secure user authentication
+- **dotenv** (^17.2.3) - Loads environment variables from .env file into process.env
+- **ejs** (^3.1.10) - Embedded JavaScript templating engine for rendering HTML views
+- **express** (^5.1.0) - Web framework for Node.js for building RESTful APIs and web applications
+- **express-session** (^1.18.2) - Session middleware for Express.js to manage user sessions
+- **method-override** (^3.0.0) - Allows use of HTTP verbs like PUT and DELETE in places where the client doesn't support it
+- **mongoose** (^8.19.3) - MongoDB object modeling library for Node.js
+
+### DevDependencies (Development)
+- **nodemon** (^3.1.11) - Development tool that auto-restarts the server when files change
 
 ## Project Structure
 
@@ -53,8 +75,26 @@ A full-stack web application built with Express.js and MongoDB featuring user au
 ├── .env                 # Environment variables
 ├── .env.example         # Environment variables template
 ├── package.json         # Node.js dependencies
+├── railway.json         # Railway deployment configuration (optional)
 └── server.js            # Main server file
 ```
+
+> **Note:** `railway.json` is optional and only needed if deploying to Railway platform.
+
+
+## Operation Guide
+1. Register an account. (Doesn't need a real account.)
+2. Log in.
+3. Add task by clicking "ADD TASK".
+4. Fill in the form.
+5. Click "ADD TASK".
+6. Click on task to edit task.
+7. Click "MARK AS DONE" to mark as done.
+8. Click "DELETE" to delete.
+9. Click "PROCRASTINATE" to postpone all tasks by 1 day.
+10. Select status and priority filters and sort to filter and sort.
+11. Input in Search box and click "SEARCH TASKS" to search task.
+12. Click "LOG OUT" to log out.
 
 ## Prerequisites
 
@@ -123,6 +163,8 @@ The server will start on `http://localhost:3000`
 ## API Endpoints
 
 ### Tasks API (No Authentication Required)
+
+Details in API.md.
 
 - **GET /api/tasks** - Get all tasks (with optional query params: `search`, `status`, `priority`, `sort`)
 - **GET /api/tasks/:id** - Get a specific task
@@ -203,30 +245,7 @@ curl -X DELETE http://localhost:3000/api/tasks/:id
 
 ## Cloud Deployment
 
-### Option 1: Railway (Recommended)
-
-1. Push your code to GitHub
-2. Create account at [Railway](https://railway.app)
-3. Create a new project from GitHub repo
-4. Add MongoDB Atlas as a database service
-5. Set environment variables in Railway dashboard
-6. Deploy automatically
-
-### Option 2: Heroku
-
-1. Create account at [Heroku](https://heroku.com)
-2. Create a new app
-3. Add MongoDB Atlas add-on or use Atlas connection string
-4. Set config vars for environment variables
-5. Deploy via Git or GitHub integration
-
-### Option 3: Render
-
-1. Create account at [Render](https://render.com)
-2. Create a new Web Service
-3. Connect your GitHub repository
-4. Add environment variables
-5. Use MongoDB Atlas for database
+Check DEPLOYMENT.md.
 
 ## Troubleshooting
 
