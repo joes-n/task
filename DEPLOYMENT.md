@@ -1,6 +1,6 @@
 # Deployment Guide
 
-This guide covers deploying the Task Management System to various cloud platforms.
+This guide covers deploying the Task Management System to various cloud platforms. For local deployment, check README.md.
 
 ## Quick Start: Railway Deployment (Recommended)
 
@@ -30,16 +30,18 @@ Railway offers simple deployment with automatic MongoDB provisioning.
    - Railway will automatically detect Node.js and deploy
 
 3. **Add MongoDB Database**
-   - In your Railway project, click "New"
-   - Select "Database" → "Add MongoDB"
-   - Railway will provision a MongoDB instance and set the `MONGODB_URI` automatically
+   - If you have your own MongoDB Atlas URI:
+      - Set the MONGODB_URI to your own MongoDB Atlas URI in the variables
+   - If you don't have a MongoDB Atlas instance:
+      - In your Railway project, click "New"
+      - Select "Database" → "Add MongoDB"
+      - Railway will provision a MongoDB instance and set the `MONGODB_URI` automatically
 
 4. **Set Environment Variables**
    - Go to your project's Variables tab
-   - Add:
+   - Set:
      ```
-     SESSION_SECRET=your-very-secure-random-secret-key
-     PORT=3000
+     SESSION_SECRET=your-secret-key
      ```
 
 5. **Deploy**
@@ -182,17 +184,6 @@ node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
 # Using OpenSSL
 openssl rand -hex 64
 ```
-
-## Post-Deployment Checklist
-
-- [ ] Test login/registration functionality
-- [ ] Test creating, editing, and deleting tasks
-- [ ] Test API endpoints using curl or Postman
-- [ ] Verify MongoDB connection is working
-- [ ] Check all environment variables are set correctly
-- [ ] Test from multiple devices/browsers
-- [ ] Update CORS settings if needed
-- [ ] Set up monitoring and alerts
 
 ## Troubleshooting
 

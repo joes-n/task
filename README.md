@@ -18,7 +18,7 @@ A full-stack web application built with Express.js and MongoDB featuring user au
 - **Views**: EJS templating engine
 - **Authentication**: express-session
 - **Password Hashing**: bcrypt
-- **Styling**: Custom CSS
+- **Styling**: CSS
 
 ## Project Structure
 
